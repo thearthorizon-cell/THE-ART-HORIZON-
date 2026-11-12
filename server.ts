@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 
@@ -13,6 +14,144 @@ const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json());
+
+// Persistent Enquiries Storage (Server-side JSON DB)
+const ENQUIRIES_FILE = path.resolve(__dirname, 'server_enquiries.json');
+
+interface StoredEnquiry {
+  id: string;
+  createdAt: string;
+  name: string;
+  email: string;
+  phone: string;
+  serviceCategory: string;
+  serviceDetail?: string;
+  countryOrCity?: string;
+  timeSlotPreference?: string;
+  message: string;
+  status: 'new' | 'contacted' | 'resolved';
+}
+
+const loadEnquiries = (): StoredEnquiry[] => {
+  try {
+    if (fs.existsSync(ENQUIRIES_FILE)) {
+      const data = fs.readFileSync(ENQUIRIES_FILE, 'utf-8');
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error('Failed to load enquiries from file:', err);
+  }
+  return [];
+};
+
+const saveEnquiries = (enquiries: StoredEnquiry[]): void => {
+  try {
+    fs.writeFileSync(ENQUIRIES_FILE, JSON.stringify(enquiries, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Failed to write enquiries to file:', err);
+  }
+};
+
+// GET /api/enquiries - Retrieve all enquiries for Vikas Gothi / Admin
+app.get('/api/enquiries', (_req: Request, res: Response) => {
+  const enquiries = loadEnquiries();
+  res.json({
+    enquiries,
+    total: enquiries.length,
+    newCount: enquiries.filter((e) => e.status === 'new').length,
+  });
+});
+
+// POST /api/enquiries - Submit a new inquiry / free trial booking
+app.post('/api/enquiries', (req: Request, res: Response): void => {
+  try {
+    const {
+      name,
+      email = '',
+      phone,
+      serviceCategory = 'general',
+      serviceDetail = '',
+      countryOrCity = '',
+      timeSlotPreference = '',
+      message = '',
+    } = req.body;
+
+    if (!name || !phone) {
+      res.status(400).json({ error: 'Name and contact phone are required.' });
+      return;
+    }
+
+    const currentList = loadEnquiries();
+    const newEnquiry: StoredEnquiry = {
+      id: 'enq-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7),
+      createdAt: new Date().toISOString(),
+      name: String(name).trim(),
+      email: String(email).trim(),
+      phone: String(phone).trim(),
+      serviceCategory: String(serviceCategory),
+      serviceDetail: String(serviceDetail),
+      countryOrCity: String(countryOrCity),
+      timeSlotPreference: String(timeSlotPreference),
+      message: String(message).trim(),
+      status: 'new',
+    };
+
+    currentList.unshift(newEnquiry);
+    saveEnquiries(currentList);
+
+    console.log(`[The Art Horizon] New Inquiry Saved: ${newEnquiry.name} (${newEnquiry.phone}) - ${newEnquiry.serviceDetail}`);
+
+    res.status(201).json({
+      success: true,
+      enquiry: newEnquiry,
+      message: 'Inquiry saved successfully on server.',
+    });
+  } catch (error: any) {
+    console.error('Failed to save enquiry:', error);
+    res.status(500).json({ error: 'Failed to record inquiry on server.' });
+  }
+});
+
+// PATCH /api/enquiries/:id - Update status (e.g. marked as contacted or resolved)
+app.patch('/api/enquiries/:id', (req: Request, res: Response): void => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!['new', 'contacted', 'resolved'].includes(status)) {
+      res.status(400).json({ error: 'Invalid status value.' });
+      return;
+    }
+
+    const currentList = loadEnquiries();
+    const index = currentList.findIndex((e) => e.id === id);
+
+    if (index === -1) {
+      res.status(404).json({ error: 'Inquiry not found.' });
+      return;
+    }
+
+    currentList[index].status = status;
+    saveEnquiries(currentList);
+
+    res.json({ success: true, enquiry: currentList[index] });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to update inquiry status.' });
+  }
+});
+
+// DELETE /api/enquiries/:id - Delete an inquiry
+app.delete('/api/enquiries/:id', (req: Request, res: Response): void => {
+  try {
+    const { id } = req.params;
+    let currentList = loadEnquiries();
+    currentList = currentList.filter((e) => e.id !== id);
+    saveEnquiries(currentList);
+    res.json({ success: true, message: 'Inquiry deleted.' });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to delete inquiry.' });
+  }
+});
 
 // Initialize GoogleGenAI server-side with standard API key and telemetry header
 const getAIClient = () => {

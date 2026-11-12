@@ -65,6 +65,15 @@ export const EnquiryModal: React.FC = () => {
       message: message.trim(),
     });
 
+    // Directly open WhatsApp with inquiry pre-filled to Vikas Gothi
+    try {
+      const text = `*New Website Enquiry - The Art Horizon*\n*Name:* ${name.trim() || 'Prospective Student/Client'}\n*Category:* ${category.replace('-', ' ').toUpperCase()}\n*Service:* ${serviceDetail.trim() || 'Course / Service details'}\n*Phone:* ${phone.trim()}\n*Email:* ${email.trim() || 'Not provided'}\n*Location:* ${countryOrCity.trim() || 'Not provided'}\n*Preference:* ${timeSlotPreference.trim() || 'Flexible'}\n*Message:* ${message.trim() || 'I would like to request course details, batch availability, and fee structure.'}`;
+      const url = `https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    } catch {
+      // ignore popup blocking
+    }
+
     setIsSubmitted(true);
     setErrorMsg('');
   };

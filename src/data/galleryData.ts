@@ -3,6 +3,39 @@ import { OFFICIAL_ASSETS } from './siteConfig';
 
 export const GALLERY_DATA: GalleryItem[] = [
   {
+    id: 'g-master-old-man-portrait',
+    title: 'Wisdom of Generations – Elder in Turban in Charcoal Realism',
+    category: 'portraits',
+    medium: 'Nitram Charcoal & Graphite on Archival Fabriano Cotton Paper',
+    dimensions: '18 x 24 inches',
+    artist: 'Master Portraitist Vikas Gothi',
+    description:
+      'Soul-stirring high-contrast classical portrait depicting an Indian village elder with weathered facial character, flowing mustache, and intricately layered turban. Masterful tonal chiaroscuro capturing dignity and lifelike gaze.',
+    image: OFFICIAL_ASSETS.oldManPortrait,
+  },
+  {
+    id: 'g-student-horses-gallop',
+    title: 'Galloping Wild Steeds – Dynamic Motion & Mane Study',
+    category: 'student-work',
+    medium: 'Pencil & Graphite Powder on Textured Cartridge Sheet',
+    dimensions: '14 x 20 inches',
+    artist: 'Student Akash (Mentored by Vikas Gothi)',
+    description:
+      'Breathtaking kinetic sketch of running wild horses with windblown flowing manes and anatomical muscle rendering. Created during advanced teen sketching classes under Vikas Gothi.',
+    image: OFFICIAL_ASSETS.horsesSketch,
+  },
+  {
+    id: 'g-master-buddha-serenity',
+    title: 'Serenity in Bodhi Leaves – Contemporary Spiritual Buddha',
+    category: 'fine-art',
+    medium: 'Acrylics & Glazes on Canvas Board',
+    dimensions: '12 x 16 inches',
+    artist: 'Vikas Gothi / The Art Horizon Studio',
+    description:
+      'Contemplative spiritual painting blending dual-tone indigo and golden ochre lighting on the peaceful visage of Lord Buddha, framed by lush translucent Bodhi leaves.',
+    image: OFFICIAL_ASSETS.buddhaPainting,
+  },
+  {
     id: 'g-real-student-krishna',
     title: 'Bal Krishna Divine Charcoal Study',
     category: 'student-work',

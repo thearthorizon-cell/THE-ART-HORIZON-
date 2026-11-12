@@ -31,6 +31,7 @@ export interface BusinessConfig {
   isAddressPendingConfirmation: boolean;
   businessHours: string;
   instagramUrl: string;
+  youtubeUrl: string;
   whatsappMessage: string;
 }
 

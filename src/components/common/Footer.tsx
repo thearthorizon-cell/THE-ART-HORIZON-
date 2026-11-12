@@ -8,13 +8,13 @@ import {
   MapPin,
   Clock,
   Instagram,
+  Youtube,
   ArrowUpRight,
   Sparkles,
   ShieldAlert,
   Globe,
-  Heart,
-  SlidersHorizontal,
   Star,
+  Lock,
 } from 'lucide-react';
 import { GoogleIcon } from './GoogleReviewsBadge';
 import { GOOGLE_REVIEWS_SUMMARY } from '../../data/testimonialsData';
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
     navigateTo,
     openEnquiryModal,
     openFreeDemoModal,
-    openAdminConfig,
+    openInquiriesModal,
     openWriteReviewModal,
     businessConfig,
   } = useStudio();
@@ -54,13 +54,13 @@ export const Footer: React.FC = () => {
           <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
             <button
               onClick={() => openEnquiryModal('general', 'Admissions & Pricing Enquiry')}
-              className="bg-[#B85D38] hover:bg-[#A04F2E] text-white px-6 py-3 rounded-sm text-sm font-medium transition-all shadow-sm w-full sm:w-auto text-center"
+              className="bg-[#B85D38] hover:bg-[#A04F2E] text-white px-6 py-3 rounded-sm text-sm font-medium transition-all shadow-sm w-full sm:w-auto text-center cursor-pointer"
             >
               Request Course Details & Pricing
             </button>
             <button
               onClick={openFreeDemoModal}
-              className="border border-stone-600 hover:border-stone-400 text-stone-200 hover:text-white px-6 py-3 rounded-sm text-sm font-medium transition-all w-full sm:w-auto text-center"
+              className="border border-stone-600 hover:border-stone-400 text-stone-200 hover:text-white px-6 py-3 rounded-sm text-sm font-medium transition-all w-full sm:w-auto text-center cursor-pointer"
             >
               Book Free Demo Class
             </button>
@@ -100,35 +100,42 @@ export const Footer: React.FC = () => {
               masterful technique.
             </p>
 
-            <div className="pt-2 flex items-center gap-3">
+            {/* Official Social Media Channels including YouTube */}
+            <div className="pt-2 flex flex-wrap items-center gap-2.5">
+              <a
+                href={businessConfig.youtubeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-9 px-3.5 rounded bg-red-950/70 hover:bg-red-850 border border-red-800/60 text-red-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+                title="The Art Horizon YouTube Channel"
+              >
+                <Youtube className="w-4 h-4 text-red-500 fill-current" />
+                <span>YouTube Channel</span>
+                <ArrowUpRight className="w-3.5 h-3.5 opacity-80" />
+              </a>
+
               <a
                 href={businessConfig.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded bg-stone-800/90 hover:bg-[#B85D38] flex items-center justify-center text-stone-300 hover:text-white transition-colors"
+                className="h-9 px-3 rounded bg-stone-800/90 hover:bg-[#B85D38] flex items-center gap-1.5 text-stone-300 hover:text-white transition-colors text-xs font-semibold"
                 aria-label="Instagram"
               >
-                <Instagram className="w-4 h-4" />
+                <Instagram className="w-4 h-4 text-pink-400" />
+                <span>Instagram</span>
               </a>
+
               <a
                 href={`https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
                   businessConfig.whatsappMessage
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3.5 py-1.5 rounded bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-800/60 text-emerald-300 text-xs flex items-center gap-1.5 transition-colors"
+                className="h-9 px-3.5 rounded bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-800/60 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
               >
                 <span>WhatsApp Us</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </a>
-              <button
-                onClick={openAdminConfig}
-                className="px-2.5 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-stone-200 text-xs flex items-center gap-1 transition-colors"
-                title="Configurable Business Settings"
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>Admin Settings</span>
-              </button>
             </div>
           </div>
 
@@ -139,66 +146,66 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-stone-400">
               <li>
-                <button onClick={() => handleLink('home')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('home')} className="hover:text-white transition-colors cursor-pointer">
                   Home
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('about')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('about')} className="hover:text-white transition-colors cursor-pointer">
                   About Us
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('founder')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('founder')} className="hover:text-white transition-colors cursor-pointer">
                   Founder Profile (Vikas Gothi)
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('art-classes')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('art-classes')} className="hover:text-white transition-colors cursor-pointer">
                   Art Classes (Kids, Teens, Adults)
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('fine-art-courses')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('fine-art-courses')} className="hover:text-white transition-colors cursor-pointer">
                   Fine Art Courses & Diplomas
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => handleLink('online-classes')}
-                  className="hover:text-white text-[#E8926F] flex items-center gap-1 transition-colors"
+                  className="hover:text-white text-[#E8926F] flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Globe className="w-3 h-3" />
                   <span>Online Art Classes (Global)</span>
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('portrait-commissions')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('portrait-commissions')} className="hover:text-white transition-colors cursor-pointer">
                   Portrait Commissions
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('commercial-projects')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('commercial-projects')} className="hover:text-white transition-colors cursor-pointer">
                   Commercial Art & Wall Murals
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('workshops')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('workshops')} className="hover:text-white transition-colors cursor-pointer">
                   Workshops (Resin, Lippan, Clay)
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('gallery')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('gallery')} className="hover:text-white transition-colors cursor-pointer">
                   Artwork Gallery
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('testimonials')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('testimonials')} className="hover:text-white transition-colors cursor-pointer">
                   Student & Client Reviews
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('contact')} className="hover:text-white transition-colors">
+                <button onClick={() => handleLink('contact')} className="hover:text-white transition-colors cursor-pointer">
                   Contact Us & Location
                 </button>
               </li>
@@ -290,6 +297,57 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
+        {/* Working Live Google Maps Location Section */}
+        <div className="my-10 bg-[#221E1B] border border-stone-800 rounded-xl overflow-hidden shadow-lg">
+          <div className="p-5 sm:p-6 border-b border-stone-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 text-[#E8926F] text-xs font-bold uppercase tracking-wider">
+                <MapPin className="w-4 h-4 text-[#C86443]" />
+                <span>Working Live Studio Location • Indore</span>
+              </div>
+              <h4 className="font-serif text-lg sm:text-xl font-bold text-white mt-1">
+                The Art Horizon Fine Art Studio & Academy
+              </h4>
+              <p className="text-xs sm:text-sm text-stone-300 mt-0.5">
+                266, Ganesh Villa, Usha Nagar Extension, Ranjit Hanuman Road, Indore, Madhya Pradesh, India
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <a
+                href="https://maps.google.com/?q=266+Ganesh+Villa+Usha+Nagar+Extension+Ranjit+Hanuman+Road+Indore"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 bg-[#B85D38] hover:bg-[#A04F2E] text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-colors shadow-sm"
+              >
+                <MapPin className="w-3.5 h-3.5" />
+                <span>Open in Google Maps</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href={`tel:${businessConfig.phone.replace(/\s+/g, '')}`}
+                className="inline-flex items-center gap-1.5 bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold px-3.5 py-2.5 rounded-lg border border-stone-700 transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5 text-amber-400" />
+                <span>Call Studio</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="w-full h-64 sm:h-80 bg-stone-900 relative">
+            <iframe
+              title="The Art Horizon Live Studio Location on Google Maps"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src="https://maps.google.com/maps?q=266%20Ganesh%20Villa%2C%20Usha%20Nagar%20Extension%2C%20Ranjit%20Hanuman%20Road%2C%20Indore&t=&z=16&ie=UTF8&iwloc=&output=embed"
+            />
+          </div>
+        </div>
+
         {/* SEO Target Search Terms Cloud */}
         <div className="py-8 border-b border-stone-800/80">
           <div className="text-[11px] uppercase tracking-wider text-stone-500 font-semibold mb-3">
@@ -307,7 +365,7 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Google Reviews Trust Bar in Footer */}
+        {/* Google Reviews Trust Bar in Footer - 173+ Reviews */}
         <div className="py-6 border-b border-stone-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0">
@@ -324,7 +382,7 @@ export const Footer: React.FC = () => {
                 </div>
               </div>
               <p className="text-xs text-stone-400">
-                Over {GOOGLE_REVIEWS_SUMMARY.totalReviews}+ verified reviews from students, parents & art collectors worldwide.
+                Over {GOOGLE_REVIEWS_SUMMARY.totalReviews}+ verified reviews from students, parents & art collectors on Google.
               </p>
             </div>
           </div>
@@ -332,29 +390,39 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={openWriteReviewModal}
-              className="bg-stone-800 hover:bg-stone-700 text-white text-xs font-semibold px-4 py-2 rounded-full border border-stone-700 transition-colors flex items-center gap-1.5"
+              className="bg-stone-800 hover:bg-stone-700 text-white text-xs font-semibold px-4 py-2 rounded-full border border-stone-700 transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
               <span>Review Us on Google</span>
             </button>
             <button
               onClick={() => handleLink('testimonials')}
-              className="text-xs text-[#E8926F] hover:text-white underline underline-offset-2 transition-colors"
+              className="text-xs text-[#E8926F] hover:text-white underline underline-offset-2 transition-colors cursor-pointer"
             >
-              Read All Reviews
+              Read All {GOOGLE_REVIEWS_SUMMARY.totalReviews}+ Reviews
             </button>
           </div>
         </div>
 
-        {/* Bottom Credits & Copyright */}
+        {/* Bottom Credits, Studio Location & Locked Studio Portal */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
           <p>
             © {new Date().getFullYear()} The Art Horizon. All Rights Reserved. Founder & Principal: Vikas Gothi.
           </p>
-          <div className="flex items-center gap-4 text-stone-500">
+          <div className="flex flex-wrap items-center gap-4 text-stone-500">
             <span>Fine Arts Education & Creative Services</span>
             <span>•</span>
             <span>Indore, Madhya Pradesh, India</span>
+            <span>•</span>
+            {/* Locked Studio Portal button - Protected with Studio PIN */}
+            <button
+              onClick={openInquiriesModal}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-850 text-stone-400 hover:text-amber-400 border border-stone-800 hover:border-amber-500/50 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+              title="Studio Portal (Admissions & Inquiries - PIN Locked)"
+            >
+              <Lock className="w-3.5 h-3.5 text-amber-500" />
+              <span>Studio Portal (PIN Locked)</span>
+            </button>
           </div>
         </div>
       </div>

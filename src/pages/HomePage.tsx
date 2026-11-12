@@ -771,7 +771,7 @@ export const HomePage: React.FC = () => {
                 onClick={() => navigateTo('testimonials')}
                 className="bg-stone-900 hover:bg-stone-800 text-white px-6 py-2.5 rounded-full text-xs font-bold transition-all shadow-xs flex items-center gap-1.5"
               >
-                <span>View All 128+ Reviews</span>
+                <span>View All 173+ Reviews</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>

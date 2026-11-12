@@ -2,7 +2,7 @@ import { TestimonialItem } from '../types';
 
 export const GOOGLE_REVIEWS_SUMMARY = {
   averageRating: 4.9,
-  totalReviews: 128,
+  totalReviews: 173,
   fiveStarPercentage: 96,
   fourStarPercentage: 4,
   threeStarPercentage: 0,
@@ -10,7 +10,7 @@ export const GOOGLE_REVIEWS_SUMMARY = {
   oneStarPercentage: 0,
   googleMapsPlaceName: 'The Art Horizon - Fine Art Academy & Studio',
   address: '266, Ganesh Villa, Usha Nagar Extension, Ranjit Hanuman Road, Indore, MP',
-  googleMapsUrl: 'https://maps.google.com/?q=The+Art+Horizon+Ganesh+Villa+Usha+Nagar+Indore',
+  googleMapsUrl: 'https://maps.google.com/?q=266+Ganesh+Villa+Usha+Nagar+Extension+Ranjit+Hanuman+Road+Indore',
   writeReviewUrl: 'https://search.google.com/local/writereview?placeid=TheArtHorizonIndore',
 };
 

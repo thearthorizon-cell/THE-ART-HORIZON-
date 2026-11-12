@@ -131,8 +131,8 @@ export const FineArtCoursesPage: React.FC = () => {
             <div className="lg:col-span-5 relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-stone-950 border border-stone-700 shadow-xl">
                 <img
-                  src={OFFICIAL_ASSETS.oilPortrait}
-                  alt="Fine Art Oil Painting Portrait on Linen"
+                  src={OFFICIAL_ASSETS.radhaKrishnaEasel}
+                  alt="Fine Art Masterpiece on Easel by Vikas Gothi"
                   className="w-full h-full object-cover"
                 />
               </div>

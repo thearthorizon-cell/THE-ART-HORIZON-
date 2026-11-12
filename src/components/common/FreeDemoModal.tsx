@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useStudio } from '../../context/StudioContext';
-import { X, Sparkles, CheckCircle2, Send, Calendar, Clock, MapPin, Video } from 'lucide-react';
+import { X, Sparkles, CheckCircle2, Send, Calendar, Clock, MapPin, Video, MessageCircle } from 'lucide-react';
 
 export const FreeDemoModal: React.FC = () => {
   const { isFreeDemoModalOpen, closeFreeDemoModal, addEnquiry, businessConfig } = useStudio();
 
   const [studentName, setStudentName] = useState('');
   const [parentName, setParentName] = useState('');
-  const [ageGroup, setAgeGroup] = useState('Kids (Ages 5-11)');
-  const [mode, setMode] = useState<'studio' | 'online'>('studio');
+  const [ageGroup, setAgeGroup] = useState('Online Kids (Ages 6–8 Years)');
+  const [mode, setMode] = useState<'studio' | 'online'>('online');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [preferredDay, setPreferredDay] = useState('Weekend Morning');
+  const [preferredDay, setPreferredDay] = useState('Weekend Morning (10:30 AM)');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -25,17 +25,44 @@ export const FreeDemoModal: React.FC = () => {
     }
 
     addEnquiry({
-      name: `${studentName.trim()} (Parent: ${parentName.trim() || 'Self'})`,
+      name: `${studentName.trim()}${parentName.trim() ? ` (Parent: ${parentName.trim()})` : ''}`,
       email: email.trim(),
       phone: phone.trim(),
       serviceCategory: mode === 'online' ? 'international-online' : 'local-classes',
-      serviceDetail: `Free Demo Class [${mode === 'online' ? 'Live Zoom' : 'In-Studio Indore'}] - ${ageGroup}`,
+      serviceDetail: `Free Demo Class [${mode === 'online' ? 'Live Zoom Worldwide' : 'In-Studio Indore'}] - ${ageGroup}`,
       timeSlotPreference: preferredDay,
-      message: `Requested Free Demo session. Mode: ${mode.toUpperCase()}. Age Group: ${ageGroup}. Preferred Timing: ${preferredDay}.`,
+      message: `Free Demo Class Request. Mode: ${mode.toUpperCase()} (${mode === 'online' ? 'Live Zoom' : 'Usha Nagar Indore'}). Age Group: ${ageGroup}. Preferred Slot: ${preferredDay}.`,
     });
+
+    // Automatically open WhatsApp to Vikas Gothi so the inquiry is posted directly to him
+    try {
+      const text = `*New Free Demo Class Booking - The Art Horizon*\n*Student Name:* ${studentName.trim()}\n*Parent/Guardian:* ${parentName.trim() || 'Self'}\n*Mode:* ${mode === 'online' ? 'Live Zoom (Worldwide)' : 'In-Studio (Indore)'}\n*Age Category:* ${ageGroup}\n*Phone / WhatsApp:* ${phone.trim()}\n*Email:* ${email.trim() || 'Not specified'}\n*Preferred Slot:* ${preferredDay}\n\nHello Vikas Sir, I have booked a Free Trial on The Art Horizon website. Please confirm our batch slot!`;
+      const cleanNum = businessConfig.phone.replace(/[^0-9]/g, '');
+      const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    } catch {
+      // ignore popup blocking
+    }
 
     setIsSubmitted(true);
     setErrorMsg('');
+  };
+
+  const handleSendToWhatsApp = () => {
+    const text = `*New Free Demo Class Booking - The Art Horizon*
+*Student Name:* ${studentName}
+*Parent/Guardian:* ${parentName || 'Self'}
+*Mode:* ${mode === 'online' ? 'Live Zoom (Worldwide)' : 'In-Studio (Indore)'}
+*Age Category:* ${ageGroup}
+*Phone / WhatsApp:* ${phone}
+*Email:* ${email || 'Not specified'}
+*Preferred Slot:* ${preferredDay}
+
+Hello Vikas Sir, I have booked a Free Trial on The Art Horizon website. Please confirm our batch slot!`;
+
+    const cleanNum = businessConfig.phone.replace(/[^0-9]/g, '');
+    const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
   };
 
   const handleClose = () => {
@@ -50,11 +77,11 @@ export const FreeDemoModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
-      <div className="relative bg-[#FAF8F5] border border-[#E7DFD5] w-full max-w-lg rounded-sm shadow-2xl overflow-hidden my-8">
+      <div className="relative bg-[#FAF8F5] border border-[#E7DFD5] w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden my-8">
         <div className="bg-[#1C1917] text-white px-6 py-5 flex items-center justify-between border-b border-stone-800">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-[#B85D38] flex items-center justify-center text-white">
-              <Sparkles className="w-4 h-4" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-amber-400 text-stone-900 flex items-center justify-center font-bold">
+              <Sparkles className="w-4 h-4 text-stone-900" />
             </div>
             <div>
               <h3 className="font-serif text-xl font-bold text-stone-100">Book a Free Demo Class</h3>
@@ -63,7 +90,7 @@ export const FreeDemoModal: React.FC = () => {
           </div>
           <button
             onClick={handleClose}
-            className="text-stone-400 hover:text-white p-1 rounded-sm hover:bg-stone-800 transition-colors"
+            className="text-stone-400 hover:text-white p-1 rounded-lg hover:bg-stone-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -71,18 +98,37 @@ export const FreeDemoModal: React.FC = () => {
 
         {isSubmitted ? (
           <div className="p-8 text-center space-y-4">
-            <div className="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-8 h-8" />
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto shadow-sm">
+              <CheckCircle2 className="w-9 h-9" />
             </div>
-            <h4 className="font-serif text-2xl font-bold text-stone-900">Demo Session Requested!</h4>
-            <p className="text-stone-600 text-sm max-w-sm mx-auto">
-              We have reserved your request for <strong className="text-stone-900">{studentName}</strong>. Our
-              academic coordinator will connect via WhatsApp/Phone to confirm your trial batch slot and share the
-              introductory kit list.
+            <h4 className="font-serif text-2xl font-bold text-stone-900">Trial Class Reserved!</h4>
+            <p className="text-stone-600 text-sm max-w-md mx-auto leading-relaxed">
+              We have recorded your demo booking for <strong className="text-stone-900">{studentName}</strong> in our
+              admissions system. Founder <strong>Vikas Gothi</strong> or our academic desk will confirm your slot.
             </p>
+
+            {/* Direct WhatsApp instant connect button */}
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-left space-y-2.5 max-w-md mx-auto">
+              <div className="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+                <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                <span>Want instant slot confirmation?</span>
+              </div>
+              <p className="text-[11px] text-emerald-800">
+                Tap below to send this booking directly to master artist Vikas Gothi on WhatsApp (+91 99818 83598):
+              </p>
+              <button
+                type="button"
+                onClick={handleSendToWhatsApp}
+                className="w-full bg-[#25D366] hover:bg-[#20ba59] text-white py-2.5 px-4 rounded-lg font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Send Booking to Vikas Gothi on WhatsApp</span>
+              </button>
+            </div>
+
             <button
               onClick={handleClose}
-              className="bg-[#B85D38] text-white px-6 py-2.5 rounded-sm text-sm font-medium hover:bg-[#A04F2E] transition-colors"
+              className="bg-stone-800 hover:bg-stone-900 text-white px-6 py-2.5 rounded-lg text-xs font-semibold transition-colors"
             >
               Back to Website
             </button>

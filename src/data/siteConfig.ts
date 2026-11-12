@@ -16,17 +16,24 @@ export const OFFICIAL_ASSETS = {
   studentSpottedDeer: '/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.29.38_PM_d96f38ad.jpeg',
   studentHummingbirdMagnolia: '/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.29.39_PM__1__79ef2edd.jpeg',
   radhaKrishnaEasel: '/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.29.39_PM_c5fc8dfd.jpeg',
-  // Specialized fine art and portrait assets
-  artisticAnatomyStudy: '/src/assets/images/artistic_anatomy_study_1794419578905.jpg',
-  charcoalPortrait: '/src/assets/images/charcoal_portrait_drawing_1794419579981.jpg',
-  oilPortrait: '/src/assets/images/oil_portrait_painting_1794419579374.jpg',
-  colourPencilPortrait: '/src/assets/images/colour_pencil_portrait_1794419580742.jpg',
-  lippanArt: '/src/assets/images/lippan_art_craft_1794419582328.jpg',
-  festivalRangoli: '/src/assets/images/festival_floor_rangoli_1794419582652.jpg',
-  kidsDrawing: '/src/assets/images/kids_creative_drawing_1794419582402.jpg',
-  pencilSketching: '/src/assets/images/pencil_sketching_study_1794419582968.jpg',
-  acrylicEaselPainting: '/src/assets/images/acrylic_canvas_painting_1794419602514.jpg',
-  resinGeodeArt: '/src/assets/images/resin_geode_art_1794419602991.jpg',
+  // Newly uploaded authentic artworks by Vikas Gothi & Academy:
+  // 1. Dynamic graphite sketch of horses with flowing manes (for Teen Sketching)
+  horsesSketch: '/assets/aistudio/WhatsApp_Image_2026-11-12_at_4.00.19_PM_e2a57e08.jpeg',
+  // 2. Black and white charcoal portrait of rural old man with turban (for Portrait Drawing & Commissions)
+  oldManPortrait: '/assets/aistudio/v_7f44a0d0.jpeg',
+  // 3. Meditative Buddha face canvas painting with Bodhi leaves
+  buddhaPainting: '/assets/aistudio/WhatsApp_Image_2026-11-12_at_4.00.20_PM_4f53e3eb.jpeg',
+  // Specialized fine art and portrait assets (served statically from public/assets/images)
+  artisticAnatomyStudy: '/assets/images/artistic_anatomy_study_1794419578905.jpg',
+  charcoalPortrait: '/assets/aistudio/v_7f44a0d0.jpeg',
+  oilPortrait: '/assets/images/oil_portrait_painting_1794419579374.jpg',
+  colourPencilPortrait: '/assets/images/colour_pencil_portrait_1794419580742.jpg',
+  lippanArt: '/assets/images/lippan_art_craft_1794419582328.jpg',
+  festivalRangoli: '/assets/images/festival_floor_rangoli_1794419582652.jpg',
+  kidsDrawing: '/assets/aistudio/WhatsApp_Image_2024-01-08_at_16.21.16_501e11bf_553401ce.jpg',
+  pencilSketching: '/assets/aistudio/WhatsApp_Image_2026-11-12_at_4.00.19_PM_e2a57e08.jpeg',
+  acrylicEaselPainting: '/assets/images/acrylic_canvas_painting_1794419602514.jpg',
+  resinGeodeArt: '/assets/images/resin_geode_art_1794419602991.jpg',
 };
 
 export const DEFAULT_BUSINESS_CONFIG: BusinessConfig = {
@@ -40,6 +47,7 @@ export const DEFAULT_BUSINESS_CONFIG: BusinessConfig = {
   isAddressPendingConfirmation: false,
   businessHours: 'Studio visits & admissions are arranged by prior appointment. Contact us for current weekday and weekend batch timings.',
   instagramUrl: 'https://instagram.com/thearthorizon',
+  youtubeUrl: 'https://youtube.com/@thearthorizon?si=Smp0UqoUCNLkUpdx',
   whatsappMessage: 'Hello Vikas ji / The Art Horizon team, I would like to enquire regarding',
 };
 

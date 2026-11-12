@@ -51,7 +51,7 @@ export const GoogleReviewsBadge: React.FC<GoogleReviewsBadgeProps> = ({
             <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
           ))}
         </div>
-        <span className="text-[11px] text-stone-300 font-medium">({totalReviews} Google Reviews)</span>
+        <span className="text-[11px] text-stone-300 font-medium">({totalReviews}+ Google Reviews)</span>
       </div>
     );
   }
@@ -110,7 +110,7 @@ export const GoogleReviewsBadge: React.FC<GoogleReviewsBadgeProps> = ({
               </div>
             </div>
             <p className="text-xs text-stone-600 mt-1">
-              Over <strong>{totalReviews} verified student, parent & collector reviews</strong> on Google Business.
+              Over <strong>{totalReviews}+ verified student, parent & collector reviews</strong> on Google Business.
             </p>
           </div>
         </div>

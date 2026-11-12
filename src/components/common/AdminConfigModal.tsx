@@ -26,6 +26,7 @@ export const AdminConfigModal: React.FC = () => {
     enquiries,
     updateEnquiryStatus,
     clearEnquiries,
+    openInquiriesModal,
   } = useStudio();
 
   const [activeTab, setActiveTab] = useState<'config' | 'enquiries'>('config');
@@ -259,23 +260,35 @@ export const AdminConfigModal: React.FC = () => {
                   </p>
                 </div>
 
-                {enquiries.length > 0 && (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleExportCSV}
-                      className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3 py-2 rounded-sm font-medium flex items-center gap-1.5"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Export CSV</span>
-                    </button>
-                    <button
-                      onClick={clearEnquiries}
-                      className="text-red-700 hover:bg-red-50 text-xs px-3 py-2 rounded-sm border border-red-200"
-                    >
-                      Clear All
-                    </button>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      closeAdminConfig();
+                      openInquiriesModal();
+                    }}
+                    className="bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs px-3.5 py-2 rounded-sm shadow-xs transition-colors flex items-center gap-1.5"
+                  >
+                    <span>📥 Open Full Inquiries Inbox</span>
+                  </button>
+
+                  {enquiries.length > 0 && (
+                    <>
+                      <button
+                        onClick={handleExportCSV}
+                        className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3 py-2 rounded-sm font-medium flex items-center gap-1.5"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>Export CSV</span>
+                      </button>
+                      <button
+                        onClick={clearEnquiries}
+                        className="text-red-700 hover:bg-red-50 text-xs px-3 py-2 rounded-sm border border-red-200"
+                      >
+                        Clear All
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
 
               {enquiries.length === 0 ? (

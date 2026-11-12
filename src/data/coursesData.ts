@@ -21,7 +21,7 @@ export const COURSES_DATA: CourseItem[] = [
       'Confidence building with celebratory mini studio exhibitions',
       'Available in-studio in Indore and via live interactive Zoom worldwide',
     ],
-    image: OFFICIAL_ASSETS.kidsDrawing,
+    image: OFFICIAL_ASSETS.studentBalKrishna,
   },
   {
     id: 'teen-art-programs',
@@ -42,7 +42,7 @@ export const COURSES_DATA: CourseItem[] = [
       'Introduction to portrait planes and expressive gesture drawing',
       'Guidance for design school and creative college entrance portfolios (NID, NIFT, Fine Arts)',
     ],
-    image: OFFICIAL_ASSETS.pencilSketching,
+    image: OFFICIAL_ASSETS.horsesSketch,
   },
   {
     id: 'adult-drawing-painting',
@@ -63,7 +63,7 @@ export const COURSES_DATA: CourseItem[] = [
       'Stress-relieving creative focus with like-minded art enthusiasts',
       'Weekend and weekday morning/evening batch options available',
     ],
-    image: OFFICIAL_ASSETS.acrylicEaselPainting,
+    image: OFFICIAL_ASSETS.studentSunsetPier,
   },
   {
     id: 'professional-fine-art-courses',
@@ -84,7 +84,7 @@ export const COURSES_DATA: CourseItem[] = [
       'Commercial gallery pricing, certificate of completion, and exhibition curation',
       'Studio portfolio review and one-on-one career consultation',
     ],
-    image: OFFICIAL_ASSETS.oilPortrait,
+    image: OFFICIAL_ASSETS.radhaKrishnaEasel,
   },
   {
     id: 'portrait-drawing-mastery',
@@ -105,6 +105,6 @@ export const COURSES_DATA: CourseItem[] = [
       'Drawing from reference photographs and live studio models',
       'Techniques for creating commissioned portraits for paying clients',
     ],
-    image: OFFICIAL_ASSETS.artisticAnatomyStudy,
+    image: OFFICIAL_ASSETS.oldManPortrait,
   },
 ];

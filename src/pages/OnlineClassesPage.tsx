@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 
 export const OnlineClassesPage: React.FC = () => {
-  const { openFreeDemoModal, addEnquiry } = useStudio();
+  const { openFreeDemoModal, addEnquiry, businessConfig } = useStudio();
 
   // Tab state for age cohorts
   const [activeAgeTab, setActiveAgeTab] = useState<string>('age-6-8');
@@ -59,6 +59,15 @@ export const OnlineClassesPage: React.FC = () => {
       timeSlotPreference: timeSlot,
       message: message.trim() || `Format: ${classFormat}. Age: ${studentAge}, Level: ${selectedLevel}, Country: ${country}, Slot: ${timeSlot}.`,
     });
+
+    // Auto-open WhatsApp directly to Vikas Gothi
+    try {
+      const text = `*Online Art Class Enquiry - The Art Horizon*\n*Parent/Student:* ${name.trim()}\n*Country:* ${country}\n*Age Group:* ${studentAge} (${selectedLevel})\n*Format:* ${classFormat}\n*Time Window:* ${timeSlot}\n*Phone:* ${phone.trim()}\n*Message:* ${message.trim() || 'Please send batch details and demo link.'}`;
+      const url = `https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    } catch {
+      // ignore
+    }
 
     setIsSubmitted(true);
   };
@@ -432,14 +441,41 @@ export const OnlineClassesPage: React.FC = () => {
           </div>
 
           {isSubmitted ? (
-            <div className="p-8 text-center space-y-3 bg-emerald-50 border border-emerald-200 rounded-2xl">
-              <div className="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-7 h-7" />
+            <div className="p-8 text-center space-y-4 bg-emerald-50 border border-emerald-200 rounded-2xl">
+              <div className="w-14 h-14 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto shadow-sm">
+                <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-stone-900">Enquiry Received!</h3>
-              <p className="text-xs text-stone-600 max-w-md mx-auto">
-                Thank you, <strong>{name}</strong>. We have noted your interest for {studentAge} ({selectedLevel} - {classFormat}). We will share the batch syllabus and trial class links via WhatsApp / Email shortly.
+              <h3 className="font-serif text-2xl font-bold text-stone-900">Enquiry Recorded!</h3>
+              <p className="text-xs sm:text-sm text-stone-600 max-w-md mx-auto leading-relaxed">
+                Thank you, <strong>{name}</strong>! We have recorded your interest for <strong>{studentAge}</strong> ({selectedLevel} - {classFormat}). It is saved in our admissions inbox.
               </p>
+
+              <div className="pt-2 max-w-md mx-auto space-y-2">
+                <a
+                  href={`https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                    `*Online Art Class Enquiry - The Art Horizon*\n*Parent/Student:* ${name}\n*Country:* ${country}\n*Age Group:* ${studentAge} (${selectedLevel})\n*Format:* ${classFormat}\n*Time Window:* ${timeSlot}\n*Phone:* ${phone}\n*Message:* ${message || 'Please send batch details and demo link.'}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366] hover:bg-[#20ba59] text-white py-3 px-5 rounded-full font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-all"
+                >
+                  <span>📲 Send to Vikas Gothi on WhatsApp (+91 99818 83598)</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    setName('');
+                    setPhone('');
+                    setEmail('');
+                    setMessage('');
+                  }}
+                  className="text-xs text-stone-600 hover:text-stone-900 underline underline-offset-2 block mx-auto pt-1"
+                >
+                  Submit another request
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">

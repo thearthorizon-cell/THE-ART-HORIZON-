@@ -11,12 +11,12 @@ import { EnquiryModal } from './components/common/EnquiryModal';
 import { FreeDemoModal } from './components/common/FreeDemoModal';
 import { Lightbox } from './components/common/Lightbox';
 import { WhatsAppButton } from './components/common/WhatsAppButton';
-import { AdminConfigModal } from './components/common/AdminConfigModal';
 import { ItemDetailModal } from './components/common/ItemDetailModal';
 import { SEOHead } from './components/common/SEOHead';
 import { GeminiChatModal } from './components/chat/GeminiChatModal';
 import { GeminiFloatingButton } from './components/chat/GeminiFloatingButton';
 import { WriteReviewModal } from './components/common/WriteReviewModal';
+import { InquiriesInboxModal } from './components/common/InquiriesInboxModal';
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -89,7 +89,7 @@ const MainContent: React.FC = () => {
       <GeminiFloatingButton onClick={openGeminiChat} />
       <GeminiChatModal isOpen={isGeminiChatOpen} onClose={closeGeminiChat} />
       <WriteReviewModal isOpen={isWriteReviewModalOpen} onClose={closeWriteReviewModal} />
-      <AdminConfigModal />
+      <InquiriesInboxModal />
     </div>
   );
 };
