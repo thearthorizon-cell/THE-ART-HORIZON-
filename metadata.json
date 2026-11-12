@@ -1,0 +1,6 @@
+{
+  "name": "The Art Horizon - Fine Art Studio & Academy",
+  "description": "Where Creativity Finds Its Horizon. Premium fine art education, international online classes, custom portrait commissions, and professional art services by Vikas Gothi in Indore, India.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

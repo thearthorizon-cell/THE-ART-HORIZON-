@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Compatibility polyfill for browser extensions / harness scripts that monkey-patch window.fetch
+      (function() {
+        try {
+          var originalFetch = typeof window !== 'undefined' && window.fetch ? window.fetch.bind(window) : null;
+          var activeFetch = originalFetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return activeFetch;
+            },
+            set: function(fn) {
+              activeFetch = fn;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          // Fallback if defineProperty fails
+        }
+        window.addEventListener('error', function(event) {
+          if (event && event.message && event.message.indexOf('fetch') !== -1 && event.message.indexOf('getter') !== -1) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+          }
+        }, true);
+      })();
+    </script>
+    <title>The Art Horizon - Fine Art Studio & Academy | Indore</title>
+    <meta
+      name="description"
+      content="The Art Horizon: Fine art academy & professional art services in Indore by Vikas Gothi. Kids, teens, adult classes, international Zoom sessions, portraits & murals."
+    />
+    <meta property="og:title" content="The Art Horizon - Fine Art Studio & Academy" />
+    <meta
+      property="og:description"
+      content="Where Creativity Finds Its Horizon. Premium fine art education, international online classes, custom portrait commissions, and professional art services by Vikas Gothi."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The Art Horizon" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Art Horizon - Fine Art Studio & Academy" />
+    <meta
+      name="twitter:description"
+      content="Fine art training, international online classes, portrait commissions & commercial art projects by Vikas Gothi in Indore."
+    />
+    <meta name="keywords" content="Art Classes in Indore, Drawing Classes in Indore, Painting Classes in Indore, Kids Art Classes, Fine Art Academy, Online Drawing Classes for Kids, Online Art Classes Worldwide, Portrait Artist in Indore, Rangoli Artist, Wall Mural Painting Services" />
+    
+    <!-- Google Fonts for Serif & Sans-Serif Aesthetics -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ArtSchool",
+      "name": "The Art Horizon",
+      "founder": {
+        "@type": "Person",
+        "name": "Vikas Gothi"
+      },
+      "slogan": "Where Creativity Finds Its Horizon.",
+      "telephone": "+919981883598",
+      "email": "Info@thearthorizon.com",
+      "url": "https://thearthorizon.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "266, Ganesh Villa, Usha Nagar Extension, Ranjit Hanuman Road",
+        "addressLocality": "Indore",
+        "addressRegion": "Madhya Pradesh",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://thearthorizon.com"
+      ],
+      "areaServed": ["Indore", "India", "United States", "United Kingdom", "United Arab Emirates", "Canada", "Worldwide"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Art Education & Creative Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Course",
+              "name": "Kids & Adult Fine Art Classes"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Course",
+              "name": "International Online Drawing & Painting Classes"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Custom Portrait Commissions & Wall Murals"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+  </head>
+  <body class="bg-[#FAF8F5] text-stone-800 antialiased selection:bg-[#B85D38]/20 selection:text-[#934524]">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
