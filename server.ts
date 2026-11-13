@@ -31,6 +31,12 @@ const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json({ limit: '15mb' }));
+app.use('/api', (_req: Request, res: Response, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
 
 // Persistent Uploaded Images Directory (served in both dev & production)
 const UPLOADS_DIR = path.resolve(__dirname, 'public', 'uploads');
@@ -166,9 +172,32 @@ const saveCMSDatabase = (db: StoredCMSDatabase): void => {
 
 // Studio PIN Authentication & Per-IP Rate Limiting
 const ALLOWED_STUDIO_PINS = new Set(['83598', '1998', '9981883598', '99818 83598']);
-const MAX_PIN_ATTEMPTS = 5;
+const MAX_PIN_ATTEMPTS = 12;
 const PIN_LOCKOUT_MS = 15 * 60 * 1000;
 const pinAttemptTracker = new Map<string, { count: number; firstAttemptAt: number; lockedUntil?: number }>();
+
+const normalizeStudioPin = (raw: string): string => {
+  const trimmed = raw.trim();
+  if (ALLOWED_STUDIO_PINS.has(trimmed)) return trimmed;
+  const compact = trimmed.replace(/[\s-]+/g, '');
+  if (ALLOWED_STUDIO_PINS.has(compact)) return compact;
+  return trimmed;
+};
+
+const extractStudioPin = (req: Request): string => {
+  const headerPin = req.headers['x-studio-pin'];
+  if (typeof headerPin === 'string' && headerPin.trim()) {
+    return headerPin.trim();
+  }
+  const authHeader = req.headers.authorization;
+  if (typeof authHeader === 'string' && authHeader.toLowerCase().startsWith('bearer ')) {
+    return authHeader.slice(7).trim();
+  }
+  if (req.body && typeof req.body.pin === 'string' && req.body.pin.trim()) {
+    return req.body.pin.trim();
+  }
+  return '';
+};
 
 const getClientIp = (req: Request): string => {
   const forwarded = req.headers['x-forwarded-for'];
@@ -191,30 +220,33 @@ const requireStudioAdmin = (req: Request, res: Response): boolean => {
     return false;
   }
 
-  const pinHeader = String(req.headers['x-studio-pin'] || (req.body && req.body.pin) || '').trim();
+  const rawPin = extractStudioPin(req);
+  const normalizedPin = normalizeStudioPin(rawPin);
 
-  if (ALLOWED_STUDIO_PINS.has(pinHeader)) {
+  if (normalizedPin && ALLOWED_STUDIO_PINS.has(normalizedPin)) {
     pinAttemptTracker.delete(clientIp);
     return true;
   }
 
-  // Record failed PIN attempt only when an actual PIN was provided (or even empty unauthorized access)
-  const freshWindow = !record || now - record.firstAttemptAt > PIN_LOCKOUT_MS;
-  const nextCount = freshWindow ? 1 : record.count + 1;
-  const nextRecord: { count: number; firstAttemptAt: number; lockedUntil?: number } = {
-    count: nextCount,
-    firstAttemptAt: freshWindow ? now : record.firstAttemptAt,
-  };
-  if (nextCount >= MAX_PIN_ATTEMPTS) {
-    nextRecord.lockedUntil = now + PIN_LOCKOUT_MS;
-  }
-  pinAttemptTracker.set(clientIp, nextRecord);
+  // Only count failed attempts when a non-empty PIN was actually submitted
+  if (rawPin) {
+    const freshWindow = !record || now - record.firstAttemptAt > PIN_LOCKOUT_MS;
+    const nextCount = freshWindow ? 1 : record.count + 1;
+    const nextRecord: { count: number; firstAttemptAt: number; lockedUntil?: number } = {
+      count: nextCount,
+      firstAttemptAt: freshWindow ? now : record.firstAttemptAt,
+    };
+    if (nextCount >= MAX_PIN_ATTEMPTS) {
+      nextRecord.lockedUntil = now + PIN_LOCKOUT_MS;
+    }
+    pinAttemptTracker.set(clientIp, nextRecord);
 
-  if (nextRecord.lockedUntil) {
-    res.status(429).json({
-      error: 'Too many invalid Studio PIN attempts. Access temporarily locked for 15 minutes.',
-    });
-    return false;
+    if (nextRecord.lockedUntil) {
+      res.status(429).json({
+        error: 'Too many invalid Studio PIN attempts. Access temporarily locked for 15 minutes.',
+      });
+      return false;
+    }
   }
 
   res.status(401).json({ error: 'Unauthorized: Valid Studio PIN required.' });
@@ -418,34 +450,48 @@ app.delete('/api/enquiries/:id', (req: Request, res: Response): void => {
 // PIN-PROTECTED STUDIO ADMIN CMS & MEDIA UPLOAD ROUTES
 // ============================================================
 
+const buildAdminDashboardPayload = () => {
+  const db = loadCMSDatabase();
+  const enquiries = loadEnquiries();
+
+  return {
+    dashboard: {
+      founder: db.founder,
+      announcements: [...db.announcements].sort((a, b) =>
+        (b.publishedAt || b.createdAt).localeCompare(a.publishedAt || a.createdAt)
+      ),
+      onlineCourses: db.onlineCourses,
+      galleryPhotos: db.galleryPhotos,
+      siteContent: db.siteContent,
+      subscribers: db.subscribers,
+      stats: {
+        totalEnquiries: enquiries.length,
+        newEnquiries: enquiries.filter((e) => e.status === 'new').length,
+        totalSubscribers: db.subscribers.length,
+        publishedAnnouncements: db.announcements.filter((a) => a.status === 'published').length,
+        visibleOnlineCourses: db.onlineCourses.filter((c) => c.visible !== false).length,
+        totalGalleryPhotos: db.galleryPhotos.length,
+      },
+    },
+    enquiries,
+  };
+};
+
 app.post('/api/admin/verify-pin', (req: Request, res: Response): void => {
   if (!requireStudioAdmin(req, res)) return;
   res.json({ valid: true });
 });
 
+app.post('/api/admin/login', (req: Request, res: Response): void => {
+  if (!requireStudioAdmin(req, res)) return;
+  const payload = buildAdminDashboardPayload();
+  res.json({ ok: true, ...payload });
+});
+
 app.get('/api/admin/dashboard', (req: Request, res: Response): void => {
   if (!requireStudioAdmin(req, res)) return;
-  const db = loadCMSDatabase();
-  const enquiries = loadEnquiries();
-
-  res.json({
-    founder: db.founder,
-    announcements: [...db.announcements].sort((a, b) =>
-      (b.publishedAt || b.createdAt).localeCompare(a.publishedAt || a.createdAt)
-    ),
-    onlineCourses: db.onlineCourses,
-    galleryPhotos: db.galleryPhotos,
-    siteContent: db.siteContent,
-    subscribers: db.subscribers,
-    stats: {
-      totalEnquiries: enquiries.length,
-      newEnquiries: enquiries.filter((e) => e.status === 'new').length,
-      totalSubscribers: db.subscribers.length,
-      publishedAnnouncements: db.announcements.filter((a) => a.status === 'published').length,
-      visibleOnlineCourses: db.onlineCourses.filter((c) => c.visible !== false).length,
-      totalGalleryPhotos: db.galleryPhotos.length,
-    },
-  });
+  const { dashboard } = buildAdminDashboardPayload();
+  res.json(dashboard);
 });
 
 // Upload image file (validated MIME type + max 8MB binary) into public/uploads/
@@ -917,6 +963,10 @@ app.get('/api/health', (_req: Request, res: Response) => {
     founder: 'Vikas Gothi',
     modelsAvailable: ['gemini-4-hydrogen', 'gemini-3.1-flash-lite'],
   });
+});
+
+app.use('/api', (_req: Request, res: Response) => {
+  res.status(404).json({ error: 'API endpoint not found.' });
 });
 
 async function startServer() {

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   AdminDashboardData,
   AnnouncementItem,
@@ -50,8 +50,8 @@ interface StudioContextType {
   newEnquiriesCount: number;
   refreshEnquiries: (pin?: string) => Promise<boolean>;
   addEnquiry: (submission: Omit<EnquirySubmission, 'id' | 'createdAt' | 'status'>) => Promise<boolean>;
-  updateEnquiryStatus: (id: string, status: EnquirySubmission['status']) => Promise<void>;
-  deleteEnquiry: (id: string) => Promise<void>;
+  updateEnquiryStatus: (id: string, status: EnquirySubmission['status']) => Promise<boolean>;
+  deleteEnquiry: (id: string) => Promise<boolean>;
   clearEnquiries: () => void;
   // CMS & Online Courses & Newsletter
   cmsState: CMSState;
@@ -105,7 +105,139 @@ const StudioContext = createContext<StudioContextType | undefined>(undefined);
 
 const CONFIG_STORAGE_KEY = 'the_art_horizon_config_v2';
 const STUDIO_PIN_SESSION_KEY = 'the_art_horizon_admin_pin';
+const STUDIO_AUTH_SESSION_KEY = 'the_art_horizon_admin_auth';
 const LEGACY_ENQUIRIES_STORAGE_KEY = 'the_art_horizon_enquiries_v1';
+
+// Safe session storage wrapper with in-memory fallback (works even in restricted iframes)
+const memorySessionMap = new Map<string, string>();
+export const safeSessionGet = (key: string): string => {
+  try {
+    const val = window.sessionStorage.getItem(key);
+    if (val !== null) return val;
+  } catch {
+    // ignore SecurityError in sandboxed iframes
+  }
+  return memorySessionMap.get(key) ?? '';
+};
+
+export const safeSessionSet = (key: string, value: string): void => {
+  memorySessionMap.set(key, value);
+  try {
+    window.sessionStorage.setItem(key, value);
+  } catch {
+    // ignore SecurityError
+  }
+};
+
+export const safeSessionRemove = (key: string): void => {
+  memorySessionMap.delete(key);
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {
+    // ignore SecurityError
+  }
+};
+
+interface ApiResult<T = any> {
+  ok: boolean;
+  status: number;
+  data: T | null;
+  isJson: boolean;
+}
+
+const xhrFallback = (url: string, init: RequestInit): Promise<{ status: number; contentType: string; text: string }> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open(init.method || 'GET', url, true);
+      xhr.withCredentials = true;
+      xhr.timeout = 12000;
+      const headers = init.headers as Record<string, string> | undefined;
+      if (headers) {
+        for (const [k, v] of Object.entries(headers)) {
+          xhr.setRequestHeader(k, v);
+        }
+      }
+      xhr.onload = () => {
+        resolve({
+          status: xhr.status,
+          contentType: xhr.getResponseHeader('content-type') || '',
+          text: xhr.responseText || '',
+        });
+      };
+      xhr.onerror = () => reject(new Error('XHR network error'));
+      xhr.ontimeout = () => reject(new Error('XHR request timeout'));
+      xhr.send((init.body as string | null) ?? null);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+async function apiRequest<T = any>(url: string, init: RequestInit = {}, retries = 2): Promise<ApiResult<T>> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      let status = 0;
+      let contentType = '';
+      let rawText = '';
+
+      try {
+        const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const timer = controller ? setTimeout(() => controller.abort(), 10000) : null;
+        try {
+          const res = await fetch(url, {
+            ...init,
+            cache: 'no-store',
+            credentials: 'same-origin',
+            signal: controller ? controller.signal : undefined,
+          });
+          status = res.status;
+          contentType = res.headers.get('content-type') || '';
+          rawText = await res.text();
+        } finally {
+          if (timer) clearTimeout(timer);
+        }
+      } catch {
+        // Fallback to XMLHttpRequest if fetch is blocked, aborted, or hijacked by browser extension/iframe
+        const xhrRes = await xhrFallback(url, init);
+        status = xhrRes.status;
+        contentType = xhrRes.contentType;
+        rawText = xhrRes.text;
+      }
+
+      const trimmed = rawText.trim();
+      const looksLikeJson = contentType.includes('application/json') || trimmed.startsWith('{') || trimmed.startsWith('[');
+      let parsed: T | null = null;
+      if (looksLikeJson && trimmed) {
+        try {
+          parsed = JSON.parse(trimmed) as T;
+        } catch {
+          parsed = null;
+        }
+      }
+
+      const isWarmupOrGatewayError = status === 502 || status === 503 || status === 504 || (!looksLikeJson && status >= 200);
+      if (isWarmupOrGatewayError && attempt < retries) {
+        await new Promise((r) => setTimeout(r, 700));
+        continue;
+      }
+
+      return {
+        ok: status >= 200 && status < 300 && looksLikeJson && parsed !== null,
+        status,
+        data: parsed,
+        isJson: looksLikeJson && parsed !== null,
+      };
+    } catch {
+      if (attempt < retries) {
+        await new Promise((r) => setTimeout(r, 700));
+        continue;
+      }
+      return { ok: false, status: 0, data: null, isJson: false };
+    }
+  }
+  return { ok: false, status: 0, data: null, isJson: false };
+}
 
 const INITIAL_CMS_STATE: CMSState = {
   founder: DEFAULT_FOUNDER_PROFILE,
@@ -194,30 +326,39 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const openInquiriesModal = () => setIsInquiriesModalOpen(true);
   const closeInquiriesModal = () => setIsInquiriesModalOpen(false);
 
-  const getStoredPin = () => (sessionStorage.getItem(STUDIO_PIN_SESSION_KEY) ?? '').trim();
+  const activePinRef = useRef<string>(safeSessionGet(STUDIO_PIN_SESSION_KEY).trim());
+
+  const getStoredPin = () => (activePinRef.current || safeSessionGet(STUDIO_PIN_SESSION_KEY)).trim();
+
+  const buildPinHeaders = (pin: string, withJsonContentType = false): Record<string, string> => {
+    const headers: Record<string, string> = {
+      'x-studio-pin': pin,
+      Authorization: `Bearer ${pin}`,
+    };
+    if (withJsonContentType) {
+      headers['Content-Type'] = 'application/json';
+    }
+    return headers;
+  };
 
   // Fetch public CMS state from server
   const refreshPublicCms = useCallback(async () => {
-    try {
-      const res = await fetch('/api/cms');
-      if (res.ok) {
-        const data = await res.json();
-        setCmsState({
-          founder: data.founder || DEFAULT_FOUNDER_PROFILE,
-          announcements: Array.isArray(data.announcements) ? data.announcements : DEFAULT_ANNOUNCEMENTS,
-          onlineCourses:
-            Array.isArray(data.onlineCourses) && data.onlineCourses.length > 0
-              ? data.onlineCourses
-              : DEFAULT_ONLINE_COURSES,
-          galleryPhotos:
-            Array.isArray(data.galleryPhotos) && data.galleryPhotos.length > 0
-              ? data.galleryPhotos
-              : GALLERY_DATA,
-          siteContent: data.siteContent || DEFAULT_SITE_CONTENT,
-        });
-      }
-    } catch (err) {
-      console.warn('Could not load CMS state from server, using defaults:', err);
+    const res = await apiRequest<any>('/api/cms');
+    if (res.ok && res.data) {
+      const data = res.data;
+      setCmsState({
+        founder: data.founder || DEFAULT_FOUNDER_PROFILE,
+        announcements: Array.isArray(data.announcements) ? data.announcements : DEFAULT_ANNOUNCEMENTS,
+        onlineCourses:
+          Array.isArray(data.onlineCourses) && data.onlineCourses.length > 0
+            ? data.onlineCourses
+            : DEFAULT_ONLINE_COURSES,
+        galleryPhotos:
+          Array.isArray(data.galleryPhotos) && data.galleryPhotos.length > 0
+            ? data.galleryPhotos
+            : GALLERY_DATA,
+        siteContent: data.siteContent || DEFAULT_SITE_CONTENT,
+      });
     }
   }, []);
 
@@ -240,32 +381,29 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     setIsLoadingEnquiries(true);
     try {
-      const res = await fetch('/api/enquiries', {
-        headers: { 'x-studio-pin': pin },
+      const res = await apiRequest<any>('/api/enquiries', {
+        headers: buildPinHeaders(pin),
       });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && Array.isArray(data.enquiries)) {
-          setEnquiries(data.enquiries);
-          return true;
-        }
-      } else if (res.status === 401 || res.status === 429) {
+      if (res.ok && res.data && Array.isArray(res.data.enquiries)) {
+        setEnquiries(res.data.enquiries);
+        return true;
+      }
+      if (res.status === 401 || res.status === 429) {
         setEnquiries([]);
         if (res.status === 401) {
-          sessionStorage.removeItem(STUDIO_PIN_SESSION_KEY);
-          sessionStorage.removeItem('the_art_horizon_admin_auth');
+          activePinRef.current = '';
+          safeSessionRemove(STUDIO_PIN_SESSION_KEY);
+          safeSessionRemove(STUDIO_AUTH_SESSION_KEY);
         }
         return false;
       }
-    } catch (err) {
-      console.warn('Could not fetch server enquiries', err);
     } finally {
       setIsLoadingEnquiries(false);
     }
     return false;
   }, []);
 
-  // Verify PIN and load full admin dashboard + enquiries
+  // Verify PIN and load full admin dashboard + enquiries in one atomic request
   const verifyAndLoadAdmin = useCallback(
     async (pinOverride?: string): Promise<{ ok: boolean; error?: string }> => {
       const pin = (pinOverride ?? getStoredPin()).trim();
@@ -275,22 +413,23 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       setIsLoadingAdmin(true);
       try {
-        const [dashRes, enqRes] = await Promise.all([
-          fetch('/api/admin/dashboard', { headers: { 'x-studio-pin': pin } }),
-          fetch('/api/enquiries', { headers: { 'x-studio-pin': pin } }),
-        ]);
+        const loginRes = await apiRequest<any>('/api/admin/login', {
+          method: 'POST',
+          headers: buildPinHeaders(pin, true),
+          body: JSON.stringify({ pin }),
+        });
 
-        if (dashRes.status === 429 || enqRes.status === 429) {
-          const errData = await dashRes.json().catch(() => ({}));
+        if (loginRes.status === 429) {
           return {
             ok: false,
-            error: errData.error || 'Too many failed PIN attempts. Please try again later.',
+            error: loginRes.data?.error || 'Too many failed PIN attempts. Please try again later.',
           };
         }
 
-        if (dashRes.status === 401 || enqRes.status === 401) {
-          sessionStorage.removeItem(STUDIO_PIN_SESSION_KEY);
-          sessionStorage.removeItem('the_art_horizon_admin_auth');
+        if (loginRes.status === 401) {
+          activePinRef.current = '';
+          safeSessionRemove(STUDIO_PIN_SESSION_KEY);
+          safeSessionRemove(STUDIO_AUTH_SESSION_KEY);
           setEnquiries([]);
           setAdminDashboard(null);
           return {
@@ -299,26 +438,28 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           };
         }
 
-        const dashCt = dashRes.headers.get('content-type') || '';
-        const enqCt = enqRes.headers.get('content-type') || '';
-
-        if (dashRes.ok && enqRes.ok && dashCt.includes('application/json') && enqCt.includes('application/json')) {
-          const dashData = await dashRes.json();
-          const enqData = await enqRes.json();
-          setAdminDashboard(dashData);
-          if (Array.isArray(enqData.enquiries)) {
-            setEnquiries(enqData.enquiries);
+        if (loginRes.ok && loginRes.data?.dashboard) {
+          activePinRef.current = pin;
+          safeSessionSet(STUDIO_PIN_SESSION_KEY, pin);
+          safeSessionSet(STUDIO_AUTH_SESSION_KEY, 'true');
+          setAdminDashboard(loginRes.data.dashboard);
+          if (Array.isArray(loginRes.data.enquiries)) {
+            setEnquiries(loginRes.data.enquiries);
           }
           return { ok: true };
         }
 
+        if (loginRes.status === 0) {
+          return {
+            ok: false,
+            error: 'Unable to connect to Studio server right now. Please wait a moment and try again.',
+          };
+        }
+
         return {
           ok: false,
-          error: `Studio server returned an unexpected response (${dashRes.status}/${enqRes.status}). Please try again.`,
+          error: loginRes.data?.error || `Studio server returned status ${loginRes.status}. Please try again.`,
         };
-      } catch (err) {
-        console.warn('Failed to load admin dashboard:', err);
-        return { ok: false, error: 'Could not reach Studio server. Please try again.' };
       } finally {
         setIsLoadingAdmin(false);
       }
@@ -405,74 +546,68 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const addEnquiry = async (
     submission: Omit<EnquirySubmission, 'id' | 'createdAt' | 'status'>
   ): Promise<boolean> => {
-    try {
-      const res = await fetch('/api/enquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: submission.name,
-          email: submission.email,
-          phone: submission.phone,
-          serviceCategory: submission.serviceCategory,
-          serviceDetail: submission.serviceDetail,
-          countryOrCity: submission.countryOrCity,
-          studentAge: submission.studentAge,
-          timeSlotPreference: submission.timeSlotPreference,
-          message: submission.message,
-        }),
-      });
+    const res = await apiRequest<any>('/api/enquiries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: submission.name,
+        email: submission.email,
+        phone: submission.phone,
+        serviceCategory: submission.serviceCategory,
+        serviceDetail: submission.serviceDetail,
+        countryOrCity: submission.countryOrCity,
+        studentAge: submission.studentAge,
+        timeSlotPreference: submission.timeSlotPreference,
+        message: submission.message,
+      }),
+    });
 
-      if (res.ok) {
-        const data = await res.json();
-        if (getStoredPin() && data?.enquiry) {
-          setEnquiries((prev) => [data.enquiry, ...prev]);
-          verifyAndLoadAdmin();
-        }
-        return true;
+    if (res.ok) {
+      if (getStoredPin() && res.data?.enquiry) {
+        setEnquiries((prev) => [res.data.enquiry, ...prev]);
+        verifyAndLoadAdmin();
       }
-    } catch (err) {
-      console.warn('Network error while saving enquiry to server:', err);
+      return true;
     }
 
     return false;
   };
 
-  const updateEnquiryStatus = async (id: string, status: EnquirySubmission['status']) => {
+  const updateEnquiryStatus = async (id: string, status: EnquirySubmission['status']): Promise<boolean> => {
     const pin = getStoredPin();
-    if (!pin) return;
+    if (!pin) return false;
 
     setEnquiries((prev) => prev.map((item) => (item.id === id ? { ...item, status } : item)));
 
-    try {
-      await fetch(`/api/enquiries/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-studio-pin': pin,
-        },
-        body: JSON.stringify({ status }),
-      });
+    const res = await apiRequest(`/api/enquiries/${id}`, {
+      method: 'PATCH',
+      headers: buildPinHeaders(pin, true),
+      body: JSON.stringify({ status }),
+    });
+    if (res.ok) {
       await verifyAndLoadAdmin(pin);
-    } catch (err) {
-      console.warn('Failed to update status on server:', err);
+      return true;
     }
+    await verifyAndLoadAdmin(pin);
+    return false;
   };
 
-  const deleteEnquiry = async (id: string) => {
+  const deleteEnquiry = async (id: string): Promise<boolean> => {
     const pin = getStoredPin();
-    if (!pin) return;
+    if (!pin) return false;
 
     setEnquiries((prev) => prev.filter((item) => item.id !== id));
 
-    try {
-      await fetch(`/api/enquiries/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-studio-pin': pin },
-      });
+    const res = await apiRequest(`/api/enquiries/${id}`, {
+      method: 'DELETE',
+      headers: buildPinHeaders(pin),
+    });
+    if (res.ok) {
       await verifyAndLoadAdmin(pin);
-    } catch (err) {
-      console.warn('Failed to delete on server:', err);
+      return true;
     }
+    await verifyAndLoadAdmin(pin);
+    return false;
   };
 
   const clearEnquiries = () => {
@@ -480,43 +615,35 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const clearAdminSession = () => {
-    sessionStorage.removeItem(STUDIO_PIN_SESSION_KEY);
-    sessionStorage.removeItem('the_art_horizon_admin_auth');
+    activePinRef.current = '';
+    safeSessionRemove(STUDIO_PIN_SESSION_KEY);
+    safeSessionRemove(STUDIO_AUTH_SESSION_KEY);
     setEnquiries([]);
     setAdminDashboard(null);
   };
 
   // Public Newsletter subscription
   const subscribeNewsletter = async (payload: SubscribePayload): Promise<SubscribeResult> => {
-    try {
-      const res = await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        if (getStoredPin()) {
-          verifyAndLoadAdmin();
-        }
-        return {
-          success: true,
-          alreadySubscribed: Boolean(data.alreadySubscribed),
-          message: data.message || 'Subscribed successfully!',
-        };
+    const res = await apiRequest<any>('/api/newsletter/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok && res.data) {
+      if (getStoredPin()) {
+        verifyAndLoadAdmin();
       }
       return {
-        success: false,
-        message: data.error || 'Could not complete subscription.',
-        error: data.error,
-      };
-    } catch {
-      return {
-        success: false,
-        message: 'Network error while subscribing. Please try again.',
-        error: 'Network error',
+        success: true,
+        alreadySubscribed: Boolean(res.data.alreadySubscribed),
+        message: res.data.message || 'Subscribed successfully!',
       };
     }
+    return {
+      success: false,
+      message: res.data?.error || 'Could not complete subscription. Please try again.',
+      error: res.data?.error || 'Network error',
+    };
   };
 
   // Admin Image Upload helper (reads File -> DataURL -> POST /api/admin/upload)
@@ -543,23 +670,15 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return { ok: false, error: 'Could not read image file.' };
     }
 
-    try {
-      const res = await fetch('/api/admin/upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-studio-pin': pin,
-        },
-        body: JSON.stringify({ dataUrl, fileName: file.name }),
-      });
-      const data = await res.json();
-      if (res.ok && data.url) {
-        return { ok: true, url: data.url };
-      }
-      return { ok: false, error: data.error || 'Upload failed.' };
-    } catch {
-      return { ok: false, error: 'Network error uploading image.' };
+    const res = await apiRequest<any>('/api/admin/upload', {
+      method: 'POST',
+      headers: buildPinHeaders(pin, true),
+      body: JSON.stringify({ dataUrl, fileName: file.name }),
+    });
+    if (res.ok && res.data?.url) {
+      return { ok: true, url: res.data.url };
     }
+    return { ok: false, error: res.data?.error || 'Upload failed.' };
   };
 
   const syncAfterAdminMutation = async (pin: string) => {
@@ -569,18 +688,14 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const updateFounderProfile = async (data: Partial<FounderProfileData>): Promise<boolean> => {
     const pin = getStoredPin();
     if (!pin) return false;
-    try {
-      const res = await fetch('/api/admin/founder', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-studio-pin': pin },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        await syncAfterAdminMutation(pin);
-        return true;
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await apiRequest('/api/admin/founder', {
+      method: 'PUT',
+      headers: buildPinHeaders(pin, true),
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      await syncAfterAdminMutation(pin);
+      return true;
     }
     return false;
   };
@@ -588,18 +703,14 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const updateSiteContent = async (data: Partial<SiteContentConfig>): Promise<boolean> => {
     const pin = getStoredPin();
     if (!pin) return false;
-    try {
-      const res = await fetch('/api/admin/site-content', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-studio-pin': pin },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        await syncAfterAdminMutation(pin);
-        return true;
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await apiRequest('/api/admin/site-content', {
+      method: 'PUT',
+      headers: buildPinHeaders(pin, true),
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      await syncAfterAdminMutation(pin);
+      return true;
     }
     return false;
   };
@@ -607,20 +718,16 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const saveAnnouncement = async (data: Partial<AnnouncementItem>, id?: string): Promise<boolean> => {
     const pin = getStoredPin();
     if (!pin) return false;
-    try {
-      const url = id ? `/api/admin/announcements/${id}` : '/api/admin/announcements';
-      const method = id ? 'PUT' : 'POST';
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'x-studio-pin': pin },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        await syncAfterAdminMutation(pin);
-        return true;
-      }
-    } catch (err) {
-      console.error(err);
+    const url = id ? `/api/admin/announcements/${id}` : '/api/admin/announcements';
+    const method = id ? 'PUT' : 'POST';
+    const res = await apiRequest(url, {
+      method,
+      headers: buildPinHeaders(pin, true),
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      await syncAfterAdminMutation(pin);
+      return true;
     }
     return false;
   };
@@ -628,17 +735,13 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const deleteAnnouncement = async (id: string): Promise<boolean> => {
     const pin = getStoredPin();
     if (!pin) return false;
-    try {
-      const res = await fetch(`/api/admin/announcements/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-studio-pin': pin },
-      });
-      if (res.ok) {
-        await syncAfterAdminMutation(pin);
-        return true;
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await apiRequest(`/api/admin/announcements/${id}`, {
+      method: 'DELETE',
+      headers: buildPinHeaders(pin),
+    });
+    if (res.ok) {
+      await syncAfterAdminMutation(pin);
+      return true;
     }
     return false;
   };
@@ -646,17 +749,13 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const deleteSubscriber = async (id: string): Promise<boolean> => {
     const pin = getStoredPin();
     if (!pin) return false;
-    try {
-      const res = await fetch(`/api/admin/subscribers/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-studio-pin': pin },
-      });
-      if (res.ok) {
-        await verifyAndLoadAdmin(pin);
-        return true;
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await apiRequest(`/api/admin/subscribers/${id}`, {
+      method: 'DELETE',
+      headers: buildPinHeaders(pin),
+    });
+    if (res.ok) {
+      await verifyAndLoadAdmin(pin);
+      return true;
     }
     return false;
   };
@@ -664,20 +763,16 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const saveGalleryPhoto = async (data: Partial<GalleryItem>, id?: string): Promise<boolean> => {
     const pin = getStoredPin();
     if (!pin) return false;
-    try {
-      const url = id ? `/api/admin/gallery/${id}` : '/api/admin/gallery';
-      const method = id ? 'PUT' : 'POST';
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'x-studio-pin': pin },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        await syncAfterAdminMutation(pin);
-        return true;
-      }
-    } catch (err) {
-      console.error(err);
+    const url = id ? `/api/admin/gallery/${id}` : '/api/admin/gallery';
+    const method = id ? 'PUT' : 'POST';
+    const res = await apiRequest(url, {
+      method,
+      headers: buildPinHeaders(pin, true),
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      await syncAfterAdminMutation(pin);
+      return true;
     }
     return false;
   };
@@ -685,17 +780,13 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const deleteGalleryPhoto = async (id: string): Promise<boolean> => {
     const pin = getStoredPin();
     if (!pin) return false;
-    try {
-      const res = await fetch(`/api/admin/gallery/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-studio-pin': pin },
-      });
-      if (res.ok) {
-        await syncAfterAdminMutation(pin);
-        return true;
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await apiRequest(`/api/admin/gallery/${id}`, {
+      method: 'DELETE',
+      headers: buildPinHeaders(pin),
+    });
+    if (res.ok) {
+      await syncAfterAdminMutation(pin);
+      return true;
     }
     return false;
   };
@@ -703,18 +794,14 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const updateOnlineCourse = async (id: string, data: Partial<OnlineCourseProgram>): Promise<boolean> => {
     const pin = getStoredPin();
     if (!pin) return false;
-    try {
-      const res = await fetch(`/api/admin/courses/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-studio-pin': pin },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        await syncAfterAdminMutation(pin);
-        return true;
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await apiRequest(`/api/admin/courses/${id}`, {
+      method: 'PUT',
+      headers: buildPinHeaders(pin, true),
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      await syncAfterAdminMutation(pin);
+      return true;
     }
     return false;
   };

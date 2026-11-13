@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { useStudio } from '../../context/StudioContext';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { safeSessionGet, safeSessionRemove, safeSessionSet, useStudio } from '../../context/StudioContext';
 import {
   AnnouncementCategory,
   AnnouncementItem,
@@ -84,8 +84,9 @@ export const InquiriesInboxModal: React.FC = () => {
   const [isVerifyingPin, setIsVerifyingPin] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return (
-      sessionStorage.getItem('the_art_horizon_admin_auth') === 'true' &&
-      Boolean(sessionStorage.getItem('the_art_horizon_admin_pin'))
+      Boolean(adminDashboard) ||
+      (safeSessionGet('the_art_horizon_admin_auth') === 'true' &&
+        Boolean(safeSessionGet('the_art_horizon_admin_pin')))
     );
   });
 
@@ -93,6 +94,7 @@ export const InquiriesInboxModal: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [confirmDeleteKey, setConfirmDeleteKey] = useState<string | null>(null);
   const [toastMsg, setToastMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const showToast = (type: 'success' | 'error', text: string) => {
     setToastMsg({ type, text });
@@ -194,6 +196,12 @@ export const InquiriesInboxModal: React.FC = () => {
     }
   }, [isInquiriesModalOpen, isAuthenticated, adminDashboard, isLoadingAdmin, verifyAndLoadAdmin]);
 
+  useEffect(() => {
+    if (adminDashboard && !isAuthenticated) {
+      setIsAuthenticated(true);
+    }
+  }, [adminDashboard, isAuthenticated]);
+
   const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanPin = pinInput.trim();
@@ -204,17 +212,17 @@ export const InquiriesInboxModal: React.FC = () => {
 
     setIsVerifyingPin(true);
     setPinError('');
-    sessionStorage.setItem('the_art_horizon_admin_pin', cleanPin);
+    safeSessionSet('the_art_horizon_admin_pin', cleanPin);
     const result = await verifyAndLoadAdmin(cleanPin);
     setIsVerifyingPin(false);
 
     if (result.ok) {
-      sessionStorage.setItem('the_art_horizon_admin_auth', 'true');
+      safeSessionSet('the_art_horizon_admin_auth', 'true');
       setIsAuthenticated(true);
       setPinError('');
     } else {
-      sessionStorage.removeItem('the_art_horizon_admin_pin');
-      sessionStorage.removeItem('the_art_horizon_admin_auth');
+      safeSessionRemove('the_art_horizon_admin_pin');
+      safeSessionRemove('the_art_horizon_admin_auth');
       setPinError(result.error || 'Incorrect Studio PIN.');
     }
   };
@@ -711,7 +719,7 @@ export const InquiriesInboxModal: React.FC = () => {
         )}
 
         {/* Main Scrollable Tab Panel */}
-        <div className="p-4 sm:p-6 overflow-y-auto grow space-y-6">
+        <div ref={panelRef} className="p-4 sm:p-6 overflow-y-auto grow space-y-6">
           {/* ==================== TAB 1: OVERVIEW ==================== */}
           {activeTab === 'overview' && (
             <div className="space-y-6">
@@ -888,8 +896,9 @@ export const InquiriesInboxModal: React.FC = () => {
                             disabled={statusUpdatingId === item.id}
                             onChange={async (e) => {
                               setStatusUpdatingId(item.id);
-                              await updateEnquiryStatus(item.id, e.target.value as EnquirySubmission['status']);
+                              const ok = await updateEnquiryStatus(item.id, e.target.value as EnquirySubmission['status']);
                               setStatusUpdatingId(null);
+                              showToast(ok ? 'success' : 'error', ok ? 'Enquiry status updated!' : 'Could not update status.');
                             }}
                             className="text-xs bg-stone-50 border border-stone-200 rounded px-2 py-1 font-semibold text-stone-700"
                           >
@@ -902,9 +911,10 @@ export const InquiriesInboxModal: React.FC = () => {
                             <div className="inline-flex items-center gap-1">
                               <button
                                 type="button"
-                                onClick={() => {
-                                  deleteEnquiry(item.id);
+                                onClick={async () => {
+                                  const ok = await deleteEnquiry(item.id);
                                   setConfirmDeleteKey(null);
+                                  showToast(ok ? 'success' : 'error', ok ? 'Enquiry deleted.' : 'Failed to delete enquiry.');
                                 }}
                                 className="px-2 py-0.5 rounded bg-rose-600 text-white text-[11px] font-bold hover:bg-rose-700"
                               >
@@ -1246,6 +1256,8 @@ export const InquiriesInboxModal: React.FC = () => {
                               setGalArtist(g.artist);
                               setGalDesc(g.description);
                               setGalImage(g.image);
+                              panelRef.current?.scrollTo({ top: 380, behavior: 'smooth' });
+                              showToast('success', `Loaded "${g.title}" into gallery editor.`);
                             }}
                             className="inline-flex items-center gap-1 text-stone-700 hover:text-stone-900 font-semibold px-2.5 py-1 rounded bg-stone-100"
                           >
@@ -1256,9 +1268,10 @@ export const InquiriesInboxModal: React.FC = () => {
                             <div className="inline-flex items-center gap-1">
                               <button
                                 type="button"
-                                onClick={() => {
-                                  deleteGalleryPhoto(g.id);
+                                onClick={async () => {
+                                  const ok = await deleteGalleryPhoto(g.id);
                                   setConfirmDeleteKey(null);
+                                  showToast(ok ? 'success' : 'error', ok ? 'Gallery photo removed.' : 'Failed to delete gallery photo.');
                                 }}
                                 className="px-2 py-1 rounded bg-rose-600 text-white font-bold hover:bg-rose-700"
                               >
@@ -1511,12 +1524,16 @@ export const InquiriesInboxModal: React.FC = () => {
 
                         <div className="flex items-center gap-2 shrink-0">
                           <button
-                            onClick={() =>
-                              saveAnnouncement(
-                                { status: ann.status === 'published' ? 'draft' : 'published' },
-                                ann.id
-                              )
-                            }
+                            onClick={async () => {
+                              const nextStatus = ann.status === 'published' ? 'draft' : 'published';
+                              const ok = await saveAnnouncement({ status: nextStatus }, ann.id);
+                              showToast(
+                                ok ? 'success' : 'error',
+                                ok
+                                  ? `Announcement ${nextStatus === 'published' ? 'published' : 'moved to draft'}.`
+                                  : 'Failed to update announcement status.'
+                              );
+                            }}
                             className="px-3 py-1.5 rounded-lg border border-stone-200 font-semibold text-stone-700 hover:bg-stone-50 inline-flex items-center gap-1"
                           >
                             {ann.status === 'published' ? (
@@ -1544,6 +1561,8 @@ export const InquiriesInboxModal: React.FC = () => {
                               setAnnCtaLabel(ann.ctaLabel || '');
                               setAnnCtaUrl(ann.ctaUrl || '');
                               setAnnStatus(ann.status);
+                              panelRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+                              showToast('success', `Loaded "${ann.title}" into editor.`);
                             }}
                             className="px-3 py-1.5 rounded-lg bg-stone-100 font-semibold text-stone-800"
                           >
@@ -1553,9 +1572,10 @@ export const InquiriesInboxModal: React.FC = () => {
                             <div className="inline-flex items-center gap-1">
                               <button
                                 type="button"
-                                onClick={() => {
-                                  deleteAnnouncement(ann.id);
+                                onClick={async () => {
+                                  const ok = await deleteAnnouncement(ann.id);
                                   setConfirmDeleteKey(null);
+                                  showToast(ok ? 'success' : 'error', ok ? 'Announcement deleted.' : 'Failed to delete announcement.');
                                 }}
                                 className="px-2 py-1 rounded bg-rose-600 text-white text-[11px] font-bold hover:bg-rose-700"
                               >
@@ -1626,9 +1646,10 @@ export const InquiriesInboxModal: React.FC = () => {
                                   <div className="inline-flex items-center gap-1.5 justify-end">
                                     <button
                                       type="button"
-                                      onClick={() => {
-                                        deleteSubscriber(sub.id);
+                                      onClick={async () => {
+                                        const ok = await deleteSubscriber(sub.id);
                                         setConfirmDeleteKey(null);
+                                        showToast(ok ? 'success' : 'error', ok ? 'Subscriber removed.' : 'Failed to remove subscriber.');
                                       }}
                                       className="px-2 py-0.5 rounded bg-rose-600 text-white text-[11px] font-bold hover:bg-rose-700"
                                     >
