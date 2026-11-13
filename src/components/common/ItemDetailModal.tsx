@@ -39,11 +39,10 @@ export const ItemDetailModal: React.FC = () => {
     openEnquiryModal(category, detail);
   };
 
-  const handleWhatsApp = () => {
-    const cleanPhone = businessConfig.phone.replace(/[^0-9]/g, '');
-    const text = `Hello Vikas ji / The Art Horizon, I would like to enquire regarding "${detailModalItem.title}". Please share details, schedule, and pricing.`;
-    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`, '_blank');
-  };
+  const cleanPhone = businessConfig.phone.replace(/[^0-9]/g, '');
+  const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
+    `Hello Vikas ji / The Art Horizon, I would like to enquire regarding "${detailModalItem.title}". Please share details, schedule, and pricing.`
+  )}`;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 lg:p-8 animate-in fade-in duration-200">
@@ -178,14 +177,15 @@ export const ItemDetailModal: React.FC = () => {
 
         {/* Footer CTAs */}
         <div className="p-4 sm:p-6 bg-white border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
-          <button
-            type="button"
-            onClick={handleWhatsApp}
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full sm:w-auto text-xs text-emerald-800 hover:text-emerald-900 font-semibold flex items-center justify-center gap-1.5 py-2.5 px-4 rounded border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 transition-colors"
           >
             <MessageCircle className="w-4 h-4 text-emerald-600" />
             <span>Chat on WhatsApp</span>
-          </button>
+          </a>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
             {detailModalItem.type === 'course' && (

@@ -1,10 +1,10 @@
-import {
+import type {
   AnnouncementItem,
   BusinessConfig,
   FounderProfileData,
   OnlineCourseProgram,
   SiteContentConfig,
-} from '../types';
+} from '../types.ts';
 
 export const OFFICIAL_ASSETS = {
   logo: '/assets/aistudio/THE_ART_HORIZON__LOGO__d2985075.jpg',

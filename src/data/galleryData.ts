@@ -1,5 +1,5 @@
-import { GalleryItem } from '../types';
-import { OFFICIAL_ASSETS } from './siteConfig';
+import type { GalleryItem } from '../types.ts';
+import { OFFICIAL_ASSETS } from './siteConfig.ts';
 
 export const GALLERY_DATA: GalleryItem[] = [
   {

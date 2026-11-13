@@ -34,6 +34,7 @@ export const EnquiryModal: React.FC = () => {
   const [timeSlotPreference, setTimeSlotPreference] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
@@ -47,14 +48,22 @@ export const EnquiryModal: React.FC = () => {
 
   if (!isEnquiryModalOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const buildWhatsAppUrl = () => {
+    const text = `*New Website Enquiry - The Art Horizon*\n*Name:* ${name.trim() || 'Prospective Student/Client'}\n*Category:* ${category.replace('-', ' ').toUpperCase()}\n*Service:* ${serviceDetail.trim() || 'Course / Service details'}\n*Phone:* ${phone.trim() || 'Not provided'}\n*Email:* ${email.trim() || 'Not provided'}\n*Location:* ${countryOrCity.trim() || 'Not provided'}\n*Preference:* ${timeSlotPreference.trim() || 'Flexible'}\n*Message:* ${message.trim() || 'I would like to request course details, batch availability, and fee structure.'}`;
+    return `https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) {
       setErrorMsg('Please provide your name and contact phone number.');
       return;
     }
 
-    addEnquiry({
+    setIsSubmitting(true);
+    setErrorMsg('');
+
+    const ok = await addEnquiry({
       name: name.trim(),
       email: email.trim(),
       phone: phone.trim(),
@@ -65,32 +74,14 @@ export const EnquiryModal: React.FC = () => {
       message: message.trim(),
     });
 
-    // Directly open WhatsApp with inquiry pre-filled to Vikas Gothi
-    try {
-      const text = `*New Website Enquiry - The Art Horizon*\n*Name:* ${name.trim() || 'Prospective Student/Client'}\n*Category:* ${category.replace('-', ' ').toUpperCase()}\n*Service:* ${serviceDetail.trim() || 'Course / Service details'}\n*Phone:* ${phone.trim()}\n*Email:* ${email.trim() || 'Not provided'}\n*Location:* ${countryOrCity.trim() || 'Not provided'}\n*Preference:* ${timeSlotPreference.trim() || 'Flexible'}\n*Message:* ${message.trim() || 'I would like to request course details, batch availability, and fee structure.'}`;
-      const url = `https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
-    } catch {
-      // ignore popup blocking
+    setIsSubmitting(false);
+
+    if (!ok) {
+      setErrorMsg('Could not reach the studio server right now. Please try again or message us directly on WhatsApp.');
+      return;
     }
 
     setIsSubmitted(true);
-    setErrorMsg('');
-  };
-
-  const handleWhatsAppSend = () => {
-    const text = `*New Website Enquiry - The Art Horizon*
-*Name:* ${name || 'Prospective Student/Client'}
-*Category:* ${category.replace('-', ' ').toUpperCase()}
-*Service:* ${serviceDetail || 'Course / Service details'}
-*Phone:* ${phone || 'Not provided'}
-*Email:* ${email || 'Not provided'}
-*Location:* ${countryOrCity || 'Not provided'}
-*Preference:* ${timeSlotPreference || 'Flexible'}
-*Message:* ${message || 'I would like to request course details, batch availability, and fee structure.'}`;
-
-    const url = `https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
   };
 
   const handleResetAndClose = () => {
@@ -152,13 +143,15 @@ export const EnquiryModal: React.FC = () => {
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button
-                onClick={handleWhatsAppSend}
+              <a
+                href={buildWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2.5 rounded-sm text-sm font-medium flex items-center justify-center gap-2"
               >
                 <span>Continue on WhatsApp Now</span>
                 <Send className="w-4 h-4" />
-              </button>
+              </a>
               <button
                 onClick={handleResetAndClose}
                 className="w-full sm:w-auto border border-stone-300 text-stone-700 hover:bg-stone-100 px-6 py-2.5 rounded-sm text-sm font-medium"
@@ -333,13 +326,14 @@ export const EnquiryModal: React.FC = () => {
 
             {/* Submit Buttons */}
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-stone-200">
-              <button
-                type="button"
-                onClick={handleWhatsAppSend}
+              <a
+                href={buildWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full sm:w-auto text-xs text-emerald-800 hover:text-emerald-900 font-medium flex items-center justify-center gap-1.5 py-2 px-3 rounded border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 transition-colors"
               >
                 <span>Instant WhatsApp Query</span>
-              </button>
+              </a>
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <button
@@ -351,9 +345,10 @@ export const EnquiryModal: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="w-1/2 sm:w-auto bg-[#B85D38] hover:bg-[#A04F2E] text-white px-6 py-2.5 rounded-sm text-sm font-medium flex items-center justify-center gap-2 shadow-sm transition-all"
+                  disabled={isSubmitting}
+                  className="w-1/2 sm:w-auto bg-[#B85D38] hover:bg-[#A04F2E] disabled:opacity-60 text-white px-6 py-2.5 rounded-sm text-sm font-medium flex items-center justify-center gap-2 shadow-sm transition-all"
                 >
-                  <span>Submit Enquiry</span>
+                  <span>{isSubmitting ? 'Sending...' : 'Submit Enquiry'}</span>
                   <Send className="w-3.5 h-3.5" />
                 </button>
               </div>

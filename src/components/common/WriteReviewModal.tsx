@@ -17,14 +17,18 @@ export const WriteReviewModal: React.FC<WriteReviewModalProps> = ({ isOpen, onCl
   const [courseOrRole, setCourseOrRole] = useState('Kids Art Classes (Parent)');
   const [reviewText, setReviewText] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reviewerName.trim() || !reviewText.trim()) return;
 
-    addEnquiry({
+    setIsSubmitting(true);
+    setErrorMsg('');
+    const ok = await addEnquiry({
       name: reviewerName.trim(),
       email: '',
       phone: `${rating} Star Google Review`,
@@ -32,6 +36,12 @@ export const WriteReviewModal: React.FC<WriteReviewModalProps> = ({ isOpen, onCl
       serviceDetail: `Review: ${rating} Stars - ${courseOrRole}`,
       message: `Rating: ${rating}/5 Stars. Role: ${courseOrRole}. Review: ${reviewText.trim()}`,
     });
+    setIsSubmitting(false);
+
+    if (!ok) {
+      setErrorMsg('Could not reach the studio server right now. Please try again or post directly on Google Maps.');
+      return;
+    }
 
     setIsSubmitted(true);
   };
@@ -208,6 +218,12 @@ export const WriteReviewModal: React.FC<WriteReviewModalProps> = ({ isOpen, onCl
               />
             </div>
 
+            {errorMsg && (
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">
+                {errorMsg}
+              </div>
+            )}
+
             <div className="pt-2 flex items-center justify-end gap-3 border-t border-stone-200">
               <button
                 type="button"
@@ -218,9 +234,10 @@ export const WriteReviewModal: React.FC<WriteReviewModalProps> = ({ isOpen, onCl
               </button>
               <button
                 type="submit"
-                className="bg-gradient-to-r from-[#D82828] to-amber-600 hover:opacity-95 text-white px-6 py-2.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-md active:scale-95"
+                disabled={isSubmitting}
+                className="bg-gradient-to-r from-[#D82828] to-amber-600 hover:opacity-95 disabled:opacity-60 text-white px-6 py-2.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-md active:scale-95"
               >
-                <span>Submit Review</span>
+                <span>{isSubmitting ? 'Submitting...' : 'Submit Review'}</span>
                 <Send className="w-3.5 h-3.5" />
               </button>
             </div>

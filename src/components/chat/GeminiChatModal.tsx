@@ -28,7 +28,7 @@ interface GeminiChatModalProps {
   onClose: () => void;
 }
 
-type ModelKey = 'gemini-3.8-flash' | 'gemini-3.1-flash-lite' | 'gemini-4-argon' | 'gemini-4-carbon';
+type ModelKey = 'gemini-4-hydrogen' | 'gemini-3.1-flash-lite';
 type RoleKey = 'general' | 'placement' | 'critique';
 
 const MODEL_OPTIONS: Array<{
@@ -39,11 +39,11 @@ const MODEL_OPTIONS: Array<{
   description: string;
 }> = [
   {
-    id: 'gemini-3.8-flash',
-    name: 'Gemini 3.8 Flash',
-    tag: 'General Tasks (Default)',
+    id: 'gemini-4-hydrogen',
+    name: 'Gemini 4 Flash',
+    tag: 'Balanced (Default)',
     icon: Sparkles,
-    description: 'Fast, balanced & intelligent for all general queries',
+    description: 'Fast, balanced & intelligent for admissions, syllabus & art queries',
   },
   {
     id: 'gemini-3.1-flash-lite',
@@ -51,20 +51,6 @@ const MODEL_OPTIONS: Array<{
     tag: 'Fast Responses',
     icon: Zap,
     description: 'Lightweight & instant answers for quick questions',
-  },
-  {
-    id: 'gemini-4-argon',
-    name: 'Gemini 4 Argon',
-    tag: 'Complex Interactive',
-    icon: Cpu,
-    description: 'Advanced interactive planning & multi-turn discussions',
-  },
-  {
-    id: 'gemini-4-carbon',
-    name: 'Gemini 4 Carbon',
-    tag: 'Deep Reasoning',
-    icon: Brain,
-    description: 'Maximum depth for classical art critique & theory',
   },
 ];
 
@@ -104,12 +90,12 @@ export const GeminiChatModal: React.FC<GeminiChatModalProps> = ({ isOpen, onClos
       role: 'model',
       text: 'Namaste! Welcome to The Art Horizon. I am your Gemini AI Art Advisor, here to guide you through Vikas Gothi’s fine art academy, our live Zoom online classes for ages 6 to 15 (max 4-5 per batch with 3 levels), 1-on-1 private classes, and custom portrait commissions in all mediums.\n\nHow can I help you today?',
       timestamp: 'Just now',
-      modelUsed: 'gemini-3.8-flash',
+      modelUsed: 'gemini-4-hydrogen',
     },
   ]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<ModelKey>('gemini-3.8-flash');
+  const [selectedModel, setSelectedModel] = useState<ModelKey>('gemini-4-hydrogen');
   const [selectedRole, setSelectedRole] = useState<RoleKey>('general');
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
 

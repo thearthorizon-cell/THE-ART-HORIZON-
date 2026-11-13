@@ -1,4 +1,5 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import type { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
@@ -852,15 +853,11 @@ app.post('/api/chat', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    let selectedModel = 'gemini-3.8-flash';
-    if (model === 'gemini-4-carbon') {
-      selectedModel = 'gemini-4-carbon';
-    } else if (model === 'gemini-4-argon') {
-      selectedModel = 'gemini-4-argon';
-    } else if (model === 'gemini-3.1-flash-lite') {
+    let selectedModel = 'gemini-4-hydrogen';
+    if (model === 'gemini-3.1-flash-lite') {
       selectedModel = 'gemini-3.1-flash-lite';
-    } else if (model === 'gemini-3.8-flash') {
-      selectedModel = 'gemini-3.8-flash';
+    } else if (model === 'gemini-4-hydrogen' || model === 'gemini-3.8-flash') {
+      selectedModel = 'gemini-4-hydrogen';
     }
 
     const ai = getAIClient();
@@ -890,7 +887,6 @@ app.post('/api/chat', async (req: Request, res: Response): Promise<void> => {
       contents,
       config: {
         systemInstruction,
-        temperature: 0.7,
       },
     });
 
@@ -919,7 +915,7 @@ app.get('/api/health', (_req: Request, res: Response) => {
     status: 'ok',
     studio: 'The Art Horizon',
     founder: 'Vikas Gothi',
-    modelsAvailable: ['gemini-3.8-flash', 'gemini-3.1-flash-lite', 'gemini-4-argon', 'gemini-4-carbon'],
+    modelsAvailable: ['gemini-4-hydrogen', 'gemini-3.1-flash-lite'],
   });
 });
 

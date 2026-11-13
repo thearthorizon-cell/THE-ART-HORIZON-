@@ -3,7 +3,6 @@ import { useStudio } from '../context/StudioContext';
 import { COURSES_DATA } from '../data/coursesData';
 import { SERVICES_DATA } from '../data/servicesData';
 import { WORKSHOPS_DATA } from '../data/workshopsData';
-import { GALLERY_DATA } from '../data/galleryData';
 import { TESTIMONIALS_DATA, GOOGLE_REVIEWS_SUMMARY } from '../data/testimonialsData';
 import { OFFICIAL_ASSETS, INTERNATIONAL_DETAILS } from '../data/siteConfig';
 import { GoogleReviewsBadge, GoogleIcon } from '../components/common/GoogleReviewsBadge';
@@ -242,7 +241,13 @@ export const HomePage: React.FC = () => {
 
                 {/* Floating Student Artwork Pill (Skilldren Style) */}
                 <div
-                  onClick={() => openLightbox(GALLERY_DATA[0])}
+                  onClick={() => {
+                    const balKrishnaItem =
+                      galleryPhotos.find((g) => g.image === OFFICIAL_ASSETS.studentBalKrishna) ||
+                      galleryPhotos.find((g) => g.title.toLowerCase().includes('bal krishna')) ||
+                      galleryPhotos[0];
+                    if (balKrishnaItem) openLightbox(balKrishnaItem);
+                  }}
                   className="absolute -bottom-6 -left-6 z-20 bg-white p-3 rounded-2xl shadow-xl border border-stone-200 hover:border-[#D82828] cursor-pointer transition-all flex items-center gap-3 max-w-xs group"
                 >
                   <img
@@ -1071,7 +1076,7 @@ export const HomePage: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <button
-                onClick={openFreeDemoModal}
+                onClick={() => openFreeDemoModal()}
                 className="w-full sm:w-auto bg-gradient-to-r from-[#D82828] to-[#F59E0B] hover:opacity-95 text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2"
               >
                 <Sparkles className="w-5 h-5 text-amber-200" />

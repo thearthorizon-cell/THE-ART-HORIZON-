@@ -22,7 +22,9 @@ export const Header: React.FC = () => {
     openFreeDemoModal,
     openGeminiChat,
     businessConfig,
+    cmsState,
   } = useStudio();
+  const { siteContent } = cmsState;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
   const [classesDropdownOpen, setClassesDropdownOpen] = useState(false);
@@ -49,9 +51,11 @@ export const Header: React.FC = () => {
               <Sparkles className="w-3 h-3 text-stone-900 fill-stone-900" />
               Free Demo Class
             </span>
-            <span className="font-semibold text-stone-100 text-xs tracking-wide">
-              Live Zoom Batches (🇺🇸 US, 🇬🇧 UK, 🇦🇪 UAE & Global) • Studio in Indore 📍
-            </span>
+            {siteContent.promoBannerEnabled && (
+              <span className="font-semibold text-stone-100 text-xs tracking-wide">
+                {siteContent.promoBannerText}
+              </span>
+            )}
             <span className="text-stone-500 hidden lg:inline">•</span>
             <GoogleReviewsBadge
               variant="compact"

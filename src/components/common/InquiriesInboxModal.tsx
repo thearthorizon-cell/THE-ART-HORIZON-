@@ -91,6 +91,7 @@ export const InquiriesInboxModal: React.FC = () => {
 
   // Main Admin Tab
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
+  const [confirmDeleteKey, setConfirmDeleteKey] = useState<string | null>(null);
   const [toastMsg, setToastMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const showToast = (type: 'success' | 'error', text: string) => {
@@ -180,6 +181,18 @@ export const InquiriesInboxModal: React.FC = () => {
     setOutcomesText((found.learningOutcomes || []).join('\n'));
     setBenefitsText((found.benefits || []).join('\n'));
   }, [adminDashboard, selectedCourseId]);
+
+  // Reload admin data if modal opens while cached session exists but dashboard is empty
+  useEffect(() => {
+    if (isInquiriesModalOpen && isAuthenticated && !adminDashboard && !isLoadingAdmin) {
+      verifyAndLoadAdmin().then((res) => {
+        if (!res.ok) {
+          setIsAuthenticated(false);
+          setPinError(res.error || '');
+        }
+      });
+    }
+  }, [isInquiriesModalOpen, isAuthenticated, adminDashboard, isLoadingAdmin, verifyAndLoadAdmin]);
 
   const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -885,17 +898,36 @@ export const InquiriesInboxModal: React.FC = () => {
                             <option value="reviewed">Reviewed</option>
                             <option value="resolved">Enrolled / Resolved</option>
                           </select>
-                          <button
-                            onClick={() => {
-                              if (window.confirm(`Delete enquiry from "${item.name}"?`)) {
-                                deleteEnquiry(item.id);
-                              }
-                            }}
-                            className="text-stone-400 hover:text-rose-600 p-1 rounded"
-                            title="Delete enquiry"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          {confirmDeleteKey === `enq:${item.id}` ? (
+                            <div className="inline-flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  deleteEnquiry(item.id);
+                                  setConfirmDeleteKey(null);
+                                }}
+                                className="px-2 py-0.5 rounded bg-rose-600 text-white text-[11px] font-bold hover:bg-rose-700"
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteKey(null)}
+                                className="px-2 py-0.5 rounded bg-stone-200 text-stone-700 text-[11px] font-semibold hover:bg-stone-300"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteKey(`enq:${item.id}`)}
+                              className="text-stone-400 hover:text-rose-600 p-1 rounded"
+                              title="Delete enquiry"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </div>
 
@@ -1220,17 +1252,36 @@ export const InquiriesInboxModal: React.FC = () => {
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
                           </button>
-                          <button
-                            onClick={() => {
-                              if (window.confirm(`Delete artwork "${g.title}" from the gallery?`)) {
-                                deleteGalleryPhoto(g.id);
-                              }
-                            }}
-                            className="inline-flex items-center gap-1 text-rose-700 hover:bg-rose-50 font-semibold px-2.5 py-1 rounded"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                            <span>Delete</span>
-                          </button>
+                          {confirmDeleteKey === `gal:${g.id}` ? (
+                            <div className="inline-flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  deleteGalleryPhoto(g.id);
+                                  setConfirmDeleteKey(null);
+                                }}
+                                className="px-2 py-1 rounded bg-rose-600 text-white font-bold hover:bg-rose-700"
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteKey(null)}
+                                className="px-2 py-1 rounded bg-stone-200 text-stone-700 font-semibold hover:bg-stone-300"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteKey(`gal:${g.id}`)}
+                              className="inline-flex items-center gap-1 text-rose-700 hover:bg-rose-50 font-semibold px-2.5 py-1 rounded"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                              <span>Delete</span>
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1498,16 +1549,35 @@ export const InquiriesInboxModal: React.FC = () => {
                           >
                             Edit
                           </button>
-                          <button
-                            onClick={() => {
-                              if (window.confirm(`Delete announcement "${ann.title}"?`)) {
-                                deleteAnnouncement(ann.id);
-                              }
-                            }}
-                            className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          {confirmDeleteKey === `ann:${ann.id}` ? (
+                            <div className="inline-flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  deleteAnnouncement(ann.id);
+                                  setConfirmDeleteKey(null);
+                                }}
+                                className="px-2 py-1 rounded bg-rose-600 text-white text-[11px] font-bold hover:bg-rose-700"
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteKey(null)}
+                                className="px-2 py-1 rounded bg-stone-200 text-stone-700 text-[11px] font-semibold hover:bg-stone-300"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteKey(`ann:${ann.id}`)}
+                              className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -1552,16 +1622,35 @@ export const InquiriesInboxModal: React.FC = () => {
                               <td className="py-2.5 pr-4 text-stone-600">{sub.name || '—'}</td>
                               <td className="py-2.5 pr-4 text-stone-500">{formatDate(sub.subscribedAt)}</td>
                               <td className="py-2.5 text-right">
-                                <button
-                                  onClick={() => {
-                                    if (window.confirm(`Remove subscriber ${sub.email}?`)) {
-                                      deleteSubscriber(sub.id);
-                                    }
-                                  }}
-                                  className="text-rose-600 hover:underline font-semibold"
-                                >
-                                  Remove
-                                </button>
+                                {confirmDeleteKey === `sub:${sub.id}` ? (
+                                  <div className="inline-flex items-center gap-1.5 justify-end">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        deleteSubscriber(sub.id);
+                                        setConfirmDeleteKey(null);
+                                      }}
+                                      className="px-2 py-0.5 rounded bg-rose-600 text-white text-[11px] font-bold hover:bg-rose-700"
+                                    >
+                                      Confirm
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setConfirmDeleteKey(null)}
+                                      className="px-2 py-0.5 rounded bg-stone-200 text-stone-700 text-[11px] font-semibold hover:bg-stone-300"
+                                    >
+                                      Cancel
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => setConfirmDeleteKey(`sub:${sub.id}`)}
+                                    className="text-rose-600 hover:underline font-semibold"
+                                  >
+                                    Remove
+                                  </button>
+                                )}
                               </td>
                             </tr>
                           ))}

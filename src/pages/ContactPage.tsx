@@ -24,18 +24,25 @@ export const ContactPage: React.FC = () => {
   const [serviceCategory, setServiceCategory] = useState('Local Art Classes in Indore');
   const [message, setMessage] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const cleanPhone = businessConfig.phone.replace(/[^0-9]/g, '');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
+    `*Contact Page Enquiry - The Art Horizon*\n*Name:* ${name.trim() || 'Prospective Student/Client'}\n*Service of Interest:* ${serviceCategory}\n*Phone:* ${phone.trim() || 'Not provided'}\n*Email:* ${email.trim() || 'Not provided'}\n*Message:* ${message.trim() || 'I would like to visit the studio or request batch details.'}`
+  )}`;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) {
       setErrorMsg('Please enter your full name and phone number.');
       return;
     }
 
-    addEnquiry({
+    setIsSubmitting(true);
+    setErrorMsg('');
+    const ok = await addEnquiry({
       name: name.trim(),
       email: email.trim(),
       phone: phone.trim(),
@@ -43,29 +50,14 @@ export const ContactPage: React.FC = () => {
       serviceDetail: serviceCategory,
       message: message.trim() || `Inquiry from website contact page for: ${serviceCategory}`,
     });
+    setIsSubmitting(false);
 
-    try {
-      const text = `*Contact Page Enquiry - The Art Horizon*\n*Name:* ${name.trim() || 'Prospective Student/Client'}\n*Service of Interest:* ${serviceCategory}\n*Phone:* ${phone.trim()}\n*Email:* ${email.trim() || 'Not provided'}\n*Message:* ${message.trim() || 'I would like to visit the studio or request batch details.'}`;
-      const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
-    } catch {
-      // ignore
+    if (!ok) {
+      setErrorMsg('Could not reach the studio server right now. Please try again or reach us via WhatsApp.');
+      return;
     }
 
     setIsSubmitted(true);
-    setErrorMsg('');
-  };
-
-  const handleWhatsAppSend = () => {
-    const text = `*Contact Page Enquiry - The Art Horizon*
-*Name:* ${name || 'Prospective Student/Client'}
-*Service of Interest:* ${serviceCategory}
-*Phone:* ${phone || 'Not provided'}
-*Email:* ${email || 'Not provided'}
-*Message:* ${message || 'I would like to visit the studio or request batch details.'}`;
-
-    const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
   };
 
   return (
@@ -256,18 +248,29 @@ export const ContactPage: React.FC = () => {
                     Your inquiry has been submitted directly to Vikas Gothi. We will call or WhatsApp you on{' '}
                     <strong>{phone}</strong> soon with course details and batch openings.
                   </p>
-                  <button
-                    onClick={() => {
-                      setIsSubmitted(false);
-                      setName('');
-                      setPhone('');
-                      setEmail('');
-                      setMessage('');
-                    }}
-                    className="bg-[#B85D38] text-white px-6 py-2 rounded-sm text-xs font-semibold uppercase tracking-wider"
-                  >
-                    Send Another Message
-                  </button>
+                  <div className="flex flex-wrap items-center justify-center gap-3">
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#25D366] hover:bg-[#20ba59] text-white px-5 py-2 rounded-sm text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-1.5"
+                    >
+                      <span>Share on WhatsApp</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                    <button
+                      onClick={() => {
+                        setIsSubmitted(false);
+                        setName('');
+                        setPhone('');
+                        setEmail('');
+                        setMessage('');
+                      }}
+                      className="bg-[#B85D38] text-white px-6 py-2 rounded-sm text-xs font-semibold uppercase tracking-wider"
+                    >
+                      Send Another Message
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -360,19 +363,22 @@ export const ContactPage: React.FC = () => {
                   </div>
 
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <button
-                      type="button"
-                      onClick={handleWhatsAppSend}
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-full sm:w-auto text-xs text-emerald-800 hover:text-emerald-900 font-semibold flex items-center justify-center gap-1.5 py-2 px-3 rounded border border-emerald-300 bg-emerald-50 hover:bg-emerald-100"
                     >
                       <span>Send Enquiry via WhatsApp</span>
-                    </button>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
 
                     <button
                       type="submit"
-                      className="w-full sm:w-auto bg-[#B85D38] hover:bg-[#A04F2E] text-white px-8 py-3 rounded-sm text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-sm"
+                      disabled={isSubmitting}
+                      className="w-full sm:w-auto bg-[#B85D38] hover:bg-[#A04F2E] disabled:opacity-60 text-white px-8 py-3 rounded-sm text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-sm"
                     >
-                      <span>Submit Contact Form</span>
+                      <span>{isSubmitting ? 'Submitting...' : 'Submit Contact Form'}</span>
                       <Send className="w-3.5 h-3.5" />
                     </button>
                   </div>

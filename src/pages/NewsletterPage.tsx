@@ -84,8 +84,6 @@ export const NewsletterPage: React.FC = () => {
       const [page, section] = clean.split('/');
       navigateTo(page as any, section);
       setDetailAnnouncement(null);
-    } else if (ctaUrl.startsWith('http://') || ctaUrl.startsWith('https://')) {
-      window.open(ctaUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -299,19 +297,26 @@ export const NewsletterPage: React.FC = () => {
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
 
-                  {item.ctaLabel && item.ctaUrl && (
-                    <button
-                      onClick={() => handleCtaNavigation(item.ctaUrl)}
-                      className="bg-[#B85D38] hover:bg-[#9E4E2D] text-white text-xs font-bold px-4 py-2 rounded-full transition-colors inline-flex items-center gap-1.5 shadow-2xs"
-                    >
-                      <span>{item.ctaLabel}</span>
-                      {item.ctaUrl.startsWith('http') ? (
+                  {item.ctaLabel && item.ctaUrl &&
+                    (item.ctaUrl.startsWith('http://') || item.ctaUrl.startsWith('https://') ? (
+                      <a
+                        href={item.ctaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-[#B85D38] hover:bg-[#9E4E2D] text-white text-xs font-bold px-4 py-2 rounded-full transition-colors inline-flex items-center gap-1.5 shadow-2xs"
+                      >
+                        <span>{item.ctaLabel}</span>
                         <ExternalLink className="w-3 h-3" />
-                      ) : (
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => handleCtaNavigation(item.ctaUrl)}
+                        className="bg-[#B85D38] hover:bg-[#9E4E2D] text-white text-xs font-bold px-4 py-2 rounded-full transition-colors inline-flex items-center gap-1.5 shadow-2xs"
+                      >
+                        <span>{item.ctaLabel}</span>
                         <ArrowRight className="w-3 h-3" />
-                      )}
-                    </button>
-                  )}
+                      </button>
+                    ))}
                 </div>
               </article>
             ))}
@@ -473,15 +478,26 @@ export const NewsletterPage: React.FC = () => {
                 </button>
 
                 <div className="flex flex-wrap items-center gap-2.5">
-                  {detailAnnouncement.ctaLabel && detailAnnouncement.ctaUrl && (
-                    <button
-                      onClick={() => handleCtaNavigation(detailAnnouncement.ctaUrl)}
-                      className="bg-[#D82828] hover:bg-[#B81E1E] text-white px-6 py-2.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-sm"
-                    >
-                      <span>{detailAnnouncement.ctaLabel}</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  )}
+                  {detailAnnouncement.ctaLabel && detailAnnouncement.ctaUrl &&
+                    (detailAnnouncement.ctaUrl.startsWith('http://') || detailAnnouncement.ctaUrl.startsWith('https://') ? (
+                      <a
+                        href={detailAnnouncement.ctaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-[#D82828] hover:bg-[#B81E1E] text-white px-6 py-2.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-sm"
+                      >
+                        <span>{detailAnnouncement.ctaLabel}</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => handleCtaNavigation(detailAnnouncement.ctaUrl)}
+                        className="bg-[#D82828] hover:bg-[#B81E1E] text-white px-6 py-2.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-sm"
+                      >
+                        <span>{detailAnnouncement.ctaLabel}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    ))}
                   <button
                     onClick={() => {
                       setDetailAnnouncement(null);

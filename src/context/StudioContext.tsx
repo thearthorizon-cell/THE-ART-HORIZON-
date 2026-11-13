@@ -299,7 +299,10 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           };
         }
 
-        if (dashRes.ok && enqRes.ok) {
+        const dashCt = dashRes.headers.get('content-type') || '';
+        const enqCt = enqRes.headers.get('content-type') || '';
+
+        if (dashRes.ok && enqRes.ok && dashCt.includes('application/json') && enqCt.includes('application/json')) {
           const dashData = await dashRes.json();
           const enqData = await enqRes.json();
           setAdminDashboard(dashData);
@@ -308,13 +311,17 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           }
           return { ok: true };
         }
+
+        return {
+          ok: false,
+          error: `Studio server returned an unexpected response (${dashRes.status}/${enqRes.status}). Please try again.`,
+        };
       } catch (err) {
         console.warn('Failed to load admin dashboard:', err);
-        return { ok: false, error: 'Could not reach studio server. Please try again.' };
+        return { ok: false, error: 'Could not reach Studio server. Please try again.' };
       } finally {
         setIsLoadingAdmin(false);
       }
-      return { ok: false, error: 'Unable to verify Studio PIN.' };
     },
     []
   );
