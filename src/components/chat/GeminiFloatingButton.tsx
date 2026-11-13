@@ -9,7 +9,7 @@ export const GeminiFloatingButton: React.FC<GeminiFloatingButtonProps> = ({ onCl
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-24 right-5 sm:bottom-28 sm:right-6 z-40 bg-gradient-to-r from-stone-900 via-[#1C1917] to-stone-900 hover:from-stone-800 hover:to-stone-850 text-white p-3.5 sm:px-4 sm:py-3 rounded-full shadow-xl hover:shadow-2xl border border-stone-700/80 transition-all active:scale-95 flex items-center gap-2.5 group"
+      className="fixed bottom-24 right-5 sm:bottom-28 sm:right-6 z-40 bg-gradient-to-r from-stone-900 via-[#1C1917] to-stone-900 hover:from-stone-800 hover:to-stone-800 text-white p-3.5 sm:px-4 sm:py-3 rounded-full shadow-xl hover:shadow-2xl border border-stone-700/80 transition-all active:scale-95 flex items-center gap-2.5 group"
       aria-label="Ask Art Horizon AI Advisor"
       title="Ask Gemini AI Advisor about Classes, 1-on-1 Sessions & Commissions"
     >

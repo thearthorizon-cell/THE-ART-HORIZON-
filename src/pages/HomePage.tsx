@@ -32,18 +32,24 @@ import {
   HelpCircle,
   Play,
   Compass,
+  BookOpen,
+  Download,
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
   const {
     navigateTo,
+    openCourseDetail,
     openEnquiryModal,
     openFreeDemoModal,
     openLightbox,
     openDetailModal,
     openWriteReviewModal,
     businessConfig,
+    cmsState,
   } = useStudio();
+
+  const { founder, announcements, onlineCourses, galleryPhotos, siteContent } = cmsState;
 
   // Skilldren-style Age Filter Tab state
   const [selectedAgeTab, setSelectedAgeTab] = useState<'all' | 'kids' | 'teens' | 'adults' | 'professional'>('all');
@@ -113,70 +119,75 @@ export const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-24 sm:space-y-32 pb-24 bg-white text-stone-800">
-      {/* 1. SKILLDREN-STYLE HERO BANNER */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF8F5] to-white pt-8 pb-16 lg:py-20 border-b border-stone-200">
+    <div className="space-y-16 sm:space-y-24 pb-24 bg-white text-stone-800">
+      {/* 1. ABOUT THE CLASSES HERO BANNER */}
+      <section id="about-classes-section" className="relative overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF8F5] to-white pt-6 pb-12 lg:py-14 border-b border-stone-200">
         {/* Soft playful background color spots */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-200/25 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/3 right-10 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-10 left-10 w-80 h-80 bg-teal-200/20 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
             {/* Left Content */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              {/* Trust Badge Pill */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-amber-300 shadow-xs text-xs font-semibold text-stone-800">
-                <span className="flex items-center text-amber-500">
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+            <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
+              {/* About the Classes & Trust Rating Pills */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#D82828]/10 border border-[#D82828]/25 text-[#D82828] text-xs font-extrabold uppercase tracking-wider">
+                  <Palette className="w-3.5 h-3.5" />
+                  <span>About the Classes</span>
                 </span>
-                <span className="font-bold text-[#0B1E3F]">Rated 4.9/5</span>
-                <span className="text-stone-300">•</span>
-                <span className="text-stone-600">500+ Students Mentored Worldwide</span>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-amber-300 shadow-xs text-xs font-semibold text-stone-800">
+                  <span className="flex items-center text-amber-500">
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  </span>
+                  <span className="font-bold text-[#0B1E3F]">Rated 4.9/5</span>
+                  <span className="text-stone-300">•</span>
+                  <span className="text-stone-600">500+ Students Mentored Worldwide</span>
+                </div>
               </div>
 
               {/* Main Headline */}
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 leading-[1.12]">
-                Where Creativity Finds Its <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D82828] via-[#E76F51] to-[#F59E0B]">Horizon.</span>
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-stone-900 leading-[1.12]">
+                {siteContent.homeHeroHeadline}
               </h1>
 
               {/* Tagline Subtext */}
-              <p className="text-lg sm:text-xl text-stone-700 max-w-2xl font-normal leading-relaxed">
-                Step-by-step drawing, painting, and fine arts classes for kids, teens, and adults.
-                Join live interactive Zoom batches from <strong className="text-stone-900 font-semibold">any country worldwide (US, UK, UAE & more)</strong> or attend in-person at our studio in <strong className="text-stone-900 font-semibold">Indore, India</strong> under master artist <strong className="text-stone-900 font-bold">Vikas Gothi</strong>.
+              <p className="text-base sm:text-lg text-stone-700 max-w-2xl font-normal leading-relaxed">
+                {siteContent.homeHeroSubtext}
               </p>
 
               {/* Google Reviews Trust Badge */}
-              <div className="pt-1 flex items-center justify-center lg:justify-start">
+              <div className="pt-0.5 flex items-center justify-center lg:justify-start">
                 <GoogleReviewsBadge
                   variant="hero"
                   onClick={() => navigateTo('testimonials')}
                 />
               </div>
 
-              {/* Skilldren-style High-Contrast Action CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+              {/* Action CTAs */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-1">
                 <button
-                  onClick={openFreeDemoModal}
-                  className="w-full sm:w-auto bg-gradient-to-r from-[#D82828] via-[#E76F51] to-[#F59E0B] hover:opacity-95 text-white px-8 py-4 rounded-full font-bold text-base shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group active:scale-95"
+                  onClick={() => openFreeDemoModal()}
+                  className="w-full sm:w-auto bg-gradient-to-r from-[#D82828] via-[#E76F51] to-[#F59E0B] hover:opacity-95 text-white px-8 py-3.5 rounded-full font-bold text-base shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group active:scale-95"
                 >
                   <Sparkles className="w-5 h-5 text-amber-200 fill-amber-200" />
-                  <span>Book Free Trial Class</span>
+                  <span>{siteContent.homeHeroPrimaryCta}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
 
                 <button
                   onClick={() => {
-                    const el = document.getElementById('programs-section');
+                    const el = document.getElementById('international-online-programs');
                     el?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="w-full sm:w-auto bg-white border-2 border-stone-800 hover:border-[#D82828] text-stone-900 hover:text-[#D82828] px-7 py-3.5 rounded-full font-bold text-base transition-all shadow-xs"
+                  className="w-full sm:w-auto bg-white border-2 border-stone-800 hover:border-[#D82828] text-stone-900 hover:text-[#D82828] px-7 py-3 rounded-full font-bold text-base transition-all shadow-xs"
                 >
-                  Explore by Age Group
+                  {siteContent.homeHeroSecondaryCta}
                 </button>
               </div>
 
@@ -269,7 +280,138 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. SKILLDREN-STYLE AGE GROUP FINDER & INTERACTIVE COURSE EXPLORER */}
+      {/* 2. INTERNATIONAL ONLINE ART PROGRAMS (JUNIOR, YOUNG & SENIOR ARTIST — AT TOP OF WEBSITE) */}
+      <section id="international-online-programs" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="space-y-2 max-w-3xl">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-xs uppercase tracking-widest text-[#D82828] font-bold">
+              <Globe className="w-3.5 h-3.5" />
+              <span>Live Zoom Worldwide · Ages 6 to 15 · Max 5 Students/Batch</span>
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 tracking-tight">
+              International Online Art Programs
+            </h2>
+            <p className="text-stone-600 text-sm sm:text-base">
+              Choose your child’s age cohort below — <strong>Junior Artist (6–8 Years)</strong>, <strong>Young Artist (9–11 Years)</strong>, or <strong>Senior Artist (12–15 Years)</strong> — with structured 3-level progressive curriculums, 8 live classes per month, and official certification.
+            </p>
+          </div>
+          <button
+            onClick={() => navigateTo('online-classes')}
+            className="self-start md:self-end bg-stone-900 hover:bg-[#D82828] text-white px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold inline-flex items-center gap-1.5 transition-colors shadow-xs shrink-0"
+          >
+            <span>Explore Full Online Classes Page</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+          {onlineCourses.map((course) => {
+            const totalLessons = course.curriculumModules.reduce((acc, m) => acc + (m.topics?.length || 0), 0);
+            return (
+              <article
+                key={course.id}
+                className="bg-white rounded-3xl border-2 border-stone-200/90 hover:border-[#D82828]/60 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <div
+                    onClick={() => openCourseDetail(course.slug)}
+                    className="relative aspect-[16/10] bg-stone-100 overflow-hidden cursor-pointer"
+                  >
+                    <img
+                      src={course.heroImage}
+                      alt={`${course.title} (${course.ageGroup})`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-3 left-3 bg-[#D82828] text-white text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+                      Age: {course.ageGroup}
+                    </span>
+                    {totalLessons > 0 && (
+                      <span className="absolute bottom-3 right-3 bg-stone-950/85 backdrop-blur-xs text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-full">
+                        {course.curriculumModules.length} Levels · {totalLessons} Lessons
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="p-6 space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#B85D38]">
+                        {course.badge}
+                      </span>
+                      <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                        Max 5 / Batch
+                      </span>
+                    </div>
+
+                    <h3
+                      onClick={() => openCourseDetail(course.slug)}
+                      className="font-serif text-2xl font-bold text-stone-900 group-hover:text-[#D82828] transition-colors cursor-pointer"
+                    >
+                      {course.title}
+                    </h3>
+
+                    <p className="text-xs sm:text-sm text-stone-600 line-clamp-2 leading-relaxed">
+                      {course.overview}
+                    </p>
+
+                    {course.whatChildrenLearn.length > 0 && (
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        {course.whatChildrenLearn.slice(0, 4).map((subj, idx) => (
+                          <span
+                            key={idx}
+                            className="text-[10px] font-semibold bg-[#FAF8F5] border border-stone-200 text-stone-700 px-2 py-0.5 rounded-md"
+                          >
+                            {subj}
+                          </span>
+                        ))}
+                        {course.whatChildrenLearn.length > 4 && (
+                          <span className="text-[10px] font-semibold text-stone-400 self-center pl-0.5">
+                            +{course.whatChildrenLearn.length - 4} more
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-6 pt-0 space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() =>
+                        openFreeDemoModal({ courseTitle: course.title, ageGroup: course.ageGroup, mode: 'online' })
+                      }
+                      className="flex-1 bg-gradient-to-r from-[#D82828] to-[#E76F51] hover:opacity-95 text-white py-2.5 px-3 rounded-full text-xs font-bold transition-all shadow-xs"
+                    >
+                      Book Free Demo
+                    </button>
+                    <button
+                      onClick={() => openCourseDetail(course.slug)}
+                      className="border border-stone-300 hover:border-stone-900 text-stone-800 py-2.5 px-4 rounded-full text-xs font-bold transition-colors inline-flex items-center gap-1"
+                    >
+                      <BookOpen className="w-3.5 h-3.5 text-[#D82828]" />
+                      <span>Full Syllabus</span>
+                    </button>
+                  </div>
+
+                  {course.curriculumPdfUrl && (
+                    <a
+                      href={course.curriculumPdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="w-full inline-flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#0B1E3F] bg-[#FAF8F5] hover:bg-stone-100 border border-stone-200 py-2 px-3 rounded-full transition-colors"
+                    >
+                      <Download className="w-3.5 h-3.5 text-[#D82828]" />
+                      <span>Download Official Syllabus PDF</span>
+                    </a>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 3. INTERACTIVE STUDIO & AGE COURSE CATALOG */}
       <section id="programs-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
         <div className="text-center space-y-3 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold uppercase tracking-wider">
@@ -571,23 +713,23 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. MEET FOUNDER VIKAS GOTHI (FEATURING USER'S REAL PORTRAIT PHOTO) */}
+      {/* 5. MEET FOUNDER VIKAS GOTHI (FEATURING REAL STUDIO PORTRAIT) */}
       <section className="bg-gradient-to-r from-stone-900 via-[#1C1917] to-stone-900 text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 px-6 sm:px-12 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Founder Real Portrait Photo */}
           <div className="lg:col-span-5 flex justify-center">
-            <div className="relative">
-              <div className="w-64 sm:w-72 aspect-[3/4] rounded-2xl overflow-hidden border-4 border-amber-400/80 shadow-2xl bg-stone-800">
+            <div className="relative w-full max-w-md">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden border-4 border-amber-400/80 shadow-2xl bg-stone-800">
                 <img
-                  src={OFFICIAL_ASSETS.founderPortrait}
-                  alt="Vikas Gothi - Founder & Master Artist of The Art Horizon"
-                  className="w-full h-full object-cover"
+                  src={founder.portraitImage}
+                  alt={`${founder.name} - ${founder.title} of The Art Horizon`}
+                  className="w-full h-full object-cover object-center"
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 bg-amber-400 text-stone-950 px-4 py-2 rounded-xl font-bold text-xs shadow-lg">
-                Founder & Mentor
+              <div className="absolute -bottom-4 -right-3 bg-amber-400 text-stone-950 px-4 py-2 rounded-xl font-bold text-xs shadow-lg">
+                {founder.title}
               </div>
             </div>
           </div>
@@ -597,30 +739,27 @@ export const HomePage: React.FC = () => {
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-bold uppercase tracking-wider">
                 <Award className="w-3.5 h-3.5" />
-                <span>Founder & Master Artist</span>
+                <span>{founder.title}</span>
               </div>
               <h2 className="font-serif text-3xl sm:text-5xl font-bold leading-tight">
-                Vikas Gothi
+                {founder.name}
               </h2>
               <p className="text-amber-300 font-serif italic text-lg sm:text-xl">
-                "Every child is an artist; our mission is to ensure they remain an artist as they grow."
+                {founder.quote}
               </p>
             </div>
 
             <p className="text-stone-300 text-sm sm:text-base leading-relaxed">
-              Based in Indore, Madhya Pradesh, Vikas Gothi has dedicated his life to fine arts education, large-scale
-              architectural murals, and portrait commissions. With mastery across all mediums—including oil painting,
-              charcoal realism, watercolors, and acrylics—he mentors young minds and adult hobbyists with warmth, patience,
-              and structured classical technique.
+              {founder.bioParagraph1}
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-left">
               <div className="bg-white/10 p-3 rounded-xl border border-white/10">
-                <span className="text-amber-300 font-bold text-lg block">15+ Years</span>
+                <span className="text-amber-300 font-bold text-lg block tabular-nums">15+ Years</span>
                 <span className="text-[11px] text-stone-300">Fine Art & Murals</span>
               </div>
               <div className="bg-white/10 p-3 rounded-xl border border-white/10">
-                <span className="text-amber-300 font-bold text-lg block">500+</span>
+                <span className="text-amber-300 font-bold text-lg block tabular-nums">500+</span>
                 <span className="text-[11px] text-stone-300">Students Mentored</span>
               </div>
               <div className="bg-white/10 p-3 rounded-xl border border-white/10 col-span-2 sm:col-span-1">
@@ -637,7 +776,7 @@ export const HomePage: React.FC = () => {
                 Read Founder Profile
               </button>
               <button
-                onClick={openFreeDemoModal}
+                onClick={() => openFreeDemoModal()}
                 className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-full font-bold text-sm transition-all"
               >
                 Book a Trial with Vikas Ji
@@ -646,6 +785,50 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* 5B. LATEST ANNOUNCEMENTS & STUDIO NEWSLETTER */}
+      {announcements.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-[#FAF8F5] border border-stone-200 rounded-3xl p-6 sm:p-8 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-widest text-[#B85D38]">
+                  Latest Announcements & Newsletter
+                </span>
+                <h3 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
+                  Upcoming Workshops, Batches & Studio News
+                </h3>
+              </div>
+              <button
+                onClick={() => navigateTo('newsletter')}
+                className="self-start sm:self-center bg-stone-900 hover:bg-stone-800 text-white px-5 py-2.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+              >
+                <span>View Newsletter & Subscribe</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {announcements.slice(0, 3).map((ann) => (
+                <div
+                  key={ann.id}
+                  onClick={() => navigateTo('newsletter')}
+                  className="bg-white border border-stone-200 rounded-2xl p-4 hover:border-[#D82828] transition-all cursor-pointer space-y-2.5"
+                >
+                  <div className="flex items-center justify-between text-[11px] text-stone-500 font-semibold">
+                    <span className="text-[#B85D38] uppercase tracking-wider">{ann.category}</span>
+                    <span className="tabular-nums">{ann.publishedAt}</span>
+                  </div>
+                  <h4 className="font-serif text-base font-bold text-stone-900 line-clamp-2">
+                    {ann.title}
+                  </h4>
+                  <p className="text-xs text-stone-600 line-clamp-2">{ann.shortDescription}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 6. REAL STUDENT ARTWORK & STUDIO GALLERY (LIGHTBOX INTERACTION) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -674,7 +857,7 @@ export const HomePage: React.FC = () => {
 
         {/* Gallery Grid: Authentic Student Creations, Master Murals & Classical Studies */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {GALLERY_DATA.slice(0, 9).map((art) => (
+          {galleryPhotos.slice(0, 9).map((art) => (
             <div
               key={art.id}
               onClick={() => openLightbox(art)}

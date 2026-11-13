@@ -5,7 +5,8 @@ import { Sparkles, Award, Palette, Heart, CheckCircle2, ArrowRight, MessageSquar
 import { OFFICIAL_ASSETS } from '../data/siteConfig';
 
 export const FounderPage: React.FC = () => {
-  const { openEnquiryModal, openFreeDemoModal, navigateTo } = useStudio();
+  const { openEnquiryModal, openFreeDemoModal, cmsState } = useStudio();
+  const { founder } = cmsState;
 
   return (
     <div className="space-y-24 py-12 pb-24">
@@ -13,18 +14,20 @@ export const FounderPage: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
-            <div className="relative mx-auto max-w-md">
-              <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-stone-900 border-4 border-[#F5B700] shadow-2xl">
+            <div className="relative mx-auto max-w-lg">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-stone-900 border-4 border-[#F5B700] shadow-2xl">
                 <img
-                  src={OFFICIAL_ASSETS.founderPortrait}
-                  alt="Vikas Gothi, Founder of The Art Horizon"
-                  className="w-full h-full object-cover"
+                  src={founder.portraitImage}
+                  alt={`${founder.name}, ${founder.title} of The Art Horizon`}
+                  className="w-full h-full object-cover object-center"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-4 sm:-right-6 bg-[#0B1E3F] text-white p-5 rounded-sm border border-stone-800 shadow-xl max-w-xs">
-                <span className="font-serif text-2xl font-bold block text-[#F5B700]">Vikas Gothi</span>
+              <div className="mt-4 sm:mt-0 sm:absolute -bottom-6 -right-3 sm:-right-5 bg-[#0B1E3F] text-white p-4 sm:p-5 rounded-sm border border-stone-800 shadow-xl max-w-xs">
+                <span className="font-serif text-xl sm:text-2xl font-bold block text-[#F5B700]">
+                  {founder.name}
+                </span>
                 <span className="text-xs uppercase tracking-wider text-stone-200 font-bold block mt-0.5">
-                  Founder & Principal Artist
+                  {founder.title}
                 </span>
                 <p className="text-[11px] text-stone-300 mt-1">
                   Master in Oil, Acrylic, Watercolor, Charcoal Realism & Wall Murals
@@ -33,7 +36,7 @@ export const FounderPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-7 space-y-6 pt-6 lg:pt-0">
+          <div className="lg:col-span-7 space-y-6 pt-4 lg:pt-0">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B85D38]/10 border border-[#B85D38]/20 text-[#8C4A2D] text-xs font-semibold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-[#B85D38]" />
               <span>Founder Spotlight</span>
@@ -44,20 +47,15 @@ export const FounderPage: React.FC = () => {
             </h1>
 
             <p className="font-serif italic text-xl text-[#8C4A2D]">
-              "Art is the quiet bridge between an observant eye, a steady hand, and a sensitive human heart."
+              {founder.quote}
             </p>
 
             <p className="text-stone-700 text-sm sm:text-base leading-relaxed">
-              Based in Indore, Madhya Pradesh, <strong className="text-stone-900 font-semibold">Vikas Gothi</strong> has
-              earned deep respect as a portraitist, large-scale rangoli maestro, and passionate educator. Driven by an
-              unrelenting commitment to classical discipline, Vikas has spent over a decade honing the delicate chemistry
-              of dry mediums—charcoal, graphite, soft pastel—and the fluid lyricism of oil and acrylic painting on canvas.
+              {founder.bioParagraph1}
             </p>
 
             <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
-              Disillusioned with how modern art coaching was turning into commercial shortcuts, Vikas established{' '}
-              <strong className="text-stone-900">The Art Horizon</strong> as an authentic atelier where young children,
-              serious teenagers, and adult professionals could receive genuine, personalized mentorship at their own pace.
+              {founder.bioParagraph2}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">

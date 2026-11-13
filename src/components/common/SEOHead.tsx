@@ -39,10 +39,16 @@ const PAGE_METADATA: Record<PageId, { title: string; description: string; keywor
     keywords: 'Fine Art Academy, Professional Fine Art Courses, Oil Painting Classes Indore, Diploma in Fine Arts',
   },
   'online-classes': {
-    title: 'International Online Art Classes – Live Zoom Sessions (USA, UK, UAE)',
+    title: 'International Online Art Classes – Live Zoom Drawing & Painting | The Art Horizon',
     description:
-      'Interactive online drawing and painting classes worldwide. 1-hour live Zoom sessions, 2 classes per week with personal mentor critique by Vikas Gothi.',
-    keywords: 'Online Drawing Classes for Kids, Online Art Classes Worldwide, Live Zoom Art Classes US UK UAE',
+      'Live interactive online drawing and painting classes for kids aged 6–15 via Zoom. Small batches of 4–6 students, 8 live classes per month, Junior, Young & Senior programs.',
+    keywords: 'Online Drawing Classes for Kids, International Online Art Classes, Live Zoom Art Classes US UK UAE',
+  },
+  newsletter: {
+    title: 'Newsletter & Academy Announcements | The Art Horizon',
+    description:
+      'Latest academy announcements, upcoming drawing and painting workshops, new international batches, art competitions, and student achievements at The Art Horizon.',
+    keywords: 'The Art Horizon Newsletter, Art Workshops Indore, Student Art Achievements, Art Competitions',
   },
   'portrait-commissions': {
     title: 'Custom Portrait Commissions – Charcoal & Colour Pencil | Vikas Gothi',

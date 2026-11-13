@@ -11,7 +11,6 @@ import {
   ArrowRight,
   Star,
   MessageCircle,
-  Youtube,
 } from 'lucide-react';
 import { GoogleReviewsBadge } from './GoogleReviewsBadge';
 
@@ -25,12 +24,14 @@ export const Header: React.FC = () => {
     businessConfig,
   } = useStudio();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
   const [classesDropdownOpen, setClassesDropdownOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
 
   const handleNavClick = (page: PageId, section?: string) => {
     navigateTo(page, section);
     setMobileMenuOpen(false);
+    setAboutDropdownOpen(false);
     setClassesDropdownOpen(false);
     setServicesDropdownOpen(false);
   };
@@ -80,10 +81,13 @@ export const Header: React.FC = () => {
               href={businessConfig.youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden lg:inline-flex items-center gap-1.5 text-red-300 hover:text-white font-semibold transition-colors"
+              className="hidden lg:inline-flex items-center gap-1.5 text-stone-100 hover:text-white font-semibold transition-colors"
               title="Official YouTube Channel @thearthorizon"
             >
-              <Youtube className="w-3.5 h-3.5 text-red-400 fill-current" />
+              <svg className="w-4 h-3 shrink-0" viewBox="0 0 28 20" fill="none" aria-hidden="true">
+                <rect width="28" height="20" rx="5" fill="#FF0000" />
+                <path d="M11.5 5.8L18.5 10L11.5 14.2V5.8Z" fill="#FFFFFF" />
+              </svg>
               <span>YouTube</span>
             </a>
 
@@ -142,33 +146,60 @@ export const Header: React.FC = () => {
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden xl:flex items-center space-x-1 2xl:space-x-1.5 text-[13px] 2xl:text-sm font-semibold text-stone-700 whitespace-nowrap">
+          <nav className="hidden xl:flex items-center space-x-0.5 2xl:space-x-1 text-[13px] font-semibold text-stone-700 whitespace-nowrap">
             <button
               onClick={() => handleNavClick('home')}
-              className={`px-3 py-2 rounded-full transition-colors ${
+              className={`px-2.5 py-2 rounded-full transition-colors ${
                 isActive('home') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
               }`}
             >
               Home
             </button>
 
-            <button
-              onClick={() => handleNavClick('about')}
-              className={`px-3 py-2 rounded-full transition-colors ${
-                isActive('about') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
-              }`}
+            {/* About & Founder Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setAboutDropdownOpen(true)}
+              onMouseLeave={() => setAboutDropdownOpen(false)}
             >
-              About Us
-            </button>
+              <button
+                onClick={() => handleNavClick('about')}
+                className={`flex items-center gap-1 px-2.5 py-2 rounded-full transition-colors ${
+                  isActive('about') || isActive('founder') || isActive('contact')
+                    ? 'text-[#D82828] font-bold bg-[#D82828]/10'
+                    : 'hover:text-[#D82828] hover:bg-stone-50'
+                }`}
+              >
+                <span>About</span>
+                <ChevronDown className="w-3.5 h-3.5 text-stone-500" />
+              </button>
 
-            <button
-              onClick={() => handleNavClick('founder')}
-              className={`px-3 py-2 rounded-full transition-colors ${
-                isActive('founder') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
-              }`}
-            >
-              Founder Profile
-            </button>
+              {aboutDropdownOpen && (
+                <div className="absolute top-full left-0 w-64 bg-white border border-stone-200 shadow-xl rounded-xl py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <button
+                    onClick={() => handleNavClick('about')}
+                    className="w-full text-left px-4 py-2.5 text-xs hover:bg-[#FAF8F5] hover:text-[#D82828] block"
+                  >
+                    <div className="font-bold text-stone-900">About The Art Horizon</div>
+                    <div className="text-stone-500 text-[11px]">Vision, Atelier Method & Values</div>
+                  </button>
+                  <button
+                    onClick={() => handleNavClick('founder')}
+                    className="w-full text-left px-4 py-2.5 text-xs hover:bg-[#FAF8F5] hover:text-[#D82828] block border-t border-stone-100"
+                  >
+                    <div className="font-bold text-stone-900">Founder Profile (Vikas Gothi)</div>
+                    <div className="text-stone-500 text-[11px]">Master Portraitist & Principal Educator</div>
+                  </button>
+                  <button
+                    onClick={() => handleNavClick('contact')}
+                    className="w-full text-left px-4 py-2.5 text-xs hover:bg-[#FAF8F5] hover:text-[#D82828] block border-t border-stone-100"
+                  >
+                    <div className="font-bold text-stone-900">Contact & Indore Studio</div>
+                    <div className="text-stone-500 text-[11px]">266 Ganesh Villa, Usha Nagar & Map</div>
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Art Classes Dropdown */}
             <div
@@ -178,8 +209,8 @@ export const Header: React.FC = () => {
             >
               <button
                 onClick={() => handleNavClick('art-classes')}
-                className={`flex items-center gap-1 px-3 py-2 rounded-full transition-colors ${
-                  isActive('art-classes') || isActive('fine-art-courses')
+                className={`flex items-center gap-1 px-2.5 py-2 rounded-full transition-colors ${
+                  isActive('art-classes') || isActive('fine-art-courses') || isActive('workshops')
                     ? 'text-[#D82828] font-bold bg-[#D82828]/10'
                     : 'hover:text-[#D82828] hover:bg-stone-50'
                 }`}
@@ -205,20 +236,27 @@ export const Header: React.FC = () => {
                     <div className="text-stone-500 text-[11px]">Classical European Sight-Size & Oil Atelier</div>
                   </button>
                   <button
-                    onClick={() => handleNavClick('online-classes')}
-                    className="w-full text-left px-4 py-2.5 text-xs hover:bg-[#FAF8F5] hover:text-[#D82828] block border-t border-stone-100 bg-[#FAF8F5]/60"
+                    onClick={() => handleNavClick('workshops')}
+                    className="w-full text-left px-4 py-2.5 text-xs hover:bg-[#FAF8F5] hover:text-[#D82828] block border-t border-stone-100"
                   >
-                    <div className="font-bold text-[#D82828] flex items-center justify-between">
-                      <span>Online Art Classes</span>
-                      <span className="text-[10px] bg-[#D82828]/10 text-[#D82828] px-2 py-0.5 rounded-full font-bold">
-                        Global Zoom
-                      </span>
-                    </div>
-                    <div className="text-stone-500 text-[11px]">Live 1-hr sessions for US, UK, UAE & Worldwide</div>
+                    <div className="font-bold text-stone-900">Resin, Lippan & Clay Workshops</div>
+                    <div className="text-stone-500 text-[11px]">Weekend Hands-On Creative Sessions</div>
                   </button>
                 </div>
               )}
             </div>
+
+            <button
+              onClick={() => handleNavClick('online-classes')}
+              className={`inline-flex items-center gap-1 px-2.5 py-2 rounded-full transition-colors ${
+                isActive('online-classes')
+                  ? 'text-[#D82828] font-bold bg-[#D82828]/10'
+                  : 'text-[#B85D38] hover:text-[#D82828] hover:bg-stone-50'
+              }`}
+            >
+              <Globe className="w-3.5 h-3.5 shrink-0" />
+              <span>International Online Classes</span>
+            </button>
 
             {/* Art Services Dropdown */}
             <div
@@ -228,13 +266,13 @@ export const Header: React.FC = () => {
             >
               <button
                 onClick={() => handleNavClick('portrait-commissions')}
-                className={`flex items-center gap-1 px-3 py-2 rounded-full transition-colors ${
+                className={`flex items-center gap-1 px-2.5 py-2 rounded-full transition-colors ${
                   isActive('portrait-commissions') || isActive('commercial-projects')
                     ? 'text-[#D82828] font-bold bg-[#D82828]/10'
                     : 'hover:text-[#D82828] hover:bg-stone-50'
                 }`}
               >
-                <span>Art Services</span>
+                <span>Services</span>
                 <ChevronDown className="w-3.5 h-3.5 text-stone-500" />
               </button>
 
@@ -259,17 +297,8 @@ export const Header: React.FC = () => {
             </div>
 
             <button
-              onClick={() => handleNavClick('workshops')}
-              className={`px-3 py-2 rounded-full transition-colors ${
-                isActive('workshops') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
-              }`}
-            >
-              Workshops
-            </button>
-
-            <button
               onClick={() => handleNavClick('gallery')}
-              className={`px-3 py-2 rounded-full transition-colors ${
+              className={`px-2.5 py-2 rounded-full transition-colors ${
                 isActive('gallery') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
               }`}
             >
@@ -277,8 +306,17 @@ export const Header: React.FC = () => {
             </button>
 
             <button
+              onClick={() => handleNavClick('newsletter')}
+              className={`px-2.5 py-2 rounded-full transition-colors ${
+                isActive('newsletter') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
+              }`}
+            >
+              Newsletter
+            </button>
+
+            <button
               onClick={() => handleNavClick('testimonials')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-full transition-colors ${
+              className={`flex items-center gap-1 px-2.5 py-2 rounded-full transition-colors ${
                 isActive('testimonials') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
               }`}
             >
@@ -288,22 +326,13 @@ export const Header: React.FC = () => {
                 <span>4.9</span>
               </span>
             </button>
-
-            <button
-              onClick={() => handleNavClick('contact')}
-              className={`px-3 py-2 rounded-full transition-colors ${
-                isActive('contact') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
-              }`}
-            >
-              Contact
-            </button>
           </nav>
 
           {/* Action CTAs */}
           <div className="flex items-center gap-2.5 shrink-0">
             <button
               onClick={openGeminiChat}
-              className="hidden 2xl:inline-flex items-center gap-1.5 bg-stone-100 hover:bg-stone-200 text-stone-850 px-3.5 py-2.5 rounded-full font-bold text-xs transition-all border border-stone-200 active:scale-95 shadow-2xs"
+              className="hidden 2xl:inline-flex items-center gap-1.5 bg-stone-100 hover:bg-stone-200 text-stone-900 px-3.5 py-2.5 rounded-full font-bold text-xs transition-all border border-stone-200 active:scale-95 shadow-2xs"
               title="Ask AI Art Advisor about Courses & Fees"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#D82828]" />
@@ -369,7 +398,10 @@ export const Header: React.FC = () => {
                 className="bg-red-600 hover:bg-red-700 text-white p-2.5 rounded-xl flex items-center justify-center shrink-0"
                 title="YouTube Channel"
               >
-                <Youtube className="w-5 h-5 fill-current" />
+                <svg className="w-5 h-4" viewBox="0 0 28 20" fill="none" aria-hidden="true">
+                  <rect width="28" height="20" rx="5" fill="#FF0000" />
+                  <path d="M11.5 5.8L18.5 10L11.5 14.2V5.8Z" fill="#FFFFFF" />
+                </svg>
               </a>
             </div>
 
@@ -428,10 +460,19 @@ export const Header: React.FC = () => {
                 isActive('online-classes') ? 'bg-[#D82828]/10 text-[#D82828] font-bold' : 'text-stone-800'
               }`}
             >
-              <span>Online Classes (Zoom Worldwide)</span>
+              <span>International Online Classes</span>
               <span className="text-[10px] bg-[#D82828] text-white px-2 py-0.5 rounded-full font-bold">
                 Ages 6-15
               </span>
+            </button>
+
+            <button
+              onClick={() => handleNavClick('newsletter')}
+              className={`text-left py-2.5 px-3 rounded-xl text-base font-semibold ${
+                isActive('newsletter') ? 'bg-[#D82828]/10 text-[#D82828] font-bold' : 'text-stone-800'
+              }`}
+            >
+              Newsletter & Announcements
             </button>
 
             <button

@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useStudio } from '../context/StudioContext';
-import { GALLERY_DATA } from '../data/galleryData';
-import { Sparkles, Eye, Maximize2, Palette, User, Filter, ArrowRight } from 'lucide-react';
+import { Maximize2, Palette, ArrowRight } from 'lucide-react';
 
 export const GalleryPage: React.FC = () => {
-  const { openLightbox, openEnquiryModal } = useStudio();
+  const { openLightbox, openEnquiryModal, cmsState } = useStudio();
   const [activeCategory, setActiveCategory] = useState<'all' | 'portraits' | 'murals' | 'rangoli' | 'student-work' | 'fine-art'>('all');
+
+  const galleryItems = cmsState.galleryPhotos;
 
   const filteredItems =
     activeCategory === 'all'
-      ? GALLERY_DATA
-      : GALLERY_DATA.filter((item) => item.category === activeCategory);
+      ? galleryItems
+      : galleryItems.filter((item) => item.category === activeCategory);
 
   return (
     <div className="space-y-16 py-12 pb-24 bg-white">

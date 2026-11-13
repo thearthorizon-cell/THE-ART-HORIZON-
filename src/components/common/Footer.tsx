@@ -8,7 +8,6 @@ import {
   MapPin,
   Clock,
   Instagram,
-  Youtube,
   ArrowUpRight,
   Sparkles,
   ShieldAlert,
@@ -106,10 +105,13 @@ export const Footer: React.FC = () => {
                 href={businessConfig.youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-9 px-3.5 rounded bg-red-950/70 hover:bg-red-850 border border-red-800/60 text-red-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+                className="h-9 px-3.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-800/60 text-red-100 hover:text-white text-xs font-semibold flex items-center gap-2 transition-colors shadow-xs"
                 title="The Art Horizon YouTube Channel"
               >
-                <Youtube className="w-4 h-4 text-red-500 fill-current" />
+                <svg className="w-5 h-4 shrink-0" viewBox="0 0 28 20" fill="none" aria-hidden="true">
+                  <rect width="28" height="20" rx="5" fill="#FF0000" />
+                  <path d="M11.5 5.8L18.5 10L11.5 14.2V5.8Z" fill="#FFFFFF" />
+                </svg>
                 <span>YouTube Channel</span>
                 <ArrowUpRight className="w-3.5 h-3.5 opacity-80" />
               </a>
@@ -176,7 +178,12 @@ export const Footer: React.FC = () => {
                   className="hover:text-white text-[#E8926F] flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Globe className="w-3 h-3" />
-                  <span>Online Art Classes (Global)</span>
+                  <span>International Online Classes</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleLink('newsletter')} className="hover:text-white transition-colors cursor-pointer">
+                  Newsletter & Announcements
                 </button>
               </li>
               <li>
@@ -417,7 +424,7 @@ export const Footer: React.FC = () => {
             {/* Locked Studio Portal button - Protected with Studio PIN */}
             <button
               onClick={openInquiriesModal}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-850 text-stone-400 hover:text-amber-400 border border-stone-800 hover:border-amber-500/50 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-400 hover:text-amber-400 border border-stone-800 hover:border-amber-500/50 text-xs font-semibold transition-all cursor-pointer shadow-xs"
               title="Studio Portal (Admissions & Inquiries - PIN Locked)"
             >
               <Lock className="w-3.5 h-3.5 text-amber-500" />

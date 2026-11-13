@@ -1,0 +1,720 @@
+{
+  "founder": {
+    "name": "Vikas Gothi",
+    "title": "Founder & Principal Artist",
+    "portraitImage": "/assets/aistudio/founder_84b502f6.jpeg",
+    "quote": "\"Art is the quiet bridge between an observant eye, a steady hand, and a sensitive human heart.\"",
+    "bioParagraph1": "Based in Indore, Madhya Pradesh, Vikas Gothi has earned deep respect as a portraitist, large-scale rangoli maestro, and passionate educator. Driven by an unrelenting commitment to classical discipline, Vikas has spent over a decade honing the delicate chemistry of dry mediums—charcoal, graphite, soft pastel—and the fluid lyricism of oil and acrylic painting on canvas.",
+    "bioParagraph2": "Disillusioned with how modern art coaching was turning into commercial shortcuts, Vikas established The Art Horizon as an authentic atelier where young children, serious teenagers, and adult professionals could receive genuine, personalized mentorship at their own pace."
+  },
+  "announcements": [
+    {
+      "id": "ann-intl-admissions-open",
+      "title": "International Online Art Admissions Open — Junior, Young & Senior Batches",
+      "category": "New Course",
+      "featuredImage": "/assets/aistudio/WhatsApp_Image_2026-11-13_at_10.30.20_PM_171d3bbe.jpeg",
+      "shortDescription": "Live interactive Zoom art classes for kids aged 6 to 15 now open for international students across the USA, UK, UAE, Oman, Kuwait, and worldwide.",
+      "fullDescription": "Admissions are officially open for our 3-month structured International Online Art Classes led by The Art Horizon. Classes run live on Zoom with small batches of 4 to 6 students, 8 live classes per month, English-language instruction, and age-appropriate batches for Junior Artist (6–8 Years), Young Artist (9–11 Years), and Senior Artist (12–15 Years). Book a free demo session today to experience our teaching approach.",
+      "publishedAt": "2026-11-12",
+      "ctaLabel": "Explore Online Classes",
+      "ctaUrl": "#/online-classes",
+      "status": "published",
+      "createdAt": "2026-11-12T10:00:00.000Z",
+      "updatedAt": "2026-11-12T10:00:00.000Z"
+    },
+    {
+      "id": "ann-weekend-workshops",
+      "title": "Weekend Studio Workshops: Resin Art, Kutch Lippan & Clay Creations",
+      "category": "Workshop",
+      "featuredImage": "/assets/images/lippan_art_craft_1794419582328.jpg",
+      "shortDescription": "Join hands-on creative weekend workshops at our Indore studio. All materials provided and every participant takes home a finished artwork.",
+      "fullDescription": "Experience mindful hands-on making at The Art Horizon studio in Usha Nagar, Indore. Our weekend workshops cover Ocean Epoxy Resin Art, Traditional Kutch Lippan Mud & Mirror Art, and Terracotta Clay Pottery. Prior registration is required due to limited studio seating.",
+      "publishedAt": "2026-11-08",
+      "ctaLabel": "View Workshop Schedule",
+      "ctaUrl": "#/workshops",
+      "status": "published",
+      "createdAt": "2026-11-08T10:00:00.000Z",
+      "updatedAt": "2026-11-08T10:00:00.000Z"
+    },
+    {
+      "id": "ann-student-showcase",
+      "title": "Student Achievement Spotlight: Bal Krishna Charcoal & Wildlife Studies",
+      "category": "Student Achievement",
+      "featuredImage": "/assets/aistudio/WhatsApp_Image_2024-01-08_at_16.21.16_501e11bf_553401ce.jpg",
+      "shortDescription": "Celebrating our academy students whose original charcoal portraits and canvas wildlife paintings were featured in this season’s studio showcase.",
+      "fullDescription": "We take immense pride in showcasing authentic drawings and canvas paintings completed by students under the direct mentorship of Vikas Gothi. Explore full-resolution student works inside the Artwork Gallery.",
+      "publishedAt": "2026-11-02",
+      "ctaLabel": "Visit Artwork Gallery",
+      "ctaUrl": "#/gallery",
+      "status": "published",
+      "createdAt": "2026-11-02T10:00:00.000Z",
+      "updatedAt": "2026-11-02T10:00:00.000Z"
+    }
+  ],
+  "onlineCourses": [
+    {
+      "id": "junior-artist",
+      "slug": "junior-artist",
+      "title": "Junior Artist Program",
+      "ageGroup": "6–8 Years",
+      "badge": "Junior Artist",
+      "heroImage": "/assets/aistudio/WhatsApp_Image_2026-11-13_at_10.30.19_PM_b3d70174.jpeg",
+      "referenceImages": [
+        "/assets/aistudio/WhatsApp_Image_2026-11-13_at_10.30.19_PM_b3d70174.jpeg"
+      ],
+      "overview": "A 3-level progressive live online drawing and creative art program for children aged 6 to 8 years (24 classes per level, 72 curated creative projects across Basic, Intermediate, and Advanced levels). Conducted in small live Zoom batches with a Certificate on Completion.",
+      "duration": "3 Progressive Levels · 24 Classes Per Level (8 Live Classes/Month)",
+      "classFormat": "Live Interactive Zoom · Max 5 Kids Per Batch · English Instruction",
+      "scheduleSummary": "8 live classes per month (3 months per level) · Certificate on Completion",
+      "language": "English-language instruction",
+      "whatChildrenLearn": [
+        "Still Life",
+        "Landscape",
+        "Sketching",
+        "Flowers",
+        "Animals",
+        "Birds",
+        "Modern Art",
+        "Folk Art"
+      ],
+      "curriculumModules": [
+        {
+          "id": "jr-basic",
+          "moduleTitle": "Basic Level · Creative Foundations (24 Topics)",
+          "techniques": [
+            "Oil Pastels & Warm Blends",
+            "Color Pencils & Wax Crayons",
+            "2B/4B Graphite Pencil Shading",
+            "Sketch Pens, Poster Colors & Liners",
+            "Warli & Madhubani Folk Art Basics"
+          ],
+          "topics": [
+            "[Still Life] Big Apple & Sweet Banana — Oil Pastels",
+            "[Still Life] My Favorite Polka-Dot Mug — Color Pencils & Pastels",
+            "[Still Life] Ice Cream Sundae in a Bowl — Wax Crayons & Pastels",
+            "[Landscape] Sunset Over Rolling Hills — Oil Pastels (Warm Blends)",
+            "[Landscape] Sunny Beach & Coconut Palm — Oil Pastels & Sketch Pens",
+            "[Landscape] Little Cottage with Garden Path — Color Pastels & Liners",
+            "[Sketching] Shaded 3D Gift Box — 2B Graphite Pencil",
+            "[Sketching] Fluffy Teddy Bear Textures — 2B / 4B Sketching Pencils",
+            "[Sketching] Twinkling Star & Crescent Moon — Graphite Pencil & Paper",
+            "[Flowers] The Happy Giant Sunflower — Oil Pastels & Black Outliner",
+            "[Flowers] Spring Tulip Garden in Grass — Oil Pastels / Poster Colors",
+            "[Flowers] Garden Daisy & Friendly Ladybug — Color Pastels & Markers",
+            "[Animals] Playful Puppy Face — Sketch Pens & Pastels",
+            "[Animals] Sleepy Curled Kitten — Color Pencils & Pastels",
+            "[Animals] Friendly Baby Elephant — Oil Pastels & Bold Liner",
+            "[Birds] Chirpy Garden Sparrow on a Twig — Pencil & Oil Pastels",
+            "[Birds] Floating Yellow Duckling — Oil Pastels on White Sheet",
+            "[Birds] Vibrant Peacock Feather Fan — Pastels & Glitter Marker",
+            "[Modern Art] Mondrian Geometric Color Grid — Graphic Markers & Paints",
+            "[Modern Art] Kandinsky Concentric Snail Shells — Oil Pastels",
+            "[Modern Art] Stained-Glass Tangled Doodles — Fine Liners & Pastels",
+            "[Folk Art] Warli Tarpa Circle Dance — White Pen on Terracotta Paper",
+            "[Folk Art] Warli Village Animals & Huts — Earth Tone Sheet & White Ink",
+            "[Folk Art] Madhubani Sacred Radiant Sun — Black Waterproof Pen & Inks"
+          ]
+        },
+        {
+          "id": "jr-intermediate",
+          "moduleTitle": "Intermediate Level · Skill & Depth (24 Topics)",
+          "techniques": [
+            "Oil Pastels & Blenders",
+            "Watercolor Wash & Resist",
+            "2B/4B/6B Pencils & Blending Stump",
+            "Soft Pastels & Tinted Paper Drawing",
+            "Picasso, Warhol & Paul Klee Modern Styles",
+            "Madhubani, Gond & Kalamkari Heritage Folk Art"
+          ],
+          "topics": [
+            "[Still Life] Overlapping Fresh Fruit Basket — Oil Pastels & Blenders",
+            "[Still Life] Ceramic Teapot & Saucer Pair — Oil Pastels & Water Inks",
+            "[Still Life] Glass Mason Jar of Marbles — Color Pencils & White Pastel",
+            "[Landscape] Winding Mountain River Valley — Pastels & Watercolor Wash",
+            "[Landscape] Rainy Walk with Umbrella — Oil Pastels & Watercolor Resist",
+            "[Landscape] Desert Dunes & Camel Caravan — Warm Gradient Pastels",
+            "[Sketching] 3D Shaded Cricket Ball — 2B, 4B & 6B Pencils",
+            "[Sketching] Ancient Tree Bark & Hollow Knots — Graphite & Blending Stump",
+            "[Sketching] Vintage Skeleton Key on Table — 2B / 4B Pencils & Eraser Edge",
+            "[Flowers] Unfolding Layered Velvet Rose — Color Pencils & Soft Pastels",
+            "[Flowers] Sacred Lotus on Water Lily Pad — Soft Pastels & Fine Outliner",
+            "[Flowers] Wildflower Jar with Ribbon Bow — Mixed Media on Cartridge Sheet",
+            "[Animals] Alert Spotted Forest Deer — Oil Pastels & Color Pencils",
+            "[Animals] Leaping Oceanic Dolphin — Pastels with Watercolor Wash",
+            "[Animals] Roaring Lion Face Profile — Graphite & Golden Pastels",
+            "[Birds] Barn Owl on Moonlit Branch — Pastels on Deep Blue Sheet",
+            "[Birds] Graceful Swan & Water Mirror — White Pastel on Tinted Paper",
+            "[Birds] Tropical Toucan in Rainforest — Oil Pastels & Black Liner",
+            "[Modern Art] Cubist Cat Portrait (Picasso Style) — Oil Pastels & Bold Marker",
+            "[Modern Art] Pop Art 4-Fruit Grid (Warhol Style) — Graphic Markers & Pastels",
+            "[Modern Art] Castle & Sun City (Paul Klee Style) — Watercolors & Pastels",
+            "[Folk Art] Madhubani Peacock of Prosperity — Black Waterproof Pen & Inks",
+            "[Folk Art] Gond Art Tribal Spotted Deer — Acrylic Fineliners & Pastels",
+            "[Folk Art] Kalamkari Tree of Life Motif — Micro Gel Pens & Earth Colors"
+          ]
+        },
+        {
+          "id": "jr-advanced",
+          "moduleTitle": "Advanced Level · Texture & Heritage (24 Topics)",
+          "techniques": [
+            "Soft Pastels / Charcoal & White Chalk",
+            "2B–8B Artist Graphite & Highlighting Eraser",
+            "Watercolor Pencils & Colored Inks",
+            "Pastels on Black Paper & Acrylic Mixed Media",
+            "Madhubani Matsya, Gond & Pattachitra Folk Art"
+          ],
+          "topics": [
+            "[Still Life] Sliced Fruits on Wooden Board — Oil Pastels & Blenders",
+            "[Still Life] Terracotta Matka & Draped Cloth — Soft Pastels / Charcoal",
+            "[Still Life] Antique Books, Candle & Quill — Graphite Pencils & White Chalk",
+            "[Landscape] Rocky Cascading Waterfall — Pastels with White Opaque Pen",
+            "[Landscape] Village Harvest at Golden Hour — Oil Pastels & Ink Liners",
+            "[Landscape] Night Suspension Bridge Cityscape — Pastels on Black Paper",
+            "[Sketching] Expressive Human Eye Study — 2B to 8B Artist Graphite",
+            "[Sketching] Galloping Wild Horse in Motion — Charcoal & Blending Stump",
+            "[Sketching] Polished Metal Chai Kettle — Graphite & Highlighting Eraser",
+            "[Flowers] Exotic Orchid on Bamboo Stem — Watercolor Pencils & Pastels",
+            "[Flowers] Botanical Hibiscus with Stamen — Colored Inks & Pastels",
+            "[Flowers] Blossom Petal with Dew Drops — Color Pencils & White Gel Pen",
+            "[Animals] Royal Bengal Tiger Stalking — Oil Pastels & Black Liner",
+            "[Animals] Giant Panda in Bamboo Grove — Charcoal & White Chalk",
+            "[Animals] Royal Festival Caparisoned Camel — Colored Inks & Pastels",
+            "[Birds] Hovering Hummingbird at Flower — Soft Pastels & Fineliners",
+            "[Birds] Soaring Mountain Eagle — Graphite & Charcoal Pencils",
+            "[Birds] Balancing Flamingo on One Leg — Pastels & Watercolor Wash",
+            "[Modern Art] Surrealist Dream Window — Oil Pastels & Acrylic Paint",
+            "[Modern Art] 3D Optical Illusion Sphere — Black Graphic Fineliners",
+            "[Modern Art] Starry Night Sky Swirls — Heavy Oil Pastels on Card",
+            "[Folk Art] Madhubani Matsya (Twin Fish) — Black Waterproof Pen & Inks",
+            "[Folk Art] Gond Art Roaring Forest Tiger — Acrylic Inks & Fineliners",
+            "[Folk Art] Pattachitra Royal Elephant — Traditional Folk Palette & Pen"
+          ]
+        }
+      ],
+      "techniques": [
+        "Oil Pastels, Soft Pastels, Wax Crayons & Watercolor Wash / Resist",
+        "2B–8B Graphite Pencil & Charcoal Sketching with Blending Stump",
+        "Color Pencils, Colored Inks, Poster Colors & Acrylic Fineliners",
+        "Indian Folk Traditions (Warli, Madhubani, Gond, Kalamkari, Pattachitra)"
+      ],
+      "skillsDeveloped": [
+        "Shape construction, overlapping composition & depth control",
+        "Smooth color blending, warm/cool gradients & resist textures",
+        "Hand-eye coordination, pencil pressure & texture observation",
+        "Creative confidence across modern, wildlife & heritage styles"
+      ],
+      "learningOutcomes": [
+        "Complete 24 guided artworks per progressive level (72 projects across 3 levels)",
+        "Master 8 diverse art categories from Still Life to Modern & Folk Art",
+        "Earn an official Certificate on Completion from The Art Horizon"
+      ],
+      "benefits": [
+        "Max 5 kids per batch for personal attention & live feedback",
+        "3 Progressive Levels: Basic, Intermediate & Advanced (24 classes per level)",
+        "Live interactive English-language instruction via Zoom",
+        "Certificate on Completion & convenient international timezones"
+      ],
+      "curriculumPendingPdf": false,
+      "visible": true,
+      "curriculumPdfUrl": "/assets/aistudio/Junior_Artists_Curriculum__Ages_6-8__249663e9.pdf"
+    },
+    {
+      "id": "young-artist",
+      "slug": "young-artist",
+      "title": "Young Artist Program",
+      "ageGroup": "9–11 Years",
+      "badge": "Young Artist",
+      "heroImage": "/assets/aistudio/WhatsApp_Image_2026-11-13_at_10.30.20_PM_171d3bbe.jpeg",
+      "referenceImages": [
+        "/assets/aistudio/WhatsApp_Image_2026-11-13_at_10.30.20_PM_171d3bbe.jpeg"
+      ],
+      "overview": "A 3-level live online Drawing & Visual Arts curriculum for students aged 9 to 11 years (24 classes per level, 72 topics covering Foundations & Perspective, Depth & Realism, and Masterclass & Heritage) in small Zoom batches of max 5 students.",
+      "duration": "3 Progressive Levels · 24 Classes Per Level (8 Live Classes/Month)",
+      "classFormat": "Live Interactive Zoom · Max 5 Students Per Batch · English Instruction",
+      "scheduleSummary": "8 live classes per month (3 months per level) · Certificate on Completion",
+      "language": "English-language instruction",
+      "whatChildrenLearn": [
+        "Still Life",
+        "Landscape",
+        "Sketching",
+        "Flowers",
+        "Animals",
+        "Birds",
+        "Modern Art",
+        "Folk Art"
+      ],
+      "curriculumModules": [
+        {
+          "id": "yg-basic",
+          "moduleTitle": "Basic Level · Foundations & Perspective (24 Topics)",
+          "techniques": [
+            "1-Point Perspective & Horizon Construction",
+            "5-Step Value Scale, 3D Solids & Blending Stump",
+            "Oil Pastels, Soft Pastels & White Chalk on Paper",
+            "Warhol, Kandinsky & Picasso Modern Interpretations",
+            "Madhubani, Warli & Gond Folk Traditions"
+          ],
+          "topics": [
+            "[Still Life] Citrus Slice Study & Pitcher — Oil Pastels on Cartridge Paper",
+            "[Still Life] Stacked Vintage Books & Mug — 2B/4B Pencils & Fineliners",
+            "[Still Life] Glass Bottle with Whole Lemon — Pastels & White Chalk",
+            "[Landscape] Mountain Lake & Forest Horizon — Oil Pastels (Cool Tones)",
+            "[Landscape] Pathway through Pine Forest (1-Point) — Graphite & Pastels",
+            "[Landscape] Lighthouse on Coastal Cliffs — Waterproof Liners & Pastels",
+            "[Sketching] 5-Step Value Scale & 3D Solids — 2B, 4B & 6B Graphite Pencils",
+            "[Sketching] Rustic Wooden Door & Iron Lock — Graphite & Blending Stump",
+            "[Sketching] Draped Silk Ribbon Study — 2B/6B Pencils & Eraser Edge",
+            "[Flowers] Botanical Lily with Anthers — Color Pencils & Pastels",
+            "[Flowers] Potted Echeveria Succulent — Soft Pastels on Card",
+            "[Flowers] Red Poppy Blossom with Seed Pod — Oil Pastels & Black Liner",
+            "[Animals] Sitting Red Fox in Snow — Oil Pastels & Fine Pen",
+            "[Animals] Majestic Horse Head Profile — Charcoal & 4B Graphite",
+            "[Animals] Playful Floating Sea Otter — Pastels with Ink Details",
+            "[Birds] Crested Blue Jay on Pine Twig — Color Pencils & Pastels",
+            "[Birds] Vibrant River Kingfisher — Oil Pastels on White Card",
+            "[Birds] Perched Screech Owl on Post — 2B/6B Pencils & Blenders",
+            "[Modern Art] Pop Art 4-Panel Portrait (Warhol) — Graphic Markers & Paints",
+            "[Modern Art] Geometric Rhythm (Kandinsky) — Fineliners & Pastels",
+            "[Modern Art] Deconstructed Guitar (Picasso) — Oil Pastels & Charcoal",
+            "[Folk Art] Madhubani Royal Elephant & Lotus — Black Waterproof Pen & Inks",
+            "[Folk Art] Warli Village Narrative Circle — White Ink on Terracotta Sheet",
+            "[Folk Art] Gond Art Tree of Life & Birds — Acrylic Markers & Liners"
+          ]
+        },
+        {
+          "id": "yg-intermediate",
+          "moduleTitle": "Intermediate Level · Depth & Realism (24 Topics)",
+          "techniques": [
+            "Two-Point Perspective Architectural Drawing",
+            "Cross-Hatching Fine Ink Pens & Charcoal",
+            "Human Hand Gestures & Knuckles Anatomy",
+            "Colored Inks, White Gouache & Toned Paper",
+            "Dalí, Chagall & Vasarely Modern Concepts",
+            "Pichwai, Madhubani & Kalamkari Heritage Art"
+          ],
+          "topics": [
+            "[Still Life] Polished Brass Kettle & Peppers — Pastels & White Gouache",
+            "[Still Life] Clear Vase with Submerged Stems — Soft Pastels & Color Pencils",
+            "[Still Life] Open Pomegranate with Ruby Seeds — Color Pencils & Liners",
+            "[Landscape] Two-Point Perspective City Street — Fineliners & Shading Pencils",
+            "[Landscape] Misty Rainforest with Hanging Vines — Pastels with Blending Stump",
+            "[Landscape] Desert Oasis Dunes at Twilight — Warm Gradient Pastels",
+            "[Sketching] Cross-Hatched Ceramic Teacup — 0.1 & 0.3 Fine Ink Pens",
+            "[Sketching] Human Hand Gestures & Knuckles — 2B/4B Graphite Pencils",
+            "[Sketching] Worn Vintage Leather Boot — Charcoal Pencil & Eraser",
+            "[Flowers] Multi-Petaled Geometric Dahlia — Color Pencils on Toned Paper",
+            "[Flowers] Bird of Paradise Blossom — Oil Pastels & Liners",
+            "[Flowers] Botanical Eucalyptus & Wreath — Waterproof Ink & Pastels",
+            "[Animals] Howling Timber Wolf at Night — Pastels on Navy Blue Sheet",
+            "[Animals] African Leopard on Tree Branch — Oil Pastels & Colored Inks",
+            "[Animals] One-Horned Rhinoceros Study — Graphite & Tinted Chalk",
+            "[Birds] Soaring Bald Eagle Landing Pose — Charcoal & White Pastel",
+            "[Birds] Flamingo Colony with Reflections — Pastels & Watercolor Wash",
+            "[Birds] Scarlet Macaw in Flight Angles — Heavy Body Pastels",
+            "[Modern Art] Surrealist Melting Clock (Dalí) — Oil Pastels & Fine Pen",
+            "[Modern Art] Stained-Glass Village (Chagall) — Inks & Oil Pastels on Card",
+            "[Modern Art] 3D Optical Kinetic Grid (Vasarely) — Fine Graphic Black Pens",
+            "[Folk Art] Pichwai Sacred Cows & Lotuses — Gouache / Pastels & Gold Pen",
+            "[Folk Art] Madhubani Tree of Life Birds — Fineliners & Traditional Inks",
+            "[Folk Art] Kalamkari Swirling Paisley Border — Earth Tone Pens & Washes"
+          ]
+        },
+        {
+          "id": "yg-advanced",
+          "moduleTitle": "Advanced Level · Masterclass & Heritage (24 Topics)",
+          "techniques": [
+            "Proportional Human Facial Study (2B–8B Graphite)",
+            "Metallic, Glass & Crumpled Texture Realism",
+            "White Charcoal & White/Gold Chalk on Black Paper",
+            "Impasto Oil Pastels (Van Gogh), Futurism & Escher",
+            "Pattachitra, Kerala Mural & Tanjore-Inspired Art"
+          ],
+          "topics": [
+            "[Still Life] Silver Goblet, Grapes & Walnuts — Graphite & White Charcoal",
+            "[Still Life] Vintage Hurricane Lantern with Flame — Pastels on Black Paper",
+            "[Still Life] Cut Crystal Bowl with Water Petals — Color Pencils & Gel Pen",
+            "[Landscape] Venice Canal Architecture (2-Point) — Fineliners & Pastels",
+            "[Landscape] Ocean Tempest over Rocky Headland — Pastels & White Ink Pen",
+            "[Landscape] Sunlit Forest Canopy with Rays — Soft Pastels & Blenders",
+            "[Sketching] Proportional Human Facial Study — 2B to 8B Artist Graphite",
+            "[Sketching] Classical Stone Archway Architecture — 0.05 to 0.5 Graphic Fineliners",
+            "[Sketching] Crumpled Aluminum Foil & Can — Charcoal & Highlighting Eraser",
+            "[Flowers] Gnarled Cherry Blossom Branch — Watercolor Pencils & Pastels",
+            "[Flowers] Macro Sunflower Core & Honeybee — Color Pencils & Fine Pen",
+            "[Flowers] White Calla Lily on Dark Sheet — White Charcoal on Black Sheet",
+            "[Animals] Stalking Snow Leopard in Crags — Pastels & Blending Tools",
+            "[Animals] Breaching Humpback Whale — Pastels with White Opaque Ink",
+            "[Animals] Charging Wild Bison / Indian Gaur — Charcoal & Dark Earth Pastels",
+            "[Birds] Peregrine Falcon in Mid-Dive Tuck — Fineliners & Shading Pencils",
+            "[Birds] Golden Pheasant Plumage Display — Vibrant Pastels & Black Liner",
+            "[Birds] Great Horned Owl Frontal Strike — White/Gold Chalk on Black Paper",
+            "[Modern Art] Expressive Self-Portrait (Van Gogh) — Oil Pastels (Heavy Impasto Style)",
+            "[Modern Art] Futurist Motion Composition — Graphic Pens & Color Washes",
+            "[Modern Art] Escher-Inspired Paradox Stairs — Precision Technical Fineliners",
+            "[Folk Art] Pattachitra Dashavatara Iconography — Traditional Ink & Mineral Colors",
+            "[Folk Art] Kerala Mural Royal Tusker Elephant — Panchavarna Palette & Pen",
+            "[Folk Art] Tanjore-Inspired Peacock & Arch — Gold Metallic Liner & Pastels"
+          ]
+        }
+      ],
+      "techniques": [
+        "1-Point & 2-Point Perspective Architecture & Horizon Landscapes",
+        "5-Step Value Scales, Cross-Hatching, Charcoal & White Chalk on Dark Paper",
+        "Proportional Human Hands & Facial Feature Studies",
+        "Modern Master Studies (Warhol, Picasso, Dalí, Van Gogh, Escher) & Indian Heritage Murals"
+      ],
+      "skillsDeveloped": [
+        "Architectural perspective, surface reflections & realistic light behavior",
+        "Fine ink cross-hatching, metallic & crystal rendering",
+        "Proportion accuracy across botanicals, wildlife & human facial features",
+        "Independent artistic style spanning modern & traditional heritage mediums"
+      ],
+      "learningOutcomes": [
+        "Complete 24 structured visual arts studies per level across 3 progressive levels",
+        "Transition smoothly from basic 3D shading to multi-medium realism & heritage art",
+        "Earn an official Certificate on Completion from The Art Horizon"
+      ],
+      "benefits": [
+        "Max 5 students per batch for continuous individual critique",
+        "3 Progressive Levels: Basic, Intermediate & Advanced (24 classes per level)",
+        "Live interactive Zoom instruction in English",
+        "Certificate on Completion & international time zone friendly slots"
+      ],
+      "curriculumPendingPdf": false,
+      "visible": true,
+      "curriculumPdfUrl": "/assets/aistudio/Young_Artists_Curriculum__Ages_9-11__5651e7e7.pdf"
+    },
+    {
+      "id": "senior-artist",
+      "slug": "senior-artist",
+      "title": "Senior Artist Program",
+      "ageGroup": "12–15 Years",
+      "badge": "Senior Artist",
+      "heroImage": "/assets/aistudio/WhatsApp_Image_2026-11-13_at_10.30.20_PMb_ef1eaa8e.jpeg",
+      "referenceImages": [
+        "/assets/aistudio/WhatsApp_Image_2026-11-13_at_10.30.20_PMb_ef1eaa8e.jpeg"
+      ],
+      "overview": "A Pre-College Fine Arts & Studio Portfolio live online program for students aged 12 to 15 years. Covers Anatomy, Chiaroscuro Charcoal, 1/2/3-Point Perspective, Transparent Watercolors, Heavy-Body Acrylics, Wildlife, Concept Art & Indian Heritage in batches of max 5 students.",
+      "duration": "3 Progressive Levels · Pre-College Fine Art Training (8 Live Classes/Month)",
+      "classFormat": "Live Interactive Zoom · Max 5 Students Per Batch · Studio Portfolio Certification",
+      "scheduleSummary": "8 live classes per month across 3 studio mastery levels · Portfolio Certification",
+      "language": "English-language instruction",
+      "whatChildrenLearn": [
+        "Anatomy",
+        "Charcoal",
+        "Perspective",
+        "Watercolor",
+        "Acrylics",
+        "Wildlife",
+        "Concept Art",
+        "Heritage"
+      ],
+      "curriculumModules": [
+        {
+          "id": "sr-basic",
+          "moduleTitle": "Basic Level · Studio Foundations & Medium Control (13 Projects)",
+          "techniques": [
+            "Loomis Head Construction & Facial Planes",
+            "Classical 9-Value Chiaroscuro Charcoal & White Chalk",
+            "1-Point Architectural Perspective (Technical Fineliners)",
+            "300 GSM Transparent Watercolor & Negative Painting",
+            "Heavy-Body Acrylics & Palette Knife Color Blending"
+          ],
+          "topics": [
+            "[Anatomy] Loomis Head Construction & Facial Planes — 2B, 4B & 6B Graphite Pencils",
+            "[Anatomy] Orbital Eye Sockets, Nose & Lip Studies — Graphite on Toned Paper",
+            "[Charcoal] Classical 9-Value Chiaroscuro Sphere & Jug — Willow & Compressed Charcoal",
+            "[Charcoal] Fabric Drapery: The Hanging Drop Fold — Charcoal & White Chalk on Grey Sheet",
+            "[Perspective] 1-Point Perspective Architectural Corridor — 0.1 & 0.5 Technical Fineliners",
+            "[Perspective] Receding Grid & Horizon Landscape — Graphite Pencils & Fineliners",
+            "[Watercolor] Misty Alpine Pine Forest & Lake Horizon — Artist Watercolors on 300 GSM Paper",
+            "[Watercolor] Negative Painting Botanical Monstera Leaves — Transparent Watercolors & Round Brushes",
+            "[Acrylics] Dramatic Twilight Sunset & Pier on Canvas — Heavy-Body Acrylics on Canvas Board",
+            "[Acrylics] Palette Knife Color Blending Study — Acrylics & Metal Painting Knife",
+            "[Wildlife] Bengal Tiger Eye & Fur Flow Study — Polychromos Colored Pencils & Gel Pen",
+            "[Concept Art] High-Contrast Graphic Pop Art Poster — Graphic Fineliners & Acrylic Inks",
+            "[Heritage] Sacred Madhubani Kachni Master Mandala — 0.1 Waterproof Pen & Earth Tones"
+          ]
+        },
+        {
+          "id": "sr-intermediate",
+          "moduleTitle": "Intermediate Level · Form Dynamics, Glazing & Textures (12 Projects)",
+          "techniques": [
+            "Classical Plaster Cast & Reflective Metal Charcoal Studies",
+            "Hand Foreshortening & Torso Contrapposto Anatomy",
+            "2-Point Perspective Historic Street & Color Wash",
+            "Luminous Watercolor Glazing & Arches Wet-on-Wet Streetscapes",
+            "Impasto Knife Acrylics, Production Character Sheets & Pichwai Heritage"
+          ],
+          "topics": [
+            "[Charcoal] Classical Plaster Cast Sculptural Study — Compressed Charcoal & Blending Stump",
+            "[Charcoal] Reflective Silver Chalice & Glass Jar — Charcoal Pencil & Highlighting Eraser",
+            "[Anatomy] Human Hand Anatomy & Foreshortening — 2B/4B Graphite & White Chalk",
+            "[Anatomy] Torso Musculature & Contrapposto Gesture — Artist Graphite Pencils on Paper",
+            "[Perspective] 2-Point Perspective Historic European Street — Waterproof Micron Pens & Color Wash",
+            "[Watercolor] Luminous Glazing: Velvet Rose & Dew Drops — Professional Watercolors on 300 GSM",
+            "[Watercolor] Atmospheric Rainy Evening Streetscape — Transparent Watercolors on Arches Sheet",
+            "[Acrylics] Palette Knife Impasto Alpine Ridge — Heavy-Body Acrylics on Stretched Canvas",
+            "[Acrylics] Dramatic Seascape & Crashing Waves — Heavy-Body Acrylics on Canvas Board",
+            "[Wildlife] Stalking Snow Leopard in Rugged Crags — Artist Colored Pencils & Gouache",
+            "[Concept Art] Production Character Model Sheet (3 Angles) — Graphic Fineliners & Tonal Markers",
+            "[Heritage] Pichwai Sacred Cow & Golden Lotus Pond — Gouache, Acrylics & Gold Metallic Liner"
+          ]
+        },
+        {
+          "id": "sr-advanced",
+          "moduleTitle": "Advanced Level · Pre-College Masterpieces & Portfolio (8 Projects)",
+          "techniques": [
+            "Rembrandt 3/4 Chiaroscuro Portrait & Full-Figure Clothed Life Study",
+            "3-Point Bird’s-Eye Metropolis Perspective",
+            "Hyper-Realistic Cut Crystal Charcoal & Carbon Pencil Rendering",
+            "Black Gesso Canvas Acrylics, Concept Keyframes & Panchavarna Kerala Murals"
+          ],
+          "topics": [
+            "[Anatomy] Rembrandt Chiaroscuro Portrait in 3/4 View — Artist Graphite 2B–8B & Charcoal Blend",
+            "[Charcoal] Full-Figure Clothed Life Study with Drapery — Vine & Compressed Charcoal on Toned Sheet",
+            "[Perspective] 3-Point Perspective Bird’s-Eye Metropolis — 0.05 to 0.8 Technical Pens & Sepia Washes",
+            "[Charcoal] Hyper-Realistic Cut Crystal Bowl & Water Drops — Carbon Pencil, Graphite & White Gouache",
+            "[Watercolor] Atmospheric Venice Canal at Twilight — Artist Watercolors on 300 GSM Cold Press",
+            "[Acrylics] Wildlife Emerging from Black Canvas (Panther) — Heavy-Body Acrylics on Black Gesso Canvas",
+            "[Concept Art] Cinematic Steampunk Mechanical Heart Keyframe — Fineliners, Metallic Inks & Washes",
+            "[Heritage] Kerala Temple Mural: Royal Tusker Elephant — Traditional Panchavarna Palette & Gouache"
+          ]
+        }
+      ],
+      "techniques": [
+        "Loomis Head Construction, Contrapposto Torso & Rembrandt Chiaroscuro Portraiture",
+        "9-Value Willow/Compressed Charcoal, Carbon Pencil & Plasters",
+        "300 GSM Arches Watercolor Glazing & Heavy-Body Stretched Canvas Impasto Acrylics",
+        "1-Point, 2-Point & 3-Point Architectural Perspective + Production Concept Art"
+      ],
+      "skillsDeveloped": [
+        "Academic human anatomy, foreshortening & tonal edge control",
+        "Multi-medium fluency across Charcoal, Transparent Watercolors & Heavy-Body Acrylics",
+        "Structural architectural perspective & concept art design turnaround",
+        "Pre-college fine art discipline & museum-grade heritage brushwork"
+      ],
+      "learningOutcomes": [
+        "Build a cohesive Pre-College Fine Art Studio Portfolio across 33 master projects",
+        "Confidently handle toned paper, Arches watercolor sheets & black gesso canvases",
+        "Earn an official Studio Portfolio Certification upon completion"
+      ],
+      "benefits": [
+        "Pre-College Fine Art Training in capped max 5-student Zoom batches",
+        "Covers Acrylics, Charcoal, Watercolors, Anatomy, Perspective & Concept Art",
+        "Live English-language atelier critique & step-by-step demonstrations",
+        "Studio Portfolio Certification ideal for art school & creative tracks"
+      ],
+      "curriculumPendingPdf": false,
+      "visible": true,
+      "curriculumPdfUrl": "/assets/aistudio/Senior_Artists_Curriculum__Ages_12-15__77a96c57.pdf"
+    }
+  ],
+  "galleryPhotos": [
+    {
+      "id": "g-master-old-man-portrait",
+      "title": "Wisdom of Generations – Elder in Turban in Charcoal Realism",
+      "category": "portraits",
+      "medium": "Nitram Charcoal & Graphite on Archival Fabriano Cotton Paper",
+      "dimensions": "18 x 24 inches",
+      "artist": "Master Portraitist Vikas Gothi",
+      "description": "Soul-stirring high-contrast classical portrait depicting an Indian village elder with weathered facial character, flowing mustache, and intricately layered turban. Masterful tonal chiaroscuro capturing dignity and lifelike gaze.",
+      "image": "/assets/aistudio/v_7f44a0d0.jpeg"
+    },
+    {
+      "id": "g-student-horses-gallop",
+      "title": "Galloping Wild Steeds – Dynamic Motion & Mane Study",
+      "category": "student-work",
+      "medium": "Pencil & Graphite Powder on Textured Cartridge Sheet",
+      "dimensions": "14 x 20 inches",
+      "artist": "Student Akash (Mentored by Vikas Gothi)",
+      "description": "Breathtaking kinetic sketch of running wild horses with windblown flowing manes and anatomical muscle rendering. Created during advanced teen sketching classes under Vikas Gothi.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-11-12_at_4.00.19_PM_e2a57e08.jpeg"
+    },
+    {
+      "id": "g-master-buddha-serenity",
+      "title": "Serenity in Bodhi Leaves – Contemporary Spiritual Buddha",
+      "category": "fine-art",
+      "medium": "Acrylics & Glazes on Canvas Board",
+      "dimensions": "12 x 16 inches",
+      "artist": "Vikas Gothi / The Art Horizon Studio",
+      "description": "Contemplative spiritual painting blending dual-tone indigo and golden ochre lighting on the peaceful visage of Lord Buddha, framed by lush translucent Bodhi leaves.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-11-12_at_4.00.20_PM_4f53e3eb.jpeg"
+    },
+    {
+      "id": "g-real-student-krishna",
+      "title": "Bal Krishna Divine Charcoal Study",
+      "category": "student-work",
+      "medium": "Nitram Charcoal & Graphite on Archival Cartridge Paper",
+      "dimensions": "18 x 24 inches",
+      "artist": "Student of The Art Horizon (Mentored by Vikas Gothi)",
+      "description": "Original student artwork created at The Art Horizon. Young student proudly displays her completed Bal Krishna tonal portraits featuring expressive eyes, peacock feather detailing, and refined charcoal blending.",
+      "image": "/assets/aistudio/WhatsApp_Image_2024-01-08_at_16.21.16_501e11bf_553401ce.jpg"
+    },
+    {
+      "id": "g-student-akku-elephant",
+      "title": "Vibrant Wildlife Elephant with Luminous Blue Eye",
+      "category": "student-work",
+      "medium": "Acrylics & Textured Brushwork on Canvas Board",
+      "dimensions": "12 x 18 inches",
+      "artist": "Student Akku (The Art Horizon Studio)",
+      "description": "Striking wildlife study painted by student Akku, displaying radiant warm-to-cool transitions along the elephant trunk, detailed skin wrinkle texturing, and a captivating glowing blue eye.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.29.38_PM__1__a789db97.jpeg"
+    },
+    {
+      "id": "g-student-lake-sunset",
+      "title": "Serene Sunset Lake & Wooden Pier",
+      "category": "student-work",
+      "medium": "Acrylic on Stretched Canvas",
+      "dimensions": "16 x 24 inches",
+      "artist": "Student of The Art Horizon",
+      "description": "Atmospheric landscape painting featuring calm waters reflecting the golden sunset, misty mountain ridges, and a one-point perspective wooden boardwalk.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.25.38_PM_a08648b2.jpeg"
+    },
+    {
+      "id": "g-student-kuku-hummingbird",
+      "title": "Hummingbird & Dewdrop Magnolia Blossoms",
+      "category": "student-work",
+      "medium": "Fine Acrylic & Soft Glazes on Linen Canvas",
+      "dimensions": "14 x 16 inches",
+      "artist": "Student Kuku (The Art Horizon Studio)",
+      "description": "Luminous botanical painting by student Kuku capturing a ruby-throated hummingbird hovering over dewy pink and golden magnolia blossoms on deep teal gradient background.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.29.39_PM__1__79ef2edd.jpeg"
+    },
+    {
+      "id": "g-student-deer-butterflies",
+      "title": "Forest Deer & Monarch Butterflies",
+      "category": "student-work",
+      "medium": "Acrylic & Oil Blends on Textured Canvas",
+      "dimensions": "16 x 20 inches",
+      "artist": "Student of The Art Horizon",
+      "description": "Gentle forest creature study depicting a spotted deer with branching antlers surrounded by fluttering yellow and electric blue butterflies in dappled woodland light.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.29.38_PM_d96f38ad.jpeg"
+    },
+    {
+      "id": "g-student-couple-selfie",
+      "title": "Contemporary Couple Mini Canvas Illustration",
+      "category": "student-work",
+      "medium": "Acrylic & Fine Line Work on Miniature Canvas",
+      "dimensions": "6 x 10 inches",
+      "artist": "Student of The Art Horizon",
+      "description": "Modern, heartwarming pop-art style portrait painted on mini canvas during a studio workshop, held in front of The Art Horizon creative workstation.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.29.38_PM__2__408ff73e.jpeg"
+    },
+    {
+      "id": "g-master-radha-krishna",
+      "title": "Radha Krishna – Modern Devotion on Easel (2025)",
+      "category": "portraits",
+      "medium": "Contemporary Acrylic on Stretched Canvas",
+      "dimensions": "24 x 36 inches",
+      "artist": "Vikas Gothi (Founder & Master Artist, 2025)",
+      "description": "Masterpiece on wooden studio easel handcrafted in 2025 by Vikas Gothi. Combines bold cubist-inspired facial facets, Krishna playing the golden flute, vibrant saffron background, and exquisite emotional intimacy.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-10-15_at_8.29.39_PM_c5fc8dfd.jpeg"
+    },
+    {
+      "id": "g-real-violin-mural",
+      "title": "Symphony in Color – Musical Violin Wall Mural",
+      "category": "murals",
+      "medium": "Vibrant Acrylics, Weatherproof Silk Sealer & Mixed Pigments",
+      "dimensions": "14 x 10 feet Custom Wall Surface",
+      "artist": "Vikas Gothi (Live In-Progress Studio Mural)",
+      "description": "Hand-painted live wall mural executed by Vikas Gothi, featuring a classical cello/violin surrounded by swirling musical staves and an impressionistic burst of yellow, emerald green, and cobalt blue.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-10-08_at_6.22.13_PM__1__96f6997f.jpeg"
+    },
+    {
+      "id": "g-real-mandala-mural",
+      "title": "Sacred Mandala & Heritage Floral Wall Art",
+      "category": "murals",
+      "medium": "Natural Terracotta Pigments & Fine Detail Acrylics",
+      "dimensions": "8 x 8 feet Concentric Wall Art",
+      "artist": "Vikas Gothi (Live Architectural Commission)",
+      "description": "Intricate hand-painted circular mandala mural executed with immaculate rotational symmetry, textured petals, and earthen terracotta tones by Vikas Gothi.",
+      "image": "/assets/aistudio/WhatsApp_Image_2026-10-08_at_6.22.03_PM_bb87e480.jpeg"
+    },
+    {
+      "id": "g-academic-anatomy-study",
+      "title": "Academic Cranial & Facial Anatomy Study",
+      "category": "fine-art",
+      "medium": "Sanguine & Charcoal on Toned Archival Paper",
+      "dimensions": "18 x 24 inches",
+      "artist": "Vikas Gothi (Classical Atelier Anatomy Series)",
+      "description": "Rigorous anatomical study analyzing human skull proportions, facial muscle groups (zygomaticus, masseter), planar head construction, and bone articulation for realistic portraiture.",
+      "image": "/assets/images/artistic_anatomy_study_1794419578905.jpg"
+    },
+    {
+      "id": "g-oil-royal-portrait",
+      "title": "Heritage Portrait in Oil on Linen",
+      "category": "portraits",
+      "medium": "Fine Oil on Stretched Belgian Linen Canvas",
+      "dimensions": "24 x 36 inches",
+      "artist": "Vikas Gothi",
+      "description": "Commissioned classical oil portrait with multi-layered glazes, rich warm skin tones, chiaroscuro lighting, and archival protective varnishing.",
+      "image": "/assets/images/oil_portrait_painting_1794419579374.jpg"
+    },
+    {
+      "id": "g-charcoal-elder",
+      "title": "The Patriarch in Contemplation",
+      "category": "portraits",
+      "medium": "Nitram Charcoal & White Chalk on Fabriano Cotton Paper",
+      "dimensions": "20 x 26 inches",
+      "artist": "Vikas Gothi",
+      "description": "Hyperrealistic charcoal study capturing deep textural wisdom, subtle skin folds, and nuanced lighting from a soft directional window source.",
+      "image": "/assets/aistudio/v_7f44a0d0.jpeg"
+    },
+    {
+      "id": "g-colour-pencil-child-portrait",
+      "title": "Luminous Child Portrait in Colour Pencil",
+      "category": "portraits",
+      "medium": "Faber-Castell Polychromos & Caran d’Ache on Archival Paper",
+      "dimensions": "14 x 18 inches",
+      "artist": "Vikas Gothi",
+      "description": "Vivid, velvety portrait drawing created with multi-layered colored pencil pigments, capturing joyful childish laughter, glowing skin tones, and delicate hair highlights.",
+      "image": "/assets/images/colour_pencil_portrait_1794419580742.jpg"
+    },
+    {
+      "id": "g-rangoli-grand-mandala",
+      "title": "Sahasradala Lotus Rangoli",
+      "category": "rangoli",
+      "medium": "Natural Lake Pigments, Ground Marble Powder & Flower Petals",
+      "dimensions": "30 x 30 feet Floor Artwork",
+      "artist": "Vikas Gothi & Team",
+      "description": "Record-scale festival floor installation executed for a landmark celebration in Indore, with mathematical symmetry and 12-layer color gradation.",
+      "image": "/assets/images/festival_floor_rangoli_1794419582652.jpg"
+    },
+    {
+      "id": "g-lippan-peacock",
+      "title": "Traditional Kutch Lippan Mud & Mirror Art",
+      "category": "fine-art",
+      "medium": "Hand-Rolled Ceramic Clay, Convex Mirrors & Distemper Wash",
+      "dimensions": "36 x 36 inches Wood Panel",
+      "artist": "The Art Horizon Heritage Studio",
+      "description": "Authentic mud-and-mirror wall centerpiece made with traditional geometric coil borders and concentric mirrors that sparkle with changing room ambient light.",
+      "image": "/assets/images/lippan_art_craft_1794419582328.jpg"
+    },
+    {
+      "id": "g-resin-geode",
+      "title": "Malachite & 24K Gold Resin Geode Art",
+      "category": "fine-art",
+      "medium": "Epoxy Resin, Natural Crushed Quartz, Mica Pigments on Birch Panel",
+      "dimensions": "30 x 48 inches",
+      "artist": "Vikas Gothi",
+      "description": "High-gloss luxury contemporary wall art featuring deep emerald and malachite rings accented with genuine quartz clusters and liquid leaf gilding.",
+      "image": "/assets/images/resin_geode_art_1794419602991.jpg"
+    }
+  ],
+  "siteContent": {
+    "promoBannerText": "Live Zoom Batches Worldwide (USA, UK, UAE, Oman, Kuwait & Global) • Book a Free 45-Minute Trial Class",
+    "promoBannerEnabled": true,
+    "homeHeroHeadline": "Where Creativity Finds Its Horizon.",
+    "homeHeroSubtext": "Step-by-step drawing, painting, and fine arts classes for kids, teens, and adults. Join live interactive Zoom batches from any country worldwide (US, UK, UAE & more) or attend in-person at our studio in Indore, India under master artist Vikas Gothi.",
+    "homeHeroPrimaryCta": "Book Free Trial Class",
+    "homeHeroSecondaryCta": "Explore by Age Group",
+    "onlineHeroHeading": "Unlock Your Child's Creativity — From Anywhere in the World",
+    "onlineHeroSubtext": "Explore fun, structured, and interactive live online drawing and painting classes designed for young artists aged 6 to 15.",
+    "onlineHeroPrimaryCta": "Book Your Free Demo Now",
+    "onlineHeroSecondaryCta": "Explore Our Courses",
+    "newsletterHeading": "Academy Newsletter & Announcements",
+    "newsletterSubheading": "Stay updated with upcoming drawing and painting workshops, international online admissions, art competitions, student achievements, and studio news."
+  },
+  "subscribers": []
+}

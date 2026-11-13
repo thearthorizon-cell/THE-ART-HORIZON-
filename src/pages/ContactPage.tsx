@@ -6,7 +6,6 @@ import {
   MapPin,
   Clock,
   Instagram,
-  Youtube,
   Send,
   CheckCircle2,
   Sparkles,
@@ -205,10 +204,13 @@ export const ContactPage: React.FC = () => {
                   href={businessConfig.youtubeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-between text-xs font-semibold text-red-200 hover:text-white bg-red-950/70 hover:bg-red-900 px-3.5 py-2.5 rounded-sm border border-red-800/60 transition-colors shadow-xs"
+                  className="inline-flex items-center justify-between text-xs font-semibold text-red-100 hover:text-white bg-red-950/70 hover:bg-red-900 px-3.5 py-2.5 rounded-sm border border-red-800/60 transition-colors shadow-xs"
                 >
                   <div className="flex items-center gap-2">
-                    <Youtube className="w-4 h-4 text-red-500 fill-current" />
+                    <svg className="w-5 h-3.5 shrink-0" viewBox="0 0 28 20" fill="none" aria-hidden="true">
+                      <rect width="28" height="20" rx="5" fill="#FF0000" />
+                      <path d="M11.5 5.8L18.5 10L11.5 14.2V5.8Z" fill="#FFFFFF" />
+                    </svg>
                     <span>The Art Horizon YouTube Channel</span>
                   </div>
                   <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
