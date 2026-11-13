@@ -31,7 +31,6 @@ import { WorkshopsPage } from './pages/WorkshopsPage';
 import { GalleryPage } from './pages/GalleryPage';
 import { TestimonialsPage } from './pages/TestimonialsPage';
 import { ContactPage } from './pages/ContactPage';
-import { NewsletterPage } from './pages/NewsletterPage';
 
 const MainContent: React.FC = () => {
   const {
@@ -67,8 +66,6 @@ const MainContent: React.FC = () => {
         return <GalleryPage />;
       case 'testimonials':
         return <TestimonialsPage />;
-      case 'newsletter':
-        return <NewsletterPage />;
       case 'contact':
         return <ContactPage />;
       default:

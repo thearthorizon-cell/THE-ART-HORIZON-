@@ -5,7 +5,6 @@ export type PageId =
   | 'art-classes'
   | 'fine-art-courses'
   | 'online-classes'
-  | 'newsletter'
   | 'portrait-commissions'
   | 'commercial-projects'
   | 'workshops'

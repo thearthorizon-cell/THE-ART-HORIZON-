@@ -310,15 +310,6 @@ export const Header: React.FC = () => {
             </button>
 
             <button
-              onClick={() => handleNavClick('newsletter')}
-              className={`px-2.5 py-2 rounded-full transition-colors ${
-                isActive('newsletter') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
-              }`}
-            >
-              Newsletter
-            </button>
-
-            <button
               onClick={() => handleNavClick('testimonials')}
               className={`flex items-center gap-1 px-2.5 py-2 rounded-full transition-colors ${
                 isActive('testimonials') ? 'text-[#D82828] font-bold bg-[#D82828]/10' : 'hover:text-[#D82828] hover:bg-stone-50'
@@ -468,15 +459,6 @@ export const Header: React.FC = () => {
               <span className="text-[10px] bg-[#D82828] text-white px-2 py-0.5 rounded-full font-bold">
                 Ages 6-15
               </span>
-            </button>
-
-            <button
-              onClick={() => handleNavClick('newsletter')}
-              className={`text-left py-2.5 px-3 rounded-xl text-base font-semibold ${
-                isActive('newsletter') ? 'bg-[#D82828]/10 text-[#D82828] font-bold' : 'text-stone-800'
-              }`}
-            >
-              Newsletter & Announcements
             </button>
 
             <button

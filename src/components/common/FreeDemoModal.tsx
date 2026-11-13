@@ -3,7 +3,7 @@ import { useStudio } from '../../context/StudioContext';
 import { X, Sparkles, CheckCircle2, Send, MapPin, Video, MessageCircle } from 'lucide-react';
 
 export const FreeDemoModal: React.FC = () => {
-  const { isFreeDemoModalOpen, closeFreeDemoModal, demoModalPreset, addEnquiry, businessConfig } = useStudio();
+  const { isFreeDemoModalOpen, closeFreeDemoModal, demoModalPreset, addEnquiry, lastEnquiryError, businessConfig } = useStudio();
 
   const [studentName, setStudentName] = useState('');
   const [parentName, setParentName] = useState('');
@@ -75,7 +75,10 @@ export const FreeDemoModal: React.FC = () => {
     setIsSubmitting(false);
 
     if (!ok) {
-      setErrorMsg('Could not reach the studio server right now. Please try again or reach us on WhatsApp.');
+      setErrorMsg(
+        lastEnquiryError ||
+          'Could not reach the studio server right now. Please try again or reach us on WhatsApp.'
+      );
       return;
     }
 
@@ -153,9 +156,18 @@ export const FreeDemoModal: React.FC = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            {errorMsg && (
-              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-sm">
-                {errorMsg}
+            {(lastEnquiryError || errorMsg) && (
+              <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-sm space-y-2">
+                <p>{lastEnquiryError || errorMsg}</p>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold px-3 py-1.5 rounded text-xs transition-colors"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  <span>Send This Demo Request on WhatsApp</span>
+                </a>
               </div>
             )}
 

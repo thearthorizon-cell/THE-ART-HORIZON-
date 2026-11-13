@@ -48,7 +48,7 @@ export const HomePage: React.FC = () => {
     cmsState,
   } = useStudio();
 
-  const { founder, announcements, onlineCourses, galleryPhotos, siteContent } = cmsState;
+  const { founder, onlineCourses, galleryPhotos, siteContent } = cmsState;
 
   // Skilldren-style Age Filter Tab state
   const [selectedAgeTab, setSelectedAgeTab] = useState<'all' | 'kids' | 'teens' | 'adults' | 'professional'>('all');
@@ -790,50 +790,6 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* 5B. LATEST ANNOUNCEMENTS & STUDIO NEWSLETTER */}
-      {announcements.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-[#FAF8F5] border border-stone-200 rounded-3xl p-6 sm:p-8 space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-[#B85D38]">
-                  Latest Announcements & Newsletter
-                </span>
-                <h3 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
-                  Upcoming Workshops, Batches & Studio News
-                </h3>
-              </div>
-              <button
-                onClick={() => navigateTo('newsletter')}
-                className="self-start sm:self-center bg-stone-900 hover:bg-stone-800 text-white px-5 py-2.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
-              >
-                <span>View Newsletter & Subscribe</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {announcements.slice(0, 3).map((ann) => (
-                <div
-                  key={ann.id}
-                  onClick={() => navigateTo('newsletter')}
-                  className="bg-white border border-stone-200 rounded-2xl p-4 hover:border-[#D82828] transition-all cursor-pointer space-y-2.5"
-                >
-                  <div className="flex items-center justify-between text-[11px] text-stone-500 font-semibold">
-                    <span className="text-[#B85D38] uppercase tracking-wider">{ann.category}</span>
-                    <span className="tabular-nums">{ann.publishedAt}</span>
-                  </div>
-                  <h4 className="font-serif text-base font-bold text-stone-900 line-clamp-2">
-                    {ann.title}
-                  </h4>
-                  <p className="text-xs text-stone-600 line-clamp-2">{ann.shortDescription}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* 6. REAL STUDENT ARTWORK & STUDIO GALLERY (LIGHTBOX INTERACTION) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">

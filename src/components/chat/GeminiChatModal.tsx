@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { buildApiUrl } from '../../context/StudioContext';
 import {
   Sparkles,
   X,
@@ -145,7 +146,7 @@ export const GeminiChatModal: React.FC<GeminiChatModalProps> = ({ isOpen, onClos
           text: m.text,
         }));
 
-      const res = await fetch('/api/chat', {
+      const res = await fetch(buildApiUrl('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

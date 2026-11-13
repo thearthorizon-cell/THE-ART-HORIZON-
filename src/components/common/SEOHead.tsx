@@ -44,12 +44,6 @@ const PAGE_METADATA: Record<PageId, { title: string; description: string; keywor
       'Live interactive online drawing and painting classes for kids aged 6–15 via Zoom. Small batches of 4–6 students, 8 live classes per month, Junior, Young & Senior programs.',
     keywords: 'Online Drawing Classes for Kids, International Online Art Classes, Live Zoom Art Classes US UK UAE',
   },
-  newsletter: {
-    title: 'Newsletter & Academy Announcements | The Art Horizon',
-    description:
-      'Latest academy announcements, upcoming drawing and painting workshops, new international batches, art competitions, and student achievements at The Art Horizon.',
-    keywords: 'The Art Horizon Newsletter, Art Workshops Indore, Student Art Achievements, Art Competitions',
-  },
   'portrait-commissions': {
     title: 'Custom Portrait Commissions – Charcoal & Colour Pencil | Vikas Gothi',
     description:

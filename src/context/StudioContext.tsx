@@ -1,18 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
-  AdminDashboardData,
-  AnnouncementItem,
   BusinessConfig,
   CMSState,
   DemoModalPreset,
   DetailModalData,
   EnquiryCategory,
   EnquirySubmission,
-  FounderProfileData,
   GalleryItem,
-  OnlineCourseProgram,
   PageId,
-  SiteContentConfig,
 } from '../types';
 import {
   DEFAULT_ANNOUNCEMENTS,
@@ -23,20 +18,6 @@ import {
 } from '../data/siteConfig';
 import { GALLERY_DATA } from '../data/galleryData';
 
-interface SubscribePayload {
-  email: string;
-  name?: string;
-  consent: boolean;
-  source?: string;
-}
-
-interface SubscribeResult {
-  success: boolean;
-  alreadySubscribed?: boolean;
-  message: string;
-  error?: string;
-}
-
 interface StudioContextType {
   currentPage: PageId;
   setCurrentPage: (page: PageId) => void;
@@ -44,36 +25,26 @@ interface StudioContextType {
   businessConfig: BusinessConfig;
   updateBusinessConfig: (newConfig: Partial<BusinessConfig>) => void;
   resetBusinessConfig: () => void;
-  // Enquiries
+  // Enquiries (PIN-protected backend)
   enquiries: EnquirySubmission[];
   isLoadingEnquiries: boolean;
   newEnquiriesCount: number;
   refreshEnquiries: (pin?: string) => Promise<boolean>;
   addEnquiry: (submission: Omit<EnquirySubmission, 'id' | 'createdAt' | 'status'>) => Promise<boolean>;
+  lastEnquiryError: string;
   updateEnquiryStatus: (id: string, status: EnquirySubmission['status']) => Promise<boolean>;
   deleteEnquiry: (id: string) => Promise<boolean>;
   clearEnquiries: () => void;
-  // CMS & Online Courses & Newsletter
+  // Static Studio Content & Online Course Details
   cmsState: CMSState;
-  refreshPublicCms: () => Promise<void>;
   selectedCourseSlug: string | null;
   setSelectedCourseSlug: (slug: string | null) => void;
   openCourseDetail: (slug: string) => void;
-  subscribeNewsletter: (payload: SubscribePayload) => Promise<SubscribeResult>;
-  // Admin CMS (PIN protected)
-  adminDashboard: AdminDashboardData | null;
+  // Admin Inquiries Auth (PIN protected)
+  isAdminAuthenticated: boolean;
   isLoadingAdmin: boolean;
   verifyAndLoadAdmin: (pinOverride?: string) => Promise<{ ok: boolean; error?: string }>;
   clearAdminSession: () => void;
-  uploadAdminImage: (file: File) => Promise<{ ok: boolean; url?: string; error?: string }>;
-  updateFounderProfile: (data: Partial<FounderProfileData>) => Promise<boolean>;
-  updateSiteContent: (data: Partial<SiteContentConfig>) => Promise<boolean>;
-  saveAnnouncement: (data: Partial<AnnouncementItem>, id?: string) => Promise<boolean>;
-  deleteAnnouncement: (id: string) => Promise<boolean>;
-  deleteSubscriber: (id: string) => Promise<boolean>;
-  saveGalleryPhoto: (data: Partial<GalleryItem>, id?: string) => Promise<boolean>;
-  deleteGalleryPhoto: (id: string) => Promise<boolean>;
-  updateOnlineCourse: (id: string, data: Partial<OnlineCourseProgram>) => Promise<boolean>;
   // Modals
   isEnquiryModalOpen: boolean;
   activeEnquiryCategory: EnquiryCategory;
@@ -106,7 +77,7 @@ const StudioContext = createContext<StudioContextType | undefined>(undefined);
 const CONFIG_STORAGE_KEY = 'the_art_horizon_config_v2';
 const STUDIO_PIN_SESSION_KEY = 'the_art_horizon_admin_pin';
 const STUDIO_AUTH_SESSION_KEY = 'the_art_horizon_admin_auth';
-const LEGACY_ENQUIRIES_STORAGE_KEY = 'the_art_horizon_enquiries_v1';
+const BROWSER_ENQUIRIES_STORAGE_KEY = 'the_art_horizon_enquiries_v1';
 
 // Safe session storage wrapper with in-memory fallback (works even in restricted iframes)
 const memorySessionMap = new Map<string, string>();
@@ -138,19 +109,53 @@ export const safeSessionRemove = (key: string): void => {
   }
 };
 
+const readFallbackEnquiries = (): EnquirySubmission[] => {
+  try {
+    const raw = localStorage.getItem(BROWSER_ENQUIRIES_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as EnquirySubmission[]) : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeFallbackEnquiries = (list: EnquirySubmission[]): void => {
+  try {
+    localStorage.setItem(BROWSER_ENQUIRIES_STORAGE_KEY, JSON.stringify(list));
+  } catch {
+    // ignore storage errors
+  }
+};
+
+const RAW_API_BASE =
+  (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_API_BASE_URL) || '';
+const NORMALIZED_API_BASE = String(RAW_API_BASE).trim().replace(/\/+$/, '');
+
+export const buildApiUrl = (path: string): string => {
+  if (/^https?:\/\//i.test(path)) return path;
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return NORMALIZED_API_BASE ? `${NORMALIZED_API_BASE}${cleanPath}` : cleanPath;
+};
+
 interface ApiResult<T = any> {
   ok: boolean;
   status: number;
   data: T | null;
   isJson: boolean;
+  staticHostDetected?: boolean;
 }
 
-const xhrFallback = (url: string, init: RequestInit): Promise<{ status: number; contentType: string; text: string }> => {
+const xhrFallback = (
+  url: string,
+  init: RequestInit,
+  withCredentials = true
+): Promise<{ status: number; contentType: string; text: string }> => {
   return new Promise((resolve, reject) => {
     try {
       const xhr = new XMLHttpRequest();
       xhr.open(init.method || 'GET', url, true);
-      xhr.withCredentials = true;
+      xhr.withCredentials = withCredentials;
       xhr.timeout = 12000;
       const headers = init.headers as Record<string, string> | undefined;
       if (headers) {
@@ -175,6 +180,12 @@ const xhrFallback = (url: string, init: RequestInit): Promise<{ status: number; 
 };
 
 async function apiRequest<T = any>(url: string, init: RequestInit = {}, retries = 2): Promise<ApiResult<T>> {
+  const fullUrl = buildApiUrl(url);
+  const isCrossOrigin =
+    typeof window !== 'undefined' &&
+    /^https?:\/\//i.test(fullUrl) &&
+    !fullUrl.startsWith(window.location.origin);
+
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       let status = 0;
@@ -185,10 +196,10 @@ async function apiRequest<T = any>(url: string, init: RequestInit = {}, retries 
         const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
         const timer = controller ? setTimeout(() => controller.abort(), 10000) : null;
         try {
-          const res = await fetch(url, {
+          const res = await fetch(fullUrl, {
             ...init,
             cache: 'no-store',
-            credentials: 'same-origin',
+            credentials: isCrossOrigin ? 'omit' : 'same-origin',
             signal: controller ? controller.signal : undefined,
           });
           status = res.status;
@@ -198,8 +209,7 @@ async function apiRequest<T = any>(url: string, init: RequestInit = {}, retries 
           if (timer) clearTimeout(timer);
         }
       } catch {
-        // Fallback to XMLHttpRequest if fetch is blocked, aborted, or hijacked by browser extension/iframe
-        const xhrRes = await xhrFallback(url, init);
+        const xhrRes = await xhrFallback(fullUrl, init, !isCrossOrigin);
         status = xhrRes.status;
         contentType = xhrRes.contentType;
         rawText = xhrRes.text;
@@ -214,6 +224,18 @@ async function apiRequest<T = any>(url: string, init: RequestInit = {}, retries 
         } catch {
           parsed = null;
         }
+      }
+
+      const isStaticHtmlOrMethodBlocked =
+        status === 405 || (status >= 200 && status < 300 && !looksLikeJson && /<!doctype html|<html/i.test(trimmed));
+      if (isStaticHtmlOrMethodBlocked) {
+        return {
+          ok: false,
+          status,
+          data: null,
+          isJson: false,
+          staticHostDetected: true,
+        };
       }
 
       const isWarmupOrGatewayError = status === 502 || status === 503 || status === 504 || (!looksLikeJson && status >= 200);
@@ -239,7 +261,7 @@ async function apiRequest<T = any>(url: string, init: RequestInit = {}, retries 
   return { ok: false, status: 0, data: null, isJson: false };
 }
 
-const INITIAL_CMS_STATE: CMSState = {
+const STATIC_STUDIO_STATE: CMSState = {
   founder: DEFAULT_FOUNDER_PROFILE,
   announcements: DEFAULT_ANNOUNCEMENTS,
   onlineCourses: DEFAULT_ONLINE_COURSES,
@@ -259,7 +281,6 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       'art-classes',
       'fine-art-courses',
       'online-classes',
-      'newsletter',
       'portrait-commissions',
       'commercial-projects',
       'workshops',
@@ -298,13 +319,14 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return DEFAULT_BUSINESS_CONFIG;
   });
 
-  // Public CMS state synced from /api/cms
-  const [cmsState, setCmsState] = useState<CMSState>(INITIAL_CMS_STATE);
+  // Static site state (replaces live CMS)
+  const cmsState = STATIC_STUDIO_STATE;
 
-  // Admin-only states (never populated unless authenticated via PIN)
+  // Admin-only Enquiries state (never populated unless authenticated via PIN)
   const [enquiries, setEnquiries] = useState<EnquirySubmission[]>([]);
   const [isLoadingEnquiries, setIsLoadingEnquiries] = useState(false);
-  const [adminDashboard, setAdminDashboard] = useState<AdminDashboardData | null>(null);
+  const [lastEnquiryError, setLastEnquiryError] = useState('');
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [isLoadingAdmin, setIsLoadingAdmin] = useState(false);
 
   // Modals state
@@ -341,41 +363,12 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return headers;
   };
 
-  // Fetch public CMS state from server
-  const refreshPublicCms = useCallback(async () => {
-    const res = await apiRequest<any>('/api/cms');
-    if (res.ok && res.data) {
-      const data = res.data;
-      setCmsState({
-        founder: data.founder || DEFAULT_FOUNDER_PROFILE,
-        announcements: Array.isArray(data.announcements) ? data.announcements : DEFAULT_ANNOUNCEMENTS,
-        onlineCourses:
-          Array.isArray(data.onlineCourses) && data.onlineCourses.length > 0
-            ? data.onlineCourses
-            : DEFAULT_ONLINE_COURSES,
-        galleryPhotos:
-          Array.isArray(data.galleryPhotos) && data.galleryPhotos.length > 0
-            ? data.galleryPhotos
-            : GALLERY_DATA,
-        siteContent: data.siteContent || DEFAULT_SITE_CONTENT,
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.removeItem(LEGACY_ENQUIRIES_STORAGE_KEY);
-    } catch {
-      // ignore
-    }
-    refreshPublicCms();
-  }, [refreshPublicCms]);
-
   // Fetch enquiries from server ONLY with valid Studio PIN
   const refreshEnquiries = useCallback(async (pinOverride?: string): Promise<boolean> => {
     const pin = (pinOverride ?? getStoredPin()).trim();
     if (!pin) {
       setEnquiries([]);
+      setIsAdminAuthenticated(false);
       return false;
     }
 
@@ -385,11 +378,17 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         headers: buildPinHeaders(pin),
       });
       if (res.ok && res.data && Array.isArray(res.data.enquiries)) {
-        setEnquiries(res.data.enquiries);
+        if (res.data.mode === 'browser-fallback') {
+          setEnquiries(readFallbackEnquiries());
+        } else {
+          setEnquiries(res.data.enquiries);
+        }
+        setIsAdminAuthenticated(true);
         return true;
       }
       if (res.status === 401 || res.status === 429) {
         setEnquiries([]);
+        setIsAdminAuthenticated(false);
         if (res.status === 401) {
           activePinRef.current = '';
           safeSessionRemove(STUDIO_PIN_SESSION_KEY);
@@ -403,7 +402,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return false;
   }, []);
 
-  // Verify PIN and load full admin dashboard + enquiries in one atomic request
+  // Verify PIN and load Enquiries Inbox
   const verifyAndLoadAdmin = useCallback(
     async (pinOverride?: string): Promise<{ ok: boolean; error?: string }> => {
       const pin = (pinOverride ?? getStoredPin()).trim();
@@ -431,22 +430,31 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           safeSessionRemove(STUDIO_PIN_SESSION_KEY);
           safeSessionRemove(STUDIO_AUTH_SESSION_KEY);
           setEnquiries([]);
-          setAdminDashboard(null);
+          setIsAdminAuthenticated(false);
           return {
             ok: false,
             error: 'Incorrect Studio PIN. Only authorized studio administrators can unlock this portal.',
           };
         }
 
-        if (loginRes.ok && loginRes.data?.dashboard) {
+        if (loginRes.ok && loginRes.data?.ok) {
           activePinRef.current = pin;
           safeSessionSet(STUDIO_PIN_SESSION_KEY, pin);
           safeSessionSet(STUDIO_AUTH_SESSION_KEY, 'true');
-          setAdminDashboard(loginRes.data.dashboard);
-          if (Array.isArray(loginRes.data.enquiries)) {
+          setIsAdminAuthenticated(true);
+          if (loginRes.data.mode === 'browser-fallback') {
+            setEnquiries(readFallbackEnquiries());
+          } else if (Array.isArray(loginRes.data.enquiries)) {
             setEnquiries(loginRes.data.enquiries);
           }
           return { ok: true };
+        }
+
+        if (loginRes.staticHostDetected) {
+          return {
+            ok: false,
+            error: `Static hosting detected (HTTP ${loginRes.status}) — make sure Cloudflare Pages Functions (/functions/api/[[path]].ts) are deployed.`,
+          };
         }
 
         if (loginRes.status === 0) {
@@ -542,10 +550,11 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
-  // Add inquiry with persistent server sync (never stored in public localStorage)
+  // Add inquiry with persistent server sync (falls back to browser storage when KV is not yet bound on Cloudflare)
   const addEnquiry = async (
     submission: Omit<EnquirySubmission, 'id' | 'createdAt' | 'status'>
   ): Promise<boolean> => {
+    setLastEnquiryError('');
     const res = await apiRequest<any>('/api/enquiries', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -562,12 +571,26 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }),
     });
 
-    if (res.ok) {
-      if (getStoredPin() && res.data?.enquiry) {
+    if (res.ok && res.data?.enquiry) {
+      if (res.data.mode === 'browser-fallback') {
+        const updated = [res.data.enquiry as EnquirySubmission, ...readFallbackEnquiries()];
+        writeFallbackEnquiries(updated);
+      }
+      if (getStoredPin()) {
         setEnquiries((prev) => [res.data.enquiry, ...prev]);
-        verifyAndLoadAdmin();
+        refreshEnquiries();
       }
       return true;
+    }
+
+    if (res.staticHostDetected) {
+      setLastEnquiryError(
+        'This domain is serving static files without API Functions active. Please tap WhatsApp below to send your enquiry directly.'
+      );
+    } else {
+      setLastEnquiryError(
+        res.data?.error || 'Could not reach the studio server right now. Please try again or reach us on WhatsApp.'
+      );
     }
 
     return false;
@@ -579,16 +602,22 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     setEnquiries((prev) => prev.map((item) => (item.id === id ? { ...item, status } : item)));
 
-    const res = await apiRequest(`/api/enquiries/${id}`, {
+    const res = await apiRequest<any>(`/api/enquiries/${id}`, {
       method: 'PATCH',
       headers: buildPinHeaders(pin, true),
       body: JSON.stringify({ status }),
     });
     if (res.ok) {
-      await verifyAndLoadAdmin(pin);
+      if (res.data?.mode === 'browser-fallback') {
+        const updated = readFallbackEnquiries().map((item) => (item.id === id ? { ...item, status } : item));
+        writeFallbackEnquiries(updated);
+        setEnquiries(updated);
+        return true;
+      }
+      await refreshEnquiries(pin);
       return true;
     }
-    await verifyAndLoadAdmin(pin);
+    await refreshEnquiries(pin);
     return false;
   };
 
@@ -598,15 +627,21 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     setEnquiries((prev) => prev.filter((item) => item.id !== id));
 
-    const res = await apiRequest(`/api/enquiries/${id}`, {
+    const res = await apiRequest<any>(`/api/enquiries/${id}`, {
       method: 'DELETE',
       headers: buildPinHeaders(pin),
     });
     if (res.ok) {
-      await verifyAndLoadAdmin(pin);
+      if (res.data?.mode === 'browser-fallback') {
+        const updated = readFallbackEnquiries().filter((item) => item.id !== id);
+        writeFallbackEnquiries(updated);
+        setEnquiries(updated);
+        return true;
+      }
+      await refreshEnquiries(pin);
       return true;
     }
-    await verifyAndLoadAdmin(pin);
+    await refreshEnquiries(pin);
     return false;
   };
 
@@ -619,204 +654,23 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     safeSessionRemove(STUDIO_PIN_SESSION_KEY);
     safeSessionRemove(STUDIO_AUTH_SESSION_KEY);
     setEnquiries([]);
-    setAdminDashboard(null);
-  };
-
-  // Public Newsletter subscription
-  const subscribeNewsletter = async (payload: SubscribePayload): Promise<SubscribeResult> => {
-    const res = await apiRequest<any>('/api/newsletter/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (res.ok && res.data) {
-      if (getStoredPin()) {
-        verifyAndLoadAdmin();
-      }
-      return {
-        success: true,
-        alreadySubscribed: Boolean(res.data.alreadySubscribed),
-        message: res.data.message || 'Subscribed successfully!',
-      };
-    }
-    return {
-      success: false,
-      message: res.data?.error || 'Could not complete subscription. Please try again.',
-      error: res.data?.error || 'Network error',
-    };
-  };
-
-  // Admin Image Upload helper (reads File -> DataURL -> POST /api/admin/upload)
-  const uploadAdminImage = async (file: File): Promise<{ ok: boolean; url?: string; error?: string }> => {
-    const pin = getStoredPin();
-    if (!pin) return { ok: false, error: 'Studio Portal is locked.' };
-
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    if (!validTypes.includes(file.type.toLowerCase())) {
-      return { ok: false, error: 'Unsupported format. Please select a JPG, PNG, or WebP image.' };
-    }
-    if (file.size > 8 * 1024 * 1024) {
-      return { ok: false, error: 'Image size exceeds 8MB limit.' };
-    }
-
-    const dataUrl = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result || ''));
-      reader.onerror = () => reject(new Error('Failed to read image file'));
-      reader.readAsDataURL(file);
-    }).catch(() => '');
-
-    if (!dataUrl) {
-      return { ok: false, error: 'Could not read image file.' };
-    }
-
-    const res = await apiRequest<any>('/api/admin/upload', {
-      method: 'POST',
-      headers: buildPinHeaders(pin, true),
-      body: JSON.stringify({ dataUrl, fileName: file.name }),
-    });
-    if (res.ok && res.data?.url) {
-      return { ok: true, url: res.data.url };
-    }
-    return { ok: false, error: res.data?.error || 'Upload failed.' };
-  };
-
-  const syncAfterAdminMutation = async (pin: string) => {
-    await Promise.all([refreshPublicCms(), verifyAndLoadAdmin(pin)]);
-  };
-
-  const updateFounderProfile = async (data: Partial<FounderProfileData>): Promise<boolean> => {
-    const pin = getStoredPin();
-    if (!pin) return false;
-    const res = await apiRequest('/api/admin/founder', {
-      method: 'PUT',
-      headers: buildPinHeaders(pin, true),
-      body: JSON.stringify(data),
-    });
-    if (res.ok) {
-      await syncAfterAdminMutation(pin);
-      return true;
-    }
-    return false;
-  };
-
-  const updateSiteContent = async (data: Partial<SiteContentConfig>): Promise<boolean> => {
-    const pin = getStoredPin();
-    if (!pin) return false;
-    const res = await apiRequest('/api/admin/site-content', {
-      method: 'PUT',
-      headers: buildPinHeaders(pin, true),
-      body: JSON.stringify(data),
-    });
-    if (res.ok) {
-      await syncAfterAdminMutation(pin);
-      return true;
-    }
-    return false;
-  };
-
-  const saveAnnouncement = async (data: Partial<AnnouncementItem>, id?: string): Promise<boolean> => {
-    const pin = getStoredPin();
-    if (!pin) return false;
-    const url = id ? `/api/admin/announcements/${id}` : '/api/admin/announcements';
-    const method = id ? 'PUT' : 'POST';
-    const res = await apiRequest(url, {
-      method,
-      headers: buildPinHeaders(pin, true),
-      body: JSON.stringify(data),
-    });
-    if (res.ok) {
-      await syncAfterAdminMutation(pin);
-      return true;
-    }
-    return false;
-  };
-
-  const deleteAnnouncement = async (id: string): Promise<boolean> => {
-    const pin = getStoredPin();
-    if (!pin) return false;
-    const res = await apiRequest(`/api/admin/announcements/${id}`, {
-      method: 'DELETE',
-      headers: buildPinHeaders(pin),
-    });
-    if (res.ok) {
-      await syncAfterAdminMutation(pin);
-      return true;
-    }
-    return false;
-  };
-
-  const deleteSubscriber = async (id: string): Promise<boolean> => {
-    const pin = getStoredPin();
-    if (!pin) return false;
-    const res = await apiRequest(`/api/admin/subscribers/${id}`, {
-      method: 'DELETE',
-      headers: buildPinHeaders(pin),
-    });
-    if (res.ok) {
-      await verifyAndLoadAdmin(pin);
-      return true;
-    }
-    return false;
-  };
-
-  const saveGalleryPhoto = async (data: Partial<GalleryItem>, id?: string): Promise<boolean> => {
-    const pin = getStoredPin();
-    if (!pin) return false;
-    const url = id ? `/api/admin/gallery/${id}` : '/api/admin/gallery';
-    const method = id ? 'PUT' : 'POST';
-    const res = await apiRequest(url, {
-      method,
-      headers: buildPinHeaders(pin, true),
-      body: JSON.stringify(data),
-    });
-    if (res.ok) {
-      await syncAfterAdminMutation(pin);
-      return true;
-    }
-    return false;
-  };
-
-  const deleteGalleryPhoto = async (id: string): Promise<boolean> => {
-    const pin = getStoredPin();
-    if (!pin) return false;
-    const res = await apiRequest(`/api/admin/gallery/${id}`, {
-      method: 'DELETE',
-      headers: buildPinHeaders(pin),
-    });
-    if (res.ok) {
-      await syncAfterAdminMutation(pin);
-      return true;
-    }
-    return false;
-  };
-
-  const updateOnlineCourse = async (id: string, data: Partial<OnlineCourseProgram>): Promise<boolean> => {
-    const pin = getStoredPin();
-    if (!pin) return false;
-    const res = await apiRequest(`/api/admin/courses/${id}`, {
-      method: 'PUT',
-      headers: buildPinHeaders(pin, true),
-      body: JSON.stringify(data),
-    });
-    if (res.ok) {
-      await syncAfterAdminMutation(pin);
-      return true;
-    }
-    return false;
+    setIsAdminAuthenticated(false);
   };
 
   const openEnquiryModal = (category: EnquiryCategory = 'general', detail: string = '') => {
+    setLastEnquiryError('');
     setActiveEnquiryCategory(category);
     setActiveEnquiryDetail(detail);
     setIsEnquiryModalOpen(true);
   };
 
   const closeEnquiryModal = () => {
+    setLastEnquiryError('');
     setIsEnquiryModalOpen(false);
   };
 
   const openFreeDemoModal = (preset?: DemoModalPreset | React.MouseEvent<any>) => {
+    setLastEnquiryError('');
     if (
       preset &&
       typeof preset === 'object' &&
@@ -831,6 +685,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const closeFreeDemoModal = () => {
+    setLastEnquiryError('');
     setIsFreeDemoModalOpen(false);
     setDemoModalPreset(null);
   };
@@ -867,28 +722,18 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         newEnquiriesCount,
         refreshEnquiries,
         addEnquiry,
+        lastEnquiryError,
         updateEnquiryStatus,
         deleteEnquiry,
         clearEnquiries,
         cmsState,
-        refreshPublicCms,
         selectedCourseSlug,
         setSelectedCourseSlug,
         openCourseDetail,
-        subscribeNewsletter,
-        adminDashboard,
+        isAdminAuthenticated,
         isLoadingAdmin,
         verifyAndLoadAdmin,
         clearAdminSession,
-        uploadAdminImage,
-        updateFounderProfile,
-        updateSiteContent,
-        saveAnnouncement,
-        deleteAnnouncement,
-        deleteSubscriber,
-        saveGalleryPhoto,
-        deleteGalleryPhoto,
-        updateOnlineCourse,
         isEnquiryModalOpen,
         activeEnquiryCategory,
         activeEnquiryDetail,

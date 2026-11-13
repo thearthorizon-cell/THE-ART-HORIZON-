@@ -182,11 +182,6 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => handleLink('newsletter')} className="hover:text-white transition-colors cursor-pointer">
-                  Newsletter & Announcements
-                </button>
-              </li>
-              <li>
                 <button onClick={() => handleLink('portrait-commissions')} className="hover:text-white transition-colors cursor-pointer">
                   Portrait Commissions
                 </button>
