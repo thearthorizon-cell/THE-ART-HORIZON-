@@ -335,7 +335,7 @@ export async function handleApiRequest(request: Request, env: WorkerEnv): Promis
       return jsonResponse(request, { error: 'A valid message string is required.' }, 400);
     }
 
-    const apiKey = env?.GEMINI_API_KEY;
+    const apiKey = typeof env?.GEMINI_API_KEY === 'string' ? env.GEMINI_API_KEY.trim() : '';
     if (!apiKey) {
       return jsonResponse(request, {
         reply:
@@ -362,32 +362,54 @@ export async function handleApiRequest(request: Request, env: WorkerEnv): Promis
     }
     contents.push({ role: 'user', parts: [{ text: message }] });
 
+    const requestedModel =
+      body.model === 'gemini-3.1-flash-lite'
+        ? 'gemini-3.1-flash-lite'
+        : body.model === 'gemini-4-hydrogen'
+        ? 'gemini-4-hydrogen'
+        : 'gemini-4-hydrogen';
+
+    const modelCandidates = Array.from(
+      new Set([requestedModel, 'gemini-4-hydrogen', 'gemini-3.1-flash-lite', 'gemini-2.5-flash'])
+    );
+
     try {
-      const geminiRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(
-          apiKey
-        )}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            systemInstruction: {
-              parts: [{ text: SYSTEM_INSTRUCTIONS[role] }],
-            },
-            contents,
-          }),
+      for (const candidateModel of modelCandidates) {
+        const geminiRes = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+            candidateModel
+          )}:generateContent?key=${encodeURIComponent(apiKey)}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              systemInstruction: {
+                parts: [{ text: SYSTEM_INSTRUCTIONS[role] }],
+              },
+              contents,
+            }),
+          }
+        );
+
+        if (!geminiRes.ok) {
+          continue;
         }
-      );
 
-      const geminiData = (await geminiRes.json()) as {
-        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-      };
+        const geminiData = (await geminiRes.json()) as {
+          candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+        };
 
-      const reply =
-        geminiData?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        'Thank you for reaching out to The Art Horizon! Please connect directly via WhatsApp at +91 99818 83598 for immediate guidance.';
+        const reply = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+        if (reply) {
+          return jsonResponse(request, { reply, modelUsed: candidateModel });
+        }
+      }
 
-      return jsonResponse(request, { reply, modelUsed: 'gemini-2.5-flash' });
+      return jsonResponse(request, {
+        reply:
+          'Thank you for reaching out to The Art Horizon! Please connect directly via WhatsApp at +91 99818 83598 for immediate guidance.',
+        modelUsed: 'studio-assistant',
+      });
     } catch {
       return jsonResponse(request, {
         reply:
