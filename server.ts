@@ -5,14 +5,21 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
-import {
-  deleteEnquiryInFirestore,
-  initFirestorePersistence,
-  isFirestoreActive,
-  loadEnquiriesFromFirestore,
-  upsertEnquiryInFirestore,
-  type StoredEnquiry,
-} from './server/firestoreStore.ts';
+
+interface StoredEnquiry {
+  id: string;
+  createdAt: string;
+  name: string;
+  email: string;
+  phone: string;
+  serviceCategory: string;
+  serviceDetail?: string;
+  countryOrCity?: string;
+  studentAge?: string;
+  timeSlotPreference?: string;
+  message: string;
+  status: 'new' | 'contacted' | 'reviewed' | 'resolved';
+}
 
 dotenv.config();
 
@@ -45,7 +52,7 @@ app.use('/api', (req: Request, res: Response, next) => {
   next();
 });
 
-// Persistent Enquiries Storage (Server-side JSON DB + optional Firestore mirror)
+// Persistent Enquiries Storage (Server-side JSON DB)
 const ENQUIRIES_FILE = path.resolve(__dirname, 'server_enquiries.json');
 
 const loadEnquiries = (): StoredEnquiry[] => {
@@ -151,14 +158,7 @@ const requireStudioAdmin = (req: Request, res: Response): boolean => {
 };
 
 const getActiveEnquiries = async (): Promise<StoredEnquiry[]> => {
-  const local = loadEnquiries();
-  if (!isFirestoreActive()) return local;
-  try {
-    return await loadEnquiriesFromFirestore();
-  } catch (err) {
-    console.error('Firestore enquiries read failed, falling back to local mirror:', err);
-    return local;
-  }
+  return loadEnquiries();
 };
 
 // ============================================================
@@ -212,7 +212,6 @@ app.post('/api/enquiries', async (req: Request, res: Response): Promise<void> =>
 
     currentList.unshift(newEnquiry);
     saveEnquiries(currentList);
-    await upsertEnquiryInFirestore(newEnquiry);
 
     console.log(`[The Art Horizon] New Inquiry Saved: ${newEnquiry.name} (${newEnquiry.phone}) - ${newEnquiry.serviceDetail}`);
 
@@ -248,7 +247,6 @@ app.patch('/api/enquiries/:id', async (req: Request, res: Response): Promise<voi
 
     currentList[index].status = status;
     saveEnquiries(currentList);
-    await upsertEnquiryInFirestore(currentList[index]);
 
     res.json({ success: true, enquiry: currentList[index] });
   } catch {
@@ -263,7 +261,6 @@ app.delete('/api/enquiries/:id', async (req: Request, res: Response): Promise<vo
     let currentList = await getActiveEnquiries();
     currentList = currentList.filter((e) => e.id !== id);
     saveEnquiries(currentList);
-    await deleteEnquiryInFirestore(id);
     res.json({ success: true, message: 'Inquiry deleted.' });
   } catch {
     res.status(500).json({ error: 'Failed to delete inquiry.' });
@@ -421,7 +418,7 @@ app.get('/api/health', (_req: Request, res: Response) => {
     status: 'ok',
     studio: 'The Art Horizon',
     founder: 'Vikas Gothi',
-    persistence: isFirestoreActive() ? 'firestore' : 'local-json',
+    persistence: 'local-json',
     modelsAvailable: ['gemini-4-hydrogen', 'gemini-3.1-flash-lite'],
   });
 });
@@ -431,7 +428,6 @@ app.use('/api', (_req: Request, res: Response) => {
 });
 
 async function startServer() {
-  await initFirestorePersistence(loadEnquiries);
   const isDev = process.env.NODE_ENV !== 'production';
 
   if (isDev) {

@@ -227,7 +227,9 @@ async function apiRequest<T = any>(url: string, init: RequestInit = {}, retries 
       }
 
       const isStaticHtmlOrMethodBlocked =
-        status === 405 || (status >= 200 && status < 300 && !looksLikeJson && /<!doctype html|<html/i.test(trimmed));
+        status === 405 ||
+        (status === 404 && !looksLikeJson) ||
+        (status >= 200 && status < 300 && !looksLikeJson && /<!doctype html|<html/i.test(trimmed));
       if (isStaticHtmlOrMethodBlocked) {
         return {
           ok: false,
@@ -453,7 +455,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (loginRes.staticHostDetected) {
           return {
             ok: false,
-            error: `Static hosting detected (HTTP ${loginRes.status}) — make sure Cloudflare Pages Functions (/functions/api/[[path]].ts) are deployed.`,
+            error: `Static hosting detected (HTTP ${loginRes.status}) — please deploy the updated Cloudflare Worker (worker.ts + wrangler.jsonc) so /api/* routes are active.`,
           };
         }
 
