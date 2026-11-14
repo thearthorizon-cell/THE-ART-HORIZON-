@@ -586,9 +586,7 @@ export const OnlineClassesPage: React.FC = () => {
                       populated directly from your official Curriculum PDF without any invented placeholder topics.
                     </p>
                     <p className="text-xs text-stone-600">
-                      Studio administrators can upload or update all modules, techniques, skills, and outcomes at any
-                      time via <strong>Studio Portal → Online Courses</strong>, or parents may book a free demo class
-                      for an interactive syllabus walkthrough.
+                      Parents may book a free demo class for an interactive syllabus walkthrough and level assessment.
                     </p>
                   </div>
                 )}
