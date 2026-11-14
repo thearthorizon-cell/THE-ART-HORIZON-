@@ -77,7 +77,9 @@ export const WorkshopsPage: React.FC = () => {
                 <div className="aspect-[16/10] overflow-hidden bg-stone-100 relative">
                   <img
                     src={ws.image}
-                    alt={ws.title}
+                    alt={`${ws.title} — Studio Workshop in Indore`}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 bg-[#1C1917]/90 text-white text-[10px] font-semibold px-2.5 py-1 rounded-sm uppercase tracking-wider">
@@ -140,9 +142,9 @@ export const WorkshopsPage: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-widest text-[#E8926F]">
               Corporate & Private Gatherings
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white">
               Host a Private Art Jam or Team Building Session
-            </h3>
+            </h2>
             <p className="text-stone-300 text-xs sm:text-sm leading-relaxed">
               We arrange bespoke weekend workshops for corporate teams, birthday celebrations, and café art mixers in
               Indore with custom themes, refreshments, and guided instruction.

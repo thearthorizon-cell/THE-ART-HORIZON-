@@ -73,6 +73,7 @@ export const OnlineClassesPage: React.FC = () => {
     cmsState,
     selectedCourseSlug,
     setSelectedCourseSlug,
+    navigateTo,
     openCourseDetail,
     openFreeDemoModal,
     addEnquiry,
@@ -155,11 +156,11 @@ export const OnlineClassesPage: React.FC = () => {
   const onlineFaqs = [
     {
       q: 'What age groups are eligible for the International Online Art Classes?',
-      a: 'We welcome children aged 6 to 15 years across three age-specific programs: Junior Artist Program (Age: 6–8 Years), Young Artist Program (Age: 9–11 Years), and Senior Artist Program (Age: 12–15 Years).',
+      a: 'We welcome children aged 6 to 15 years across three age-specific programs: Junior Artists: 6–8 Years, Young Artists: 9–11 Years, and Senior Artists: 12–15 Years.',
     },
     {
       q: 'How many students are in each online batch?',
-      a: 'Classes run in strictly small batches of 4 to 6 students so every child receives step-by-step live guidance and personalized attention on Zoom.',
+      a: 'Classes run in strictly small batches (Max 4–5 Students) so every child receives step-by-step live guidance and personalized attention on Zoom.',
     },
     {
       q: 'How many classes are held each month and how long is each course?',
@@ -198,8 +199,7 @@ export const OnlineClassesPage: React.FC = () => {
             <button
               onClick={() => {
                 setSelectedCourseSlug(null);
-                window.location.hash = '#/online-classes';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                navigateTo('online-classes');
               }}
               className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-stone-700 hover:text-[#D82828] bg-white border border-stone-200 px-4 py-2 rounded-full shadow-2xs transition-colors"
             >
@@ -230,6 +230,8 @@ export const OnlineClassesPage: React.FC = () => {
               <img
                 src={activeCourse.heroImage}
                 alt={`${activeCourse.title} (${activeCourse.ageGroup})`}
+                decoding="async"
+                fetchPriority="high"
                 className="w-full h-full object-cover"
               />
               <span className="absolute top-4 left-4 bg-[#D82828] text-white text-xs font-extrabold uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md">
@@ -596,9 +598,9 @@ export const OnlineClassesPage: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                     {activeCourse.techniques.length > 0 && (
                       <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 space-y-2">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-[#B85D38]">
+                        <h3 className="text-xs font-bold uppercase tracking-wider text-[#B85D38]">
                           Techniques Covered
-                        </h4>
+                        </h3>
                         <ul className="space-y-1.5 text-xs text-stone-700">
                           {activeCourse.techniques.map((item, i) => (
                             <li key={i} className="flex items-start gap-1.5">
@@ -612,9 +614,9 @@ export const OnlineClassesPage: React.FC = () => {
 
                     {activeCourse.skillsDeveloped.length > 0 && (
                       <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 space-y-2">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-[#B85D38]">
+                        <h3 className="text-xs font-bold uppercase tracking-wider text-[#B85D38]">
                           Skills Developed
-                        </h4>
+                        </h3>
                         <ul className="space-y-1.5 text-xs text-stone-700">
                           {activeCourse.skillsDeveloped.map((item, i) => (
                             <li key={i} className="flex items-start gap-1.5">
@@ -628,9 +630,9 @@ export const OnlineClassesPage: React.FC = () => {
 
                     {activeCourse.learningOutcomes.length > 0 && (
                       <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 space-y-2">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-[#B85D38]">
+                        <h3 className="text-xs font-bold uppercase tracking-wider text-[#B85D38]">
                           Learning Outcomes
-                        </h4>
+                        </h3>
                         <ul className="space-y-1.5 text-xs text-stone-700">
                           {activeCourse.learningOutcomes.map((item, i) => (
                             <li key={i} className="flex items-start gap-1.5">
@@ -681,6 +683,8 @@ export const OnlineClassesPage: React.FC = () => {
                         <img
                           src={imgUrl}
                           alt={`${activeCourse.title} showcase ${idx + 1}`}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-auto object-cover"
                         />
                       </div>
@@ -729,9 +733,9 @@ export const OnlineClassesPage: React.FC = () => {
             {/* Quick Facts Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
               <div className="bg-white/10 border border-white/15 rounded-2xl p-3.5">
-                <div className="text-xl sm:text-2xl font-black text-amber-300">4–6</div>
+                <div className="text-lg sm:text-xl font-black text-amber-300">Max 4–5 Students</div>
                 <div className="text-[11px] font-bold uppercase tracking-wider text-stone-200">
-                  Students / Batch
+                  Per Live Batch
                 </div>
               </div>
               <div className="bg-white/10 border border-white/15 rounded-2xl p-3.5">
@@ -797,7 +801,7 @@ export const OnlineClassesPage: React.FC = () => {
             },
             {
               icon: Users,
-              title: 'Small Batches (4–6 Students)',
+              title: 'Max 4–5 Students',
               desc: 'Strictly small group batches so every child is noticed, guided, and encouraged.',
             },
             {
@@ -876,6 +880,8 @@ export const OnlineClassesPage: React.FC = () => {
                   <img
                     src={course.heroImage}
                     alt={`${course.title} (${course.ageGroup})`}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <span className="absolute top-3 left-3 bg-stone-950/85 text-amber-300 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
@@ -1062,7 +1068,7 @@ export const OnlineClassesPage: React.FC = () => {
                 One-on-One (1:1) Private Classes Also Available
               </h3>
               <p className="text-xs sm:text-sm text-stone-300 max-w-2xl">
-                Alongside our 4–6 student group batches, parents may book private 1-on-1 sessions for flexible
+                Alongside our small group batches (Max 4–5 Students), parents may book private 1-on-1 sessions for flexible
                 scheduling or tailored guidance. The fee structure for 1-on-1 sessions is different from group batches.
               </p>
             </div>
@@ -1099,8 +1105,8 @@ export const OnlineClassesPage: React.FC = () => {
             },
             {
               step: '02',
-              title: 'Join a 4–6 Student Live Batch',
-              desc: 'Your child enters a friendly English-medium cohort matched to their age (6–8, 9–11, or 12–15) with clear overhead step-by-step teaching.',
+              title: 'Join a Live Batch (Max 4–5 Students)',
+              desc: 'Your child enters a friendly English-medium cohort matched to their age (Junior Artists: 6–8 Years, Young Artists: 9–11 Years, Senior Artists: 12–15 Years) with clear overhead step-by-step teaching.',
             },
             {
               step: '03',

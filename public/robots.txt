@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
-Sitemap: https://thearthorizon.com/sitemap.xml
+Sitemap: https://www.thearthorizon.com/sitemap.xml

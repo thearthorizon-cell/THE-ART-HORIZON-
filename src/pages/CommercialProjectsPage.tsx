@@ -44,7 +44,13 @@ export const CommercialProjectsPage: React.FC = () => {
             >
               <div>
                 <div className="aspect-[16/10] overflow-hidden bg-stone-100 relative">
-                  <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
+                  <img
+                    src={service.image}
+                    alt={`${service.title} — Commercial Art Project`}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
                   <div className="absolute top-3 left-3 bg-[#1C1917]/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-sm uppercase tracking-wider">
                     {service.category.toUpperCase()}
                   </div>
@@ -139,9 +145,9 @@ export const CommercialProjectsPage: React.FC = () => {
       {/* Call to Action */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
         <div className="bg-[#1C1917] text-white p-8 sm:p-12 rounded-sm border border-stone-800 space-y-4">
-          <h3 className="font-serif text-3xl font-bold text-white">
+          <h2 className="font-serif text-3xl font-bold text-white">
             Have an Architectural Space or Grand Celebration in Mind?
-          </h3>
+          </h2>
           <p className="text-stone-300 text-xs sm:text-sm max-w-xl mx-auto">
             From Indore and Madhya Pradesh to national destinations, our team brings creativity, reliability, and
             unmatched artistic finish to every project.

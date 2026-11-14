@@ -43,12 +43,12 @@ Studio Address: 266, Ganesh Villa, Usha Nagar Extension, Ranjit Hanuman Road, In
 Key Studio Facts:
 1. International Online Art Classes:
    - Live interactive Zoom classes, 8 live classes per month, 3-month structured courses.
-   - Small batches of 4 to 6 students for personalized attention.
+   - Small batches (Max 4–5 Students) for personalized attention.
    - English-language instruction with step-by-step guidance.
    - Three age-based programs:
-     * Junior Artist Program (Age: 6–8 Years)
-     * Young Artist Program (Age: 9–11 Years)
-     * Senior Artist Program (Age: 12–15 Years)
+     * Junior Artists: 6–8 Years
+     * Young Artists: 9–11 Years
+     * Senior Artists: 12–15 Years
    - One-on-one (1-on-1) private classes are also available.
    - Welcoming students from USA, UK, UAE, Oman, Kuwait, Canada, Australia, Singapore, Europe, and worldwide.
    - Free demo class is available before enrolling.
@@ -64,11 +64,11 @@ Guide students with actionable advice on academic realism, portrait proportions,
 
   placement: `You are an Admissions & Batch Placement Specialist for The Art Horizon's Online Art Academy.
 Help parents and students choose between:
-- Junior Artist Program (Age: 6–8 Years)
-- Young Artist Program (Age: 9–11 Years)
-- Senior Artist Program (Age: 12–15 Years)
+- Junior Artists: 6–8 Years
+- Young Artists: 9–11 Years
+- Senior Artists: 12–15 Years
 - 1-on-1 private mentorship or In-Studio Indore classes.
-Explain batches of 4 to 6 students, 8 live Zoom classes/month, and flexible international timezones (USA, UK, UAE, Oman, Kuwait).`,
+Explain small batches (Max 4–5 Students), 8 live Zoom classes/month, and flexible international timezones (USA, UK, UAE, Oman, Kuwait).`,
 };
 
 function buildCorsHeaders(request: Request): Record<string, string> {

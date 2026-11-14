@@ -3,113 +3,174 @@ import { PageId } from '../../types';
 
 interface SEOHeadProps {
   page: PageId;
+  courseSlug?: string | null;
   customTitle?: string;
   customDescription?: string;
 }
 
-const PAGE_METADATA: Record<PageId, { title: string; description: string; keywords: string }> = {
+const CANONICAL_BASE = 'https://www.thearthorizon.com';
+
+const PAGE_METADATA: Record<PageId, { path: string; title: string; description: string; keywords: string }> = {
   home: {
-    title: 'The Art Horizon – Fine Art Studio & Academy | Indore',
+    path: '/',
+    title: 'Online Drawing & Painting Classes for Kids | The Art Horizon',
     description:
-      'Where Creativity Finds Its Horizon. Discover fine art classes for kids and adults, international Zoom sessions, custom portrait commissions, and wall murals by Vikas Gothi.',
-    keywords: 'Art Classes in Indore, Drawing Classes in Indore, Painting Classes in Indore, Fine Art Academy, Vikas Gothi',
+      'Explore live online drawing and painting classes for kids aged 6–15 at The Art Horizon. Small batches of max 4–5 students. Book your free demo class today!',
+    keywords:
+      'Online Drawing Classes for Kids, Online Painting Classes for Kids, Live Online Art Classes, Drawing Classes for Ages 6–15, Small Group Online Art Classes, The Art Horizon, Vikas Gothi',
   },
   about: {
-    title: 'About The Art Horizon – Our Atelier Philosophy & Vision',
+    path: '/about',
+    title: 'About The Art Horizon — Fine Art Studio & Online Academy',
     description:
-      'Learn about The Art Horizon fine arts studio in Indore. Dedicated to nurturing authentic artistic technique, classical drawing discipline, and contemporary creative freedom.',
-    keywords: 'About The Art Horizon, Fine Arts Academy Indore, Art Studio Indore, Vikas Gothi Art',
+      'Discover The Art Horizon founded by Vikas Gothi. Classical fine art instruction, small group online art classes (Max 4–5 Students), and in-studio Indore training.',
+    keywords:
+      'About The Art Horizon, Fine Arts Academy Indore, Live Online Art Classes, Vikas Gothi Art Studio',
   },
   founder: {
-    title: 'Vikas Gothi – Founder & Master Artist | The Art Horizon',
+    path: '/founder',
+    title: 'Vikas Gothi — Founder & Master Fine Artist | The Art Horizon',
     description:
-      'Meet Vikas Gothi, founder of The Art Horizon. Renowned fine artist specializing in hyperrealistic charcoal portraits, grand rangoli installations, and fine art education.',
-    keywords: 'Vikas Gothi, Portrait Artist in Indore, Rangoli Artist, Master Fine Artist India',
+      'Meet Vikas Gothi, founder and mentor at The Art Horizon. Teaching live online drawing and painting classes for kids aged 6–15, custom portraits, and murals.',
+    keywords:
+      'Vikas Gothi, Portrait Artist in Indore, Online Art Teacher for Kids, Master Fine Artist India',
   },
   'art-classes': {
-    title: 'Art Classes in Indore – Kids, Teens & Adult Drawing & Painting',
+    path: '/art-classes',
+    title: 'Drawing & Painting Classes for Kids, Teens & Adults | The Art Horizon',
     description:
-      'Structured fine art classes in Indore for kids, teens, and adults. Learn observational sketching, charcoal shading, acrylics, watercolours, and anatomical portraiture.',
-    keywords: 'Kids Art Classes, Drawing Classes in Indore, Painting Classes in Indore, Sketching Classes',
+      'Structured drawing and painting classes in Indore and live online via Zoom. Small batches of Max 4–5 Students for kids, teens, and adults.',
+    keywords:
+      'Online Drawing Classes for Kids, Online Painting Classes for Kids, Drawing Classes for Ages 6–15, Kids Art Classes Indore',
   },
   'fine-art-courses': {
-    title: 'Professional Fine Art Courses & Diplomas | The Art Horizon',
+    path: '/fine-art-courses',
+    title: 'Professional Fine Art Courses & Diploma | The Art Horizon',
     description:
-      'Master classical oil painting on canvas, sight-size realism, anatomy studies, and portfolio development with professional fine art courses by Vikas Gothi.',
-    keywords: 'Fine Art Academy, Professional Fine Art Courses, Oil Painting Classes Indore, Diploma in Fine Arts',
+      'Classical oil painting on canvas, sight-size realism, anatomy studies, and portfolio development mentored by Vikas Gothi at The Art Horizon.',
+    keywords:
+      'Fine Art Academy, Professional Fine Art Courses, Oil Painting Classes Indore, Pre-College Art Portfolio',
   },
   'online-classes': {
-    title: 'International Online Art Classes – Live Zoom Drawing & Painting | The Art Horizon',
+    path: '/online-classes',
+    title: 'Live Online Art Classes for Kids Ages 6–15 | The Art Horizon',
     description:
-      'Live interactive online drawing and painting classes for kids aged 6–15 via Zoom. Small batches of 4–6 students, 8 live classes per month, Junior, Young & Senior programs.',
-    keywords: 'Online Drawing Classes for Kids, International Online Art Classes, Live Zoom Art Classes US UK UAE',
+      'Join live online drawing & painting classes via Zoom for Junior Artists (6–8 Years), Young Artists (9–11 Years), and Senior Artists (12–15 Years). Max 4–5 Students per batch.',
+    keywords:
+      'Live Online Art Classes, Online Drawing Classes for Kids, Online Painting Classes for Kids, Drawing Classes for Ages 6–15, Small Group Online Art Classes',
   },
   'portrait-commissions': {
-    title: 'Custom Portrait Commissions – Charcoal & Colour Pencil | Vikas Gothi',
+    path: '/portrait-commissions',
+    title: 'Custom Hand-Painted Portrait Commissions | The Art Horizon',
     description:
-      'Commission museum-grade, hand-drawn portraits in charcoal, graphite, and colour pencil by Vikas Gothi. Worldwide delivery with certificate of authenticity.',
-    keywords: 'Portrait Artist in Indore, Charcoal Portraits, Custom Portrait Commission, Colour Pencil Portraits',
+      'Commission museum-grade portraits in oil, acrylic, watercolor, charcoal, and colour pencil by Vikas Gothi with worldwide insured delivery.',
+    keywords:
+      'Custom Portrait Commission, Charcoal Portrait Artist, Oil Portrait Painting, Colour Pencil Portraits India',
   },
   'commercial-projects': {
-    title: 'Commercial Art Projects – Wall Murals & Rangoli | The Art Horizon',
+    path: '/commercial-projects',
+    title: 'Commercial Wall Murals & Festival Rangoli Art | The Art Horizon',
     description:
-      'Bespoke wall murals, record-scale traditional and 3D rangoli, and corporate art installations for hotels, cafes, and grand cultural festivals.',
-    keywords: 'Wall Mural Painting Services, Rangoli Artist, Corporate Art Projects, Hotel Murals Indore',
+      'Bespoke architectural wall murals, hospitality and café art, and grand festival rangoli installations by Vikas Gothi and The Art Horizon.',
+    keywords:
+      'Wall Mural Painting Services, Commercial Murals Indore, Festival Rangoli Artist, Hotel Art Installations',
   },
   workshops: {
-    title: 'Creative Art Workshops – Resin, Lippan, Pottery & Clay Art',
+    path: '/workshops',
+    title: 'Weekend Art Workshops — Resin, Lippan & Clay | The Art Horizon',
     description:
-      'Join weekend creative art workshops at The Art Horizon. Ocean resin art, traditional Kutch Lippan mud and mirror art, terracotta clay pottery, and summer camps.',
-    keywords: 'Resin Art Workshop, Lippan Art Workshop Indore, Clay Pottery Classes, Art Workshops Indore',
+      'Hands-on weekend art workshops in Indore including ocean resin art, traditional Kutch Lippan mud-mirror art, pottery, and summer art camps.',
+    keywords:
+      'Resin Art Workshop Indore, Lippan Art Workshop, Clay Pottery Classes Indore, Weekend Art Workshops',
   },
   gallery: {
-    title: 'Artwork Gallery – Fine Art, Portraits & Murals | The Art Horizon',
+    path: '/gallery',
+    title: 'Student Art & Studio Portfolio Gallery | The Art Horizon',
     description:
-      'Explore original artworks, commissioned charcoal portraits, student masterpieces, and large-scale murals by Vikas Gothi and The Art Horizon studio.',
-    keywords: 'Fine Art Gallery Indore, Charcoal Drawing Gallery, Student Artwork Exhibition',
+      'Explore original artworks by kids and teen students, charcoal and oil portraits, festival rangolis, and murals created at The Art Horizon.',
+    keywords:
+      'The Art Horizon Gallery, Kids Drawing Showcase, Charcoal Portrait Portfolio, Wall Mural Gallery',
   },
   testimonials: {
-    title: 'Student & Client Testimonials | The Art Horizon',
+    path: '/testimonials',
+    title: 'Parent & Student Reviews | The Art Horizon',
     description:
-      'Read authentic experiences from students, parents, and art commission clients from Indore, the United States, United Kingdom, and the UAE.',
-    keywords: 'The Art Horizon Reviews, Student Experiences, Art Class Feedback Indore',
+      'Read verified feedback from parents and art students across India, USA, UK, and UAE learning drawing and painting with Vikas Gothi.',
+    keywords:
+      'The Art Horizon Reviews, Online Art Class Reviews, Parent Testimonials Vikas Gothi',
   },
   contact: {
-    title: 'Contact The Art Horizon – Studio Visit & Course Enquiries | Indore',
+    path: '/contact',
+    title: 'Contact & Book Your Free Demo Class | The Art Horizon',
     description:
-      'Get in touch with The Art Horizon in Usha Nagar, Indore. Call +91 99818 83598, WhatsApp, or request course details and free demo sessions.',
-    keywords: 'Contact The Art Horizon, Art Studio Location Indore, Ranjeet Hanuman Road Art Class',
+      'Contact The Art Horizon to book a free online demo art class or visit our studio in Usha Nagar, Indore. Call or WhatsApp +91 99818 83598.',
+    keywords:
+      'Contact The Art Horizon, Book Free Demo Art Class, Art Studio Indore Usha Nagar',
   },
 };
 
-export const SEOHead: React.FC<SEOHeadProps> = ({ page, customTitle, customDescription }) => {
+const COURSE_METADATA: Record<string, { path: string; title: string; description: string }> = {
+  'junior-artist': {
+    path: '/online-classes/junior-artist',
+    title: 'Junior Artists Online Drawing Class (6–8 Years) | The Art Horizon',
+    description:
+      'Live online drawing & painting classes for Junior Artists (6–8 Years) across 3 progressive levels. Small group online art classes (Max 4–5 Students). Book your free demo!',
+  },
+  'young-artist': {
+    path: '/online-classes/young-artist',
+    title: 'Young Artists Online Art & Painting Class (9–11 Years) | The Art Horizon',
+    description:
+      'Live online drawing & painting classes for Young Artists (9–11 Years) covering perspective, shading, pastels, and folk art in batches of Max 4–5 Students.',
+  },
+  'senior-artist': {
+    path: '/online-classes/senior-artist',
+    title: 'Senior Artists Fine Art & Portfolio Class (12–15 Years) | The Art Horizon',
+    description:
+      'Pre-college live online fine art classes for Senior Artists (12–15 Years) covering anatomy, charcoal, watercolors, and acrylics. Max 4–5 Students per batch.',
+  },
+};
+
+function upsertMetaTag(attribute: 'name' | 'property', key: string, content: string) {
+  let tag = document.querySelector(`meta[${attribute}="${key}"]`);
+  if (!tag) {
+    tag = document.createElement('meta');
+    tag.setAttribute(attribute, key);
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute('content', content);
+}
+
+function upsertCanonical(href: string) {
+  let link = document.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', href);
+}
+
+export const SEOHead: React.FC<SEOHeadProps> = ({ page, courseSlug, customTitle, customDescription }) => {
   useEffect(() => {
-    const meta = PAGE_METADATA[page] || PAGE_METADATA.home;
-    const finalTitle = customTitle || meta.title;
-    const finalDesc = customDescription || meta.description;
+    const baseMeta = PAGE_METADATA[page] || PAGE_METADATA.home;
+    const courseMeta = page === 'online-classes' && courseSlug ? COURSE_METADATA[courseSlug] : undefined;
+
+    const finalTitle = customTitle || courseMeta?.title || baseMeta.title;
+    const finalDesc = customDescription || courseMeta?.description || baseMeta.description;
+    const finalPath = courseMeta?.path || baseMeta.path;
+    const canonicalUrl = `${CANONICAL_BASE}${finalPath === '/' ? '/' : finalPath}`;
 
     document.title = finalTitle;
+    upsertCanonical(canonicalUrl);
 
-    // Update meta description
-    let metaDescTag = document.querySelector('meta[name="description"]');
-    if (metaDescTag) {
-      metaDescTag.setAttribute('content', finalDesc);
-    }
-
-    // Update OG Title & Description
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute('content', finalTitle);
-
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.setAttribute('content', finalDesc);
-
-    // Update Twitter Title & Description
-    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-    if (twitterTitle) twitterTitle.setAttribute('content', finalTitle);
-
-    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
-    if (twitterDesc) twitterDesc.setAttribute('content', finalDesc);
-  }, [page, customTitle, customDescription]);
+    upsertMetaTag('name', 'description', finalDesc);
+    upsertMetaTag('name', 'keywords', baseMeta.keywords);
+    upsertMetaTag('property', 'og:title', finalTitle);
+    upsertMetaTag('property', 'og:description', finalDesc);
+    upsertMetaTag('property', 'og:url', canonicalUrl);
+    upsertMetaTag('name', 'twitter:title', finalTitle);
+    upsertMetaTag('name', 'twitter:description', finalDesc);
+  }, [page, courseSlug, customTitle, customDescription]);
 
   return null;
 };

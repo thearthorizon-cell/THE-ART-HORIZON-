@@ -68,7 +68,7 @@ const ROLE_OPTIONS: Array<{
   {
     id: 'placement',
     label: 'Course & Batch Guide',
-    description: 'Ages 6-15, 3 levels, 4-5 batch size & 1-on-1 options',
+    description: 'Ages 6–15, 3 levels, Max 4–5 Students & 1-on-1 options',
   },
   {
     id: 'critique',
@@ -89,7 +89,7 @@ export const GeminiChatModal: React.FC<GeminiChatModalProps> = ({ isOpen, onClos
     {
       id: 'welcome',
       role: 'model',
-      text: 'Namaste! Welcome to The Art Horizon. I am your Gemini AI Art Advisor, here to guide you through Vikas Gothi’s fine art academy, our live Zoom online classes for ages 6 to 15 (max 4-5 per batch with 3 levels), 1-on-1 private classes, and custom portrait commissions in all mediums.\n\nHow can I help you today?',
+      text: 'Namaste! Welcome to The Art Horizon. I am your Gemini AI Art Advisor, here to guide you through Vikas Gothi’s fine art academy, our live Zoom online classes for ages 6–15 (Max 4–5 Students per batch with 3 levels), 1-on-1 private classes, and custom portrait commissions in all mediums.\n\nHow can I help you today?',
       timestamp: 'Just now',
       modelUsed: 'gemini-4-hydrogen',
     },

@@ -198,7 +198,7 @@ export const HomePage: React.FC = () => {
                 </div>
                 <div className="bg-white p-3 rounded-2xl border border-stone-200 shadow-2xs">
                   <span className="text-[11px] text-rose-700 font-bold uppercase tracking-wider block">Small Batches</span>
-                  <span className="text-xs font-bold text-stone-900">1:4 Focused Attention</span>
+                  <span className="text-xs font-bold text-stone-900">Max 4–5 Students</span>
                 </div>
                 <div className="bg-white p-3 rounded-2xl border border-stone-200 shadow-2xs">
                   <span className="text-[11px] text-teal-700 font-bold uppercase tracking-wider block">All Mediums</span>
@@ -219,7 +219,9 @@ export const HomePage: React.FC = () => {
                   <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-stone-900 group">
                     <img
                       src={OFFICIAL_ASSETS.vikasPaintingViolinMural}
-                      alt="Vikas Gothi hand-painting colorful symphony violin wall mural"
+                      alt="Vikas Gothi hand-painting colorful symphony violin wall mural at The Art Horizon"
+                      fetchPriority="high"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-900/20 to-transparent flex flex-col justify-end p-5 text-white">
@@ -229,9 +231,9 @@ export const HomePage: React.FC = () => {
                           Master Artist in Action
                         </span>
                       </div>
-                      <h4 className="font-serif text-xl sm:text-2xl font-bold leading-tight">
+                      <p className="font-serif text-xl sm:text-2xl font-bold leading-tight">
                         Vikas Gothi • Founder
-                      </h4>
+                      </p>
                       <p className="text-xs text-stone-200 mt-1">
                         Handcrafting fine art murals, classical portraits & mentoring next-gen artists.
                       </p>
@@ -252,7 +254,8 @@ export const HomePage: React.FC = () => {
                 >
                   <img
                     src={OFFICIAL_ASSETS.studentBalKrishna}
-                    alt="Student holding charcoal portrait of Bal Krishna"
+                    alt="Young art student proudly holding her Bal Krishna charcoal portrait"
+                    decoding="async"
                     className="w-14 h-14 rounded-xl object-cover border border-stone-100 group-hover:scale-105 transition-transform"
                   />
                   <div>
@@ -291,13 +294,13 @@ export const HomePage: React.FC = () => {
           <div className="space-y-2 max-w-3xl">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-xs uppercase tracking-widest text-[#D82828] font-bold">
               <Globe className="w-3.5 h-3.5" />
-              <span>Live Zoom Worldwide · Ages 6 to 15 · Max 5 Students/Batch</span>
+              <span>Live Zoom Worldwide · Ages 6–15 · Max 4–5 Students</span>
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 tracking-tight">
-              International Online Art Programs
+              Live Online Drawing & Painting Classes for Kids
             </h2>
             <p className="text-stone-600 text-sm sm:text-base">
-              Choose your child’s age cohort below — <strong>Junior Artist (6–8 Years)</strong>, <strong>Young Artist (9–11 Years)</strong>, or <strong>Senior Artist (12–15 Years)</strong> — with structured 3-level progressive curriculums, 8 live classes per month, and official certification.
+              Choose your child’s age group below — <strong>Junior Artists: 6–8 Years</strong>, <strong>Young Artists: 9–11 Years</strong>, or <strong>Senior Artists: 12–15 Years</strong> — with structured 3-level progressive curriculums, 8 live classes per month, and small batches of Max 4–5 Students.
             </p>
           </div>
           <button
@@ -324,7 +327,9 @@ export const HomePage: React.FC = () => {
                   >
                     <img
                       src={course.heroImage}
-                      alt={`${course.title} (${course.ageGroup})`}
+                      alt={`${course.title} (${course.ageGroup}) live online art class banner`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-3 left-3 bg-[#D82828] text-white text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
@@ -343,7 +348,7 @@ export const HomePage: React.FC = () => {
                         {course.badge}
                       </span>
                       <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                        Max 5 / Batch
+                        Max 4–5 Students
                       </span>
                     </div>
 
@@ -473,7 +478,9 @@ export const HomePage: React.FC = () => {
                 <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
                   <img
                     src={course.image}
-                    alt={course.title}
+                    alt={`${course.title} at The Art Horizon`}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
@@ -591,7 +598,7 @@ export const HomePage: React.FC = () => {
               {
                 step: '03',
                 title: 'Live Interactive Classes',
-                desc: 'Join small batches (max 4–5 students) for ages 6 to 15 with 3 progressive levels (Beginner, Intermediate, Advanced). Dual cameras provide real-time draw-overs. 1-on-1 private classes are also available.',
+                desc: 'Join small group online art classes (Max 4–5 Students) for ages 6–15 (Junior Artists: 6–8 Years, Young Artists: 9–11 Years, Senior Artists: 12–15 Years) with 3 progressive levels. Dual cameras provide real-time draw-overs. 1-on-1 private classes are also available.',
                 badge: 'Max 4–5 Students',
                 color: 'border-teal-300 bg-teal-50/50',
                 btnText: 'View Class Options',
@@ -684,9 +691,9 @@ export const HomePage: React.FC = () => {
             },
             {
               icon: <Users className="w-6 h-6 text-rose-600" />,
-              title: 'Small Batches (Max 4–5 Students)',
-              desc: 'With strictly 4 to 5 students per session across 3 age cohorts (6-8, 9-11, 12-15 yrs), every child receives instant draw-overs and feedback. 1-on-1 private classes are also available with tailored fee structure.',
-              tag: 'Max 4-5 Students • 3 Levels',
+              title: 'Small Group Online Art Classes (Max 4–5 Students)',
+              desc: 'With strictly Max 4–5 Students per session across 3 age groups (Junior Artists: 6–8 Years, Young Artists: 9–11 Years, Senior Artists: 12–15 Years), every child receives instant draw-overs and feedback. 1-on-1 private classes are also available with a tailored fee structure.',
+              tag: 'Max 4–5 Students • 3 Levels',
             },
             {
               icon: <ShieldCheck className="w-6 h-6 text-emerald-600" />,
@@ -730,6 +737,8 @@ export const HomePage: React.FC = () => {
                 <img
                   src={founder.portraitImage}
                   alt={`${founder.name} - ${founder.title} of The Art Horizon`}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-center"
                 />
               </div>
@@ -826,7 +835,9 @@ export const HomePage: React.FC = () => {
             >
               <img
                 src={art.image}
-                alt={art.title}
+                alt={`${art.title} — ${art.medium}`}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/25 to-transparent flex flex-col justify-end p-5 text-white">
@@ -844,7 +855,7 @@ export const HomePage: React.FC = () => {
                   </span>
                   <span className="text-[10px] text-stone-300 truncate">{art.artist}</span>
                 </div>
-                <h4 className="font-serif font-bold text-lg sm:text-xl leading-snug">{art.title}</h4>
+                <h3 className="font-serif font-bold text-lg sm:text-xl leading-snug">{art.title}</h3>
                 <p className="text-xs text-stone-300 mt-0.5 line-clamp-1">{art.medium}</p>
               </div>
             </div>
@@ -952,10 +963,10 @@ export const HomePage: React.FC = () => {
                       {item.author.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-stone-900 leading-tight flex items-center gap-1">
+                      <h3 className="font-bold text-sm text-stone-900 leading-tight flex items-center gap-1">
                         <span>{item.author}</span>
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 inline" />
-                      </h4>
+                      </h3>
                       <span className="text-xs text-stone-500">{item.role}</span>
                     </div>
                   </div>
@@ -1009,53 +1020,6 @@ export const HomePage: React.FC = () => {
               )}
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* 10. SKILLDREN FINAL CALL TO ACTION BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-stone-900 via-[#1C1917] to-stone-900 text-white rounded-3xl p-8 sm:p-14 text-center space-y-6 shadow-2xl relative overflow-hidden">
-          <div className="max-w-3xl mx-auto space-y-4 relative z-10">
-            <span className="inline-flex items-center gap-1.5 bg-amber-400 text-stone-950 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              Start With A Free 45-Minute Trial
-            </span>
-
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold leading-tight">
-              Ready to Discover the Artist Within You?
-            </h2>
-
-            <p className="text-stone-300 text-base sm:text-lg max-w-2xl mx-auto">
-              Join students across the USA, UK, UAE, and India learning fine art under Vikas Gothi.
-              Experience our live dual-camera teaching format firsthand with zero commitment.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <button
-                onClick={() => openFreeDemoModal()}
-                className="w-full sm:w-auto bg-gradient-to-r from-[#D82828] to-[#F59E0B] hover:opacity-95 text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2"
-              >
-                <Sparkles className="w-5 h-5 text-amber-200" />
-                <span>Book Free Trial Class</span>
-              </button>
-
-              <a
-                href={`https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                  'Hello Vikas ji, I would like to book a free trial class for The Art Horizon.'
-                )}`}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white px-7 py-4 rounded-full font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span>Chat on WhatsApp</span>
-              </a>
-            </div>
-
-            <p className="text-stone-400 text-xs pt-2">
-              📍 Studio Address: 266, Ganesh Villa, Usha Nagar Extension, Ranjit Hanuman Road, Indore • Phone: +91 99818 83598
-            </p>
-          </div>
         </div>
       </section>
     </div>

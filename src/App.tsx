@@ -35,6 +35,7 @@ import { ContactPage } from './pages/ContactPage';
 const MainContent: React.FC = () => {
   const {
     currentPage,
+    selectedCourseSlug,
     isGeminiChatOpen,
     openGeminiChat,
     closeGeminiChat,
@@ -75,7 +76,7 @@ const MainContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-stone-800 antialiased selection:bg-[#B85D38]/20 selection:text-[#8C4A2D]">
-      <SEOHead page={currentPage} />
+      <SEOHead page={currentPage} courseSlug={selectedCourseSlug} />
       <Header />
       <main className="flex-1">{renderCurrentPage()}</main>
       <Footer />

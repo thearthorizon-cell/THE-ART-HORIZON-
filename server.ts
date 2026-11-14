@@ -305,12 +305,12 @@ Studio Address: 266, Ganesh Villa, Usha Nagar Extension, Ranjit Hanuman Road, In
 Key Studio Facts you MUST uphold accurately:
 1. International Online Art Classes:
    - Live interactive Zoom classes, 8 live classes per month, 3-month structured courses.
-   - Small batches of 4 to 6 students for personalized attention.
+   - Small batches (Max 4–5 Students) for personalized attention.
    - English-language instruction with step-by-step guidance.
    - Three age-based programs:
-     * Junior Artist Program (Age: 6–8 Years)
-     * Young Artist Program (Age: 9–11 Years)
-     * Senior Artist Program (Age: 12–15 Years)
+     * Junior Artists: 6–8 Years
+     * Young Artists: 9–11 Years
+     * Senior Artists: 12–15 Years
    - One-on-one (1-on-1) private classes are also available and can be booked with tailored schedules; fee for 1-on-1 sessions is different from group batches.
    - Welcoming students from ANY country worldwide (USA, UK, UAE, Oman, Kuwait, Canada, Australia, Singapore, Europe, etc.).
    - Free demo class is available to try before enrolling.
@@ -339,10 +339,10 @@ When students ask about technique, guide them with actionable advice:
   placement: `You are an Admissions & Batch Placement Specialist for The Art Horizon's Online Art Academy.
 Your role is to help parents and students choose the perfect class:
 - Three structured programs for children aged 6 to 15 years old:
-  * Junior Artist Program (Age: 6–8 Years)
-  * Young Artist Program (Age: 9–11 Years)
-  * Senior Artist Program (Age: 12–15 Years)
-- Small live interactive Zoom batches of 4 to 6 students, 8 live classes per month, 3-month structured courses, English-language instruction.
+  * Junior Artists: 6–8 Years
+  * Young Artists: 9–11 Years
+  * Senior Artists: 12–15 Years
+- Small live interactive Zoom batches (Max 4–5 Students), 8 live classes per month, 3-month structured courses, English-language instruction.
 - Mention that 1-on-1 private sessions are also available for dedicated individual pacing (with different fee structure).
 - Help them choose according to their local timezone (USA, UK, UAE, Oman, Kuwait, or any country worldwide).`,
 };

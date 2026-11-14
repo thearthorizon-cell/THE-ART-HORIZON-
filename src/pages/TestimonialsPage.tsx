@@ -206,9 +206,9 @@ export const TestimonialsPage: React.FC = () => {
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <h4 className="font-bold text-stone-900 text-sm sm:text-base leading-tight">
+                        <h2 className="font-bold text-stone-900 text-sm sm:text-base leading-tight">
                           {item.author}
-                        </h4>
+                        </h2>
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 fill-emerald-100" />
                       </div>
                       <div className="text-[11px] text-stone-500 font-medium flex items-center gap-1.5 mt-0.5">
@@ -283,9 +283,9 @@ export const TestimonialsPage: React.FC = () => {
           <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mx-auto shadow-sm">
             <GoogleIcon className="w-7 h-7" />
           </div>
-          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
             Have You Learned or Commissioned Art with Vikas Gothi?
-          </h3>
+          </h2>
           <p className="text-xs sm:text-sm text-stone-600 max-w-xl mx-auto leading-relaxed">
             Your review helps young artists, parents, and art lovers discover high-quality fine art mentorship. It takes less than a minute to share your star rating!
           </p>

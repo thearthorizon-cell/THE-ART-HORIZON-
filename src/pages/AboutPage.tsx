@@ -64,6 +64,8 @@ export const AboutPage: React.FC = () => {
                 <img
                   src={OFFICIAL_ASSETS.oilPortrait}
                   alt="Classical Oil Portrait on Linen Canvas"
+                  loading="lazy"
+                  decoding="async"
                   className="rounded-2xl aspect-[3/4] object-cover shadow-md"
                 />
                 <div className="bg-white p-4 border border-stone-200 rounded-2xl">
@@ -80,6 +82,8 @@ export const AboutPage: React.FC = () => {
                 <img
                   src={OFFICIAL_ASSETS.charcoalPortrait}
                   alt="Hyperrealistic Charcoal Fine Art Portrait"
+                  loading="lazy"
+                  decoding="async"
                   className="rounded-2xl aspect-[3/4] object-cover shadow-md"
                 />
               </div>
@@ -167,9 +171,9 @@ export const AboutPage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-stone-800">
             <div>
-              <div className="font-serif text-2xl font-bold text-[#E8926F]">Intimate Batches</div>
+              <div className="font-serif text-2xl font-bold text-[#E8926F]">Max 4–5 Students</div>
               <p className="text-xs text-stone-400 mt-1">
-                Strict limits of 6 to 8 students per batch ensure personalized guidance at every table.
+                Strictly small cohorts (Max 4–5 Students per batch) ensure personalized guidance at every session.
               </p>
             </div>
             <div>

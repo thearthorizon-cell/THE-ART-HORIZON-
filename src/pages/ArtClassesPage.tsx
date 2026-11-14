@@ -110,7 +110,9 @@ export const ArtClassesPage: React.FC = () => {
                 <div className="lg:col-span-5 relative bg-stone-100 aspect-[16/10] lg:aspect-auto">
                   <img
                     src={course.image}
-                    alt={course.title}
+                    alt={`${course.title} — ${course.ageGroup}`}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-4 left-4 flex gap-2">
@@ -226,11 +228,11 @@ export const ArtClassesPage: React.FC = () => {
             <span className="text-xs font-bold uppercase tracking-widest text-amber-300">
               Residing Outside Indore or Abroad?
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white">
               Join Our International Live Zoom Batches
-            </h3>
+            </h2>
             <p className="text-stone-300 text-xs sm:text-sm">
-              Live interactive Zoom classes for children aged 6 to 15 years old. Strictly capped micro-batches of max 4 to 5 students with 3 structured levels (Beginner, Intermediate, Advanced). Individual one-on-one (1:1) sessions also available!
+              Live interactive Zoom classes for children aged 6–15 years (Junior Artists: 6–8 Years, Young Artists: 9–11 Years, Senior Artists: 12–15 Years). Strictly small batches (Max 4–5 Students) with 3 structured levels (Beginner, Intermediate, Advanced). Individual one-on-one (1:1) sessions also available!
             </p>
           </div>
           <button

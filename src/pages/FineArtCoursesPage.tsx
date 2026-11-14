@@ -133,6 +133,8 @@ export const FineArtCoursesPage: React.FC = () => {
                 <img
                   src={OFFICIAL_ASSETS.radhaKrishnaEasel}
                   alt="Fine Art Masterpiece on Easel by Vikas Gothi"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -188,9 +190,9 @@ export const FineArtCoursesPage: React.FC = () => {
       {/* Admissions & CTA */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
         <div className="bg-[#FAF8F5] border-2 border-dashed border-[#B85D38]/40 p-8 sm:p-12 rounded-sm space-y-4">
-          <h3 className="font-serif text-3xl font-bold text-stone-900">
+          <h2 className="font-serif text-3xl font-bold text-stone-900">
             Ready to Take Your Art to Professional Height?
-          </h3>
+          </h2>
           <p className="text-stone-600 text-sm sm:text-base max-w-xl mx-auto">
             Admissions for our upcoming Fine Art Diploma batch are currently open. Book a personal portfolio review with
             Vikas Gothi at our Indore studio or via Zoom.

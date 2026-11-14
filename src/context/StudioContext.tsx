@@ -271,42 +271,51 @@ const STATIC_STUDIO_STATE: CMSState = {
   siteContent: DEFAULT_SITE_CONTENT,
 };
 
+const VALID_PAGES: PageId[] = [
+  'home',
+  'about',
+  'founder',
+  'art-classes',
+  'fine-art-courses',
+  'online-classes',
+  'portrait-commissions',
+  'commercial-projects',
+  'workshops',
+  'gallery',
+  'testimonials',
+  'contact',
+];
+
+const parseRouteFromLocation = (): { page: PageId; courseSlug: string | null; openAdmin: boolean } => {
+  if (typeof window === 'undefined') {
+    return { page: 'home', courseSlug: null, openAdmin: false };
+  }
+  const rawHash = window.location.hash.replace(/^#\/?/, '').trim();
+  if (rawHash === 'admin' || rawHash === 'inbox' || rawHash === 'studio-backend' || rawHash === 'inquiries') {
+    return { page: 'home', courseSlug: null, openAdmin: true };
+  }
+
+  const rawPath = rawHash || window.location.pathname.replace(/^\/+|\/+$/g, '').trim();
+  const parts = rawPath.split('/').filter(Boolean);
+  const firstSegment = parts[0] || '';
+
+  if (firstSegment === 'admin' || firstSegment === 'inbox' || firstSegment === 'studio-backend' || firstSegment === 'inquiries') {
+    return { page: 'home', courseSlug: null, openAdmin: true };
+  }
+
+  if (VALID_PAGES.includes(firstSegment as PageId)) {
+    const page = firstSegment as PageId;
+    const courseSlug = page === 'online-classes' && parts[1] ? parts[1] : null;
+    return { page, courseSlug, openAdmin: false };
+  }
+
+  return { page: 'home', courseSlug: null, openAdmin: false };
+};
+
 export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const getInitialPage = (): PageId => {
-    const rawHash = window.location.hash.replace('#/', '').replace('#', '').trim();
-    const hash = rawHash.split('/')[0];
-
-    const validPages: PageId[] = [
-      'home',
-      'about',
-      'founder',
-      'art-classes',
-      'fine-art-courses',
-      'online-classes',
-      'portrait-commissions',
-      'commercial-projects',
-      'workshops',
-      'gallery',
-      'testimonials',
-      'contact',
-    ];
-    if (validPages.includes(hash as PageId)) {
-      return hash as PageId;
-    }
-    return 'home';
-  };
-
-  const getInitialCourseSlug = (): string | null => {
-    const rawHash = window.location.hash.replace('#/', '').replace('#', '').trim();
-    const parts = rawHash.split('/');
-    if (parts[0] === 'online-classes' && parts[1]) {
-      return parts[1];
-    }
-    return null;
-  };
-
-  const [currentPage, setCurrentPage] = useState<PageId>(getInitialPage());
-  const [selectedCourseSlug, setSelectedCourseSlug] = useState<string | null>(getInitialCourseSlug());
+  const initialRoute = parseRouteFromLocation();
+  const [currentPage, setCurrentPage] = useState<PageId>(initialRoute.page);
+  const [selectedCourseSlug, setSelectedCourseSlug] = useState<string | null>(initialRoute.courseSlug);
 
   // Business Config state
   const [businessConfig, setBusinessConfig] = useState<BusinessConfig>(() => {
@@ -483,32 +492,29 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [verifyAndLoadAdmin]);
 
-  // Sync route changes with URL hash
+  // Sync route changes with clean browser path & legacy URL hashes
   useEffect(() => {
-    const handleHashChange = () => {
-      const rawHash = window.location.hash.replace('#/', '').replace('#', '').trim();
-      if (rawHash === 'admin' || rawHash === 'inbox' || rawHash === 'studio-backend' || rawHash === 'inquiries') {
+    const handleLocationChange = () => {
+      const parsed = parseRouteFromLocation();
+      if (parsed.openAdmin) {
         setIsInquiriesModalOpen(true);
         return;
       }
-      const page = getInitialPage();
-      const slug = getInitialCourseSlug();
-      setCurrentPage(page);
-      setSelectedCourseSlug(slug);
+      setCurrentPage(parsed.page);
+      setSelectedCourseSlug(parsed.courseSlug);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    if (
-      window.location.hash.includes('admin') ||
-      window.location.hash.includes('inbox') ||
-      window.location.hash.includes('studio-backend') ||
-      window.location.hash.includes('inquiries')
-    ) {
+    if (initialRoute.openAdmin) {
       setIsInquiriesModalOpen(true);
     }
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
   }, []);
 
   const navigateTo = (page: PageId, hashOrSection?: string) => {
@@ -520,14 +526,33 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else {
       setSelectedCourseSlug(hashOrSection);
     }
-    window.location.hash = hashOrSection ? `#/${page}/${hashOrSection}` : `#/${page}`;
+    const cleanPath =
+      page === 'home'
+        ? '/'
+        : hashOrSection
+        ? `/${page}/${hashOrSection}`
+        : `/${page}`;
+    try {
+      if (window.location.pathname !== cleanPath || window.location.hash) {
+        window.history.pushState({}, '', cleanPath);
+      }
+    } catch {
+      window.location.hash = hashOrSection ? `#/${page}/${hashOrSection}` : `#/${page}`;
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const openCourseDetail = (slug: string) => {
     setSelectedCourseSlug(slug);
     setCurrentPage('online-classes');
-    window.location.hash = `#/online-classes/${slug}`;
+    const cleanPath = `/online-classes/${slug}`;
+    try {
+      if (window.location.pathname !== cleanPath || window.location.hash) {
+        window.history.pushState({}, '', cleanPath);
+      }
+    } catch {
+      window.location.hash = `#/online-classes/${slug}`;
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

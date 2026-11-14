@@ -19,6 +19,8 @@ export const FounderPage: React.FC = () => {
                 <img
                   src={founder.portraitImage}
                   alt={`${founder.name}, ${founder.title} of The Art Horizon`}
+                  decoding="async"
+                  fetchPriority="high"
                   className="w-full h-full object-cover object-center"
                 />
               </div>
@@ -145,6 +147,8 @@ export const FounderPage: React.FC = () => {
                   <img
                     src="/assets/aistudio/WhatsApp_Image_2026-10-08_at_6.22.13_PM__1__96f6997f.jpeg"
                     alt="Vikas Gothi painting musical violin wall mural"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -163,6 +167,8 @@ export const FounderPage: React.FC = () => {
                   <img
                     src="/assets/aistudio/WhatsApp_Image_2026-10-08_at_6.22.03_PM_bb87e480.jpeg"
                     alt="Vikas Gothi painting sacred mandala wall mural"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 </div>

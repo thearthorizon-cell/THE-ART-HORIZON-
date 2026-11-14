@@ -68,7 +68,9 @@ export const GalleryPage: React.FC = () => {
               <div className="relative aspect-[4/3] bg-stone-900 overflow-hidden">
                 <img
                   src={item.image}
-                  alt={item.title}
+                  alt={`${item.title} — ${item.medium}`}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
                 <div className="absolute inset-0 bg-stone-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -83,9 +85,9 @@ export const GalleryPage: React.FC = () => {
               </div>
 
               <div className="p-6 space-y-2">
-                <h3 className="font-serif text-xl font-bold text-stone-900 group-hover:text-[#D82828] transition-colors">
+                <h2 className="font-serif text-xl font-bold text-stone-900 group-hover:text-[#D82828] transition-colors">
                   {item.title}
-                </h3>
+                </h2>
                 <p className="text-xs text-stone-500 line-clamp-1">{item.medium}</p>
                 <p className="text-xs text-stone-600 line-clamp-2 mt-1">{item.description}</p>
 
@@ -111,9 +113,9 @@ export const GalleryPage: React.FC = () => {
             <span className="text-xs font-bold uppercase tracking-widest text-amber-300">
               Want a Custom Commission?
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white">
               Commission Master Artist Vikas Gothi
-            </h3>
+            </h2>
             <p className="text-stone-300 text-xs sm:text-sm">
               We create custom oil paintings, realistic charcoal & colour pencil portraits, architectural wall murals, and event rangolis for clients worldwide.
             </p>

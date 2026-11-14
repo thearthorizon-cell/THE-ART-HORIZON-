@@ -101,7 +101,7 @@ export const DEFAULT_ONLINE_COURSES: OnlineCourseProgram[] = [
     overview:
       'A 3-level progressive live online drawing and creative art program for children aged 6 to 8 years (24 classes per level, 72 curated creative projects across Basic, Intermediate, and Advanced levels). Conducted in small live Zoom batches with a Certificate on Completion.',
     duration: '3 Progressive Levels · 24 Classes Per Level (8 Live Classes/Month)',
-    classFormat: 'Live Interactive Zoom · Max 5 Kids Per Batch · English Instruction',
+    classFormat: 'Live Interactive Zoom · Max 4–5 Students · English Instruction',
     scheduleSummary: '8 live classes per month (3 months per level) · Certificate on Completion',
     language: 'English-language instruction',
     whatChildrenLearn: [
@@ -246,7 +246,7 @@ export const DEFAULT_ONLINE_COURSES: OnlineCourseProgram[] = [
       'Earn an official Certificate on Completion from The Art Horizon',
     ],
     benefits: [
-      'Max 5 kids per batch for personal attention & live feedback',
+      'Max 4–5 Students per batch for personal attention & live feedback',
       '3 Progressive Levels: Basic, Intermediate & Advanced (24 classes per level)',
       'Live interactive English-language instruction via Zoom',
       'Certificate on Completion & convenient international timezones',
@@ -264,9 +264,9 @@ export const DEFAULT_ONLINE_COURSES: OnlineCourseProgram[] = [
     heroImage: OFFICIAL_ASSETS.youngArtistBanner,
     referenceImages: [OFFICIAL_ASSETS.youngArtistBanner],
     overview:
-      'A 3-level live online Drawing & Visual Arts curriculum for students aged 9 to 11 years (24 classes per level, 72 topics covering Foundations & Perspective, Depth & Realism, and Masterclass & Heritage) in small Zoom batches of max 5 students.',
+      'A 3-level live online Drawing & Visual Arts curriculum for students aged 9 to 11 years (24 classes per level, 72 topics covering Foundations & Perspective, Depth & Realism, and Masterclass & Heritage) in small Zoom batches (Max 4–5 Students).',
     duration: '3 Progressive Levels · 24 Classes Per Level (8 Live Classes/Month)',
-    classFormat: 'Live Interactive Zoom · Max 5 Students Per Batch · English Instruction',
+    classFormat: 'Live Interactive Zoom · Max 4–5 Students · English Instruction',
     scheduleSummary: '8 live classes per month (3 months per level) · Certificate on Completion',
     language: 'English-language instruction',
     whatChildrenLearn: [
@@ -411,7 +411,7 @@ export const DEFAULT_ONLINE_COURSES: OnlineCourseProgram[] = [
       'Earn an official Certificate on Completion from The Art Horizon',
     ],
     benefits: [
-      'Max 5 students per batch for continuous individual critique',
+      'Max 4–5 Students per batch for continuous individual critique',
       '3 Progressive Levels: Basic, Intermediate & Advanced (24 classes per level)',
       'Live interactive Zoom instruction in English',
       'Certificate on Completion & international time zone friendly slots',
@@ -429,9 +429,9 @@ export const DEFAULT_ONLINE_COURSES: OnlineCourseProgram[] = [
     heroImage: OFFICIAL_ASSETS.seniorArtistBanner,
     referenceImages: [OFFICIAL_ASSETS.seniorArtistBanner],
     overview:
-      'A Pre-College Fine Arts & Studio Portfolio live online program for students aged 12 to 15 years. Covers Anatomy, Chiaroscuro Charcoal, 1/2/3-Point Perspective, Transparent Watercolors, Heavy-Body Acrylics, Wildlife, Concept Art & Indian Heritage in batches of max 5 students.',
+      'A Pre-College Fine Arts & Studio Portfolio live online program for students aged 12 to 15 years. Covers Anatomy, Chiaroscuro Charcoal, 1/2/3-Point Perspective, Transparent Watercolors, Heavy-Body Acrylics, Wildlife, Concept Art & Indian Heritage in small Zoom batches (Max 4–5 Students).',
     duration: '3 Progressive Levels · Pre-College Fine Art Training (8 Live Classes/Month)',
-    classFormat: 'Live Interactive Zoom · Max 5 Students Per Batch · Studio Portfolio Certification',
+    classFormat: 'Live Interactive Zoom · Max 4–5 Students · Studio Portfolio Certification',
     scheduleSummary: '8 live classes per month across 3 studio mastery levels · Portfolio Certification',
     language: 'English-language instruction',
     whatChildrenLearn: [
@@ -535,7 +535,7 @@ export const DEFAULT_ONLINE_COURSES: OnlineCourseProgram[] = [
       'Earn an official Studio Portfolio Certification upon completion',
     ],
     benefits: [
-      'Pre-College Fine Art Training in capped max 5-student Zoom batches',
+      'Pre-College Fine Art Training in small batches (Max 4–5 Students)',
       'Covers Acrylics, Charcoal, Watercolors, Anatomy, Perspective & Concept Art',
       'Live English-language atelier critique & step-by-step demonstrations',
       'Studio Portfolio Certification ideal for art school & creative tracks',
@@ -555,7 +555,7 @@ export const DEFAULT_ANNOUNCEMENTS: AnnouncementItem[] = [
     shortDescription:
       'Live interactive Zoom art classes for kids aged 6 to 15 now open for international students across the USA, UK, UAE, Oman, Kuwait, and worldwide.',
     fullDescription:
-      'Admissions are officially open for our structured International Online Art Classes led by The Art Horizon. Classes run live on Zoom with small batches of max 5 students, 8 live classes per month, English-language instruction, and age-appropriate batches for Junior Artist (6–8 Years), Young Artist (9–11 Years), and Senior Artist (12–15 Years). Official syllabus PDFs are now live for every age cohort!',
+      'Admissions are officially open for our structured International Online Art Classes led by The Art Horizon. Classes run live on Zoom with small batches (Max 4–5 Students), 8 live classes per month, English-language instruction, and age-appropriate batches for Junior Artists (6–8 Years), Young Artists (9–11 Years), and Senior Artists (12–15 Years). Official syllabus PDFs are now live for every age cohort!',
     publishedAt: '2026-11-12',
     ctaLabel: 'Explore Online Classes',
     ctaUrl: '#/online-classes',
@@ -633,7 +633,7 @@ export const ONLINE_AGE_GROUPS: OnlineAgeBatch[] = [
     badge: 'Junior Artist Program',
     title: 'Junior Artist Program',
     recommendedFor:
-      'Children aged 6–8 learning across 3 progressive levels (24 classes per level) in max 5-student live interactive Zoom batches.',
+      'Children aged 6–8 learning across 3 progressive levels (24 classes per level) in live interactive Zoom batches (Max 4–5 Students).',
     levels: [
       {
         name: 'Beginner',
@@ -673,7 +673,7 @@ export const ONLINE_AGE_GROUPS: OnlineAgeBatch[] = [
     badge: 'Young Artist Program',
     title: 'Young Artist Program',
     recommendedFor:
-      'Children aged 9–11 learning across 3 progressive levels (24 classes per level) in max 5-student live interactive Zoom batches.',
+      'Children aged 9–11 learning across 3 progressive levels (24 classes per level) in live interactive Zoom batches (Max 4–5 Students).',
     levels: [
       {
         name: 'Beginner',
@@ -713,7 +713,7 @@ export const ONLINE_AGE_GROUPS: OnlineAgeBatch[] = [
     badge: 'Senior Artist Program',
     title: 'Senior Artist Program',
     recommendedFor:
-      'Pre-College Fine Arts & Studio Portfolio curriculum in max 5-student live interactive Zoom batches.',
+      'Pre-College Fine Arts & Studio Portfolio curriculum in live interactive Zoom batches (Max 4–5 Students).',
     levels: [
       {
         name: 'Beginner',
@@ -751,7 +751,7 @@ export const ONLINE_AGE_GROUPS: OnlineAgeBatch[] = [
 
 export const ONLINE_CLASS_SPECIFICATIONS = {
   ageSpan: 'Children aged 6 to 15 years old',
-  maxBatchSize: 'Small batches of 4–6 students',
+  maxBatchSize: 'Max 4–5 Students',
   batchPacing: '8 live classes per month · 3-month structured courses',
   language: 'English-language instruction',
   oneOnOneOption: {
@@ -778,7 +778,7 @@ export const INTERNATIONAL_DETAILS = {
       code: 'UK/EU',
       flag: '🇬🇧 🇪🇺',
       timeZones: 'GMT / BST afternoon & weekend sessions',
-      popularPrograms: 'Live Interactive Zoom • English Instruction • 4–6 Student Batches',
+      popularPrograms: 'Live Interactive Zoom • English Instruction • Max 4–5 Students',
     },
     {
       country: 'UAE, Oman, Kuwait & GCC',
@@ -801,7 +801,7 @@ export const INTERNATIONAL_DETAILS = {
       desc: 'Real-time two-way instruction with clear overhead demonstrations and live feedback during every session.',
     },
     {
-      title: 'Small Batches of 4–6 Students',
+      title: 'Max 4–5 Students',
       desc: 'Strictly small cohorts so every young artist receives individual guidance without getting lost in a crowd.',
     },
     {

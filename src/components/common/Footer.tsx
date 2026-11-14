@@ -1,7 +1,6 @@
 import React from 'react';
 import { useStudio } from '../../context/StudioContext';
 import { PageId } from '../../types';
-import { TARGET_SEARCH_TERMS } from '../../data/siteConfig';
 import {
   Phone,
   Mail,
@@ -14,6 +13,7 @@ import {
   Globe,
   Star,
   Lock,
+  MessageCircle,
 } from 'lucide-react';
 import { GoogleIcon } from './GoogleReviewsBadge';
 import { GOOGLE_REVIEWS_SUMMARY } from '../../data/testimonialsData';
@@ -35,34 +35,45 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#181615] text-[#EDE7DE] border-t border-[#2D2825] pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top Feature Banner */}
-        <div className="bg-[#24201D] border border-stone-800 rounded-sm p-6 sm:p-8 mb-16 flex flex-col lg:flex-row items-center justify-between gap-6">
-          <div>
-            <div className="flex items-center gap-2 text-[#E8926F] text-xs font-semibold uppercase tracking-widest mb-1">
+        {/* Unified Admissions & Free Demo Call-to-Action Banner */}
+        <div className="bg-gradient-to-br from-[#24201D] via-[#2B2521] to-[#1D1A18] border border-stone-700/80 rounded-2xl p-6 sm:p-10 mb-14 flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 text-[#E8926F] text-xs font-bold uppercase tracking-widest">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Admissions & Creative Commissions Open</span>
+              <span>Small Group Online Art Classes • Max 4–5 Students</span>
             </div>
-            <h3 className="font-serif text-2xl sm:text-3xl text-stone-100 font-bold">
-              Begin Your Artistic Journey at The Art Horizon
-            </h3>
-            <p className="text-stone-400 text-sm mt-1 max-w-2xl">
-              From foundational kids and adult hobby classes in Indore to live interactive Zoom sessions for the USA,
-              UK, and UAE, and bespoke hand-drawn portrait commissions.
+            <h2 className="font-serif text-2xl sm:text-4xl text-stone-100 font-bold leading-tight">
+              Admissions Open — Book Your Free Demo Class!
+            </h2>
+            <p className="text-stone-300 text-sm leading-relaxed">
+              Live online drawing &amp; painting classes for ages 6–15 (Junior Artists: 6–8 Years, Young Artists: 9–11 Years, Senior Artists: 12–15 Years), in-studio Indore batches, and custom portrait commissions under <strong className="text-white font-semibold">Vikas Gothi</strong>.
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            <button
-              onClick={() => openEnquiryModal('general', 'Admissions & Pricing Enquiry')}
-              className="bg-[#B85D38] hover:bg-[#A04F2E] text-white px-6 py-3 rounded-sm text-sm font-medium transition-all shadow-sm w-full sm:w-auto text-center cursor-pointer"
-            >
-              Request Course Details & Pricing
-            </button>
+          <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full lg:w-auto shrink-0">
             <button
               onClick={openFreeDemoModal}
-              className="border border-stone-600 hover:border-stone-400 text-stone-200 hover:text-white px-6 py-3 rounded-sm text-sm font-medium transition-all w-full sm:w-auto text-center cursor-pointer"
+              className="bg-gradient-to-r from-[#D82828] via-[#E76F51] to-[#F59E0B] hover:opacity-95 text-white px-7 py-3.5 rounded-full text-sm font-bold transition-all shadow-lg text-center cursor-pointer inline-flex items-center justify-center gap-2"
             >
-              Book Free Demo Class
+              <Sparkles className="w-4 h-4 text-amber-200" />
+              <span>Book Your Free Demo</span>
             </button>
+            <button
+              onClick={() => openEnquiryModal('general', 'Admissions & Pricing Enquiry')}
+              className="border border-stone-600 hover:border-stone-400 text-stone-200 hover:text-white px-5 py-3.5 rounded-full text-sm font-medium transition-all text-center cursor-pointer"
+            >
+              Request Course Details
+            </button>
+            <a
+              href={`https://wa.me/${businessConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                'Hello Vikas ji, I would like to book a free demo class at The Art Horizon.'
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-emerald-700 hover:bg-emerald-600 text-white px-5 py-3.5 rounded-full text-sm font-semibold transition-all text-center inline-flex items-center justify-center gap-1.5"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>WhatsApp</span>
+            </a>
           </div>
         </div>
 
@@ -75,6 +86,8 @@ export const Footer: React.FC = () => {
                 <img
                   src="/assets/aistudio/THE_ART_HORIZON__LOGO__d2985075.jpg"
                   alt="The Art Horizon Official Logo"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -143,9 +156,9 @@ export const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="space-y-3">
-            <h4 className="text-xs uppercase tracking-widest text-[#E8926F] font-semibold">
+            <h3 className="text-xs uppercase tracking-widest text-[#E8926F] font-semibold">
               Explore Pages
-            </h4>
+            </h3>
             <ul className="space-y-2 text-xs sm:text-sm text-stone-400">
               <li>
                 <button onClick={() => handleLink('home')} className="hover:text-white transition-colors cursor-pointer">
@@ -216,13 +229,13 @@ export const Footer: React.FC = () => {
 
           {/* Education & Services */}
           <div className="space-y-3">
-            <h4 className="text-xs uppercase tracking-widest text-[#E8926F] font-semibold">
+            <h3 className="text-xs uppercase tracking-widest text-[#E8926F] font-semibold">
               Art Disciplines
-            </h4>
+            </h3>
             <ul className="space-y-2 text-xs sm:text-sm text-stone-400">
               <li>
-                <span className="text-stone-300 font-medium block">Kids Drawing & Colour</span>
-                <span className="text-[11px] text-stone-500">Ages 5-11 foundational motor & visual</span>
+                <span className="text-stone-300 font-medium block">Online Kids Drawing &amp; Painting</span>
+                <span className="text-[11px] text-stone-500">Ages 6–15 • Max 4–5 Students</span>
               </li>
               <li>
                 <span className="text-stone-300 font-medium block">Realistic Charcoal Portraits</span>
@@ -249,9 +262,9 @@ export const Footer: React.FC = () => {
 
           {/* Business & Studio Contact */}
           <div className="space-y-3">
-            <h4 className="text-xs uppercase tracking-widest text-[#E8926F] font-semibold">
+            <h3 className="text-xs uppercase tracking-widest text-[#E8926F] font-semibold">
               Studio & Contact
-            </h4>
+            </h3>
             <div className="space-y-3 text-xs sm:text-sm text-stone-400">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#C86443] shrink-0 mt-0.5" />
@@ -307,9 +320,9 @@ export const Footer: React.FC = () => {
                 <MapPin className="w-4 h-4 text-[#C86443]" />
                 <span>Working Live Studio Location • Indore</span>
               </div>
-              <h4 className="font-serif text-lg sm:text-xl font-bold text-white mt-1">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-white mt-1">
                 The Art Horizon Fine Art Studio & Academy
-              </h4>
+              </h3>
               <p className="text-xs sm:text-sm text-stone-300 mt-0.5">
                 266, Ganesh Villa, Usha Nagar Extension, Ranjit Hanuman Road, Indore, Madhya Pradesh, India
               </p>
@@ -347,23 +360,6 @@ export const Footer: React.FC = () => {
               referrerPolicy="no-referrer-when-downgrade"
               src="https://maps.google.com/maps?q=266%20Ganesh%20Villa%2C%20Usha%20Nagar%20Extension%2C%20Ranjit%20Hanuman%20Road%2C%20Indore&t=&z=16&ie=UTF8&iwloc=&output=embed"
             />
-          </div>
-        </div>
-
-        {/* SEO Target Search Terms Cloud */}
-        <div className="py-8 border-b border-stone-800/80">
-          <div className="text-[11px] uppercase tracking-wider text-stone-500 font-semibold mb-3">
-            Popular Specializations & Target Regions:
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {TARGET_SEARCH_TERMS.map((term, index) => (
-              <span
-                key={index}
-                className="text-xs text-stone-400 bg-stone-900/90 border border-stone-800 px-3 py-1 rounded-sm hover:border-stone-700 hover:text-stone-200 transition-colors"
-              >
-                {term}
-              </span>
-            ))}
           </div>
         </div>
 
