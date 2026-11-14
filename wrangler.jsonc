@@ -8,5 +8,11 @@
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
     "run_worker_first": true
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "STUDIO_KV",
+      "id": "09a7913a272f426a9564bf5af8ef7662"
+    }
+  ]
 }
