@@ -356,11 +356,11 @@ app.post('/api/chat', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    let selectedModel = 'gemini-4-hydrogen';
-    if (model === 'gemini-3.1-flash-lite') {
-      selectedModel = 'gemini-3.1-flash-lite';
-    } else if (model === 'gemini-4-hydrogen' || model === 'gemini-3.8-flash') {
+    let selectedModel = 'gemini-3.1-flash-lite';
+    if (model === 'gemini-4-hydrogen') {
       selectedModel = 'gemini-4-hydrogen';
+    } else if (model === 'gemini-3.1-flash-lite') {
+      selectedModel = 'gemini-3.1-flash-lite';
     }
 
     const ai = getAIClient();

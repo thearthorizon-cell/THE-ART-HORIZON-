@@ -363,14 +363,12 @@ export async function handleApiRequest(request: Request, env: WorkerEnv): Promis
     contents.push({ role: 'user', parts: [{ text: message }] });
 
     const requestedModel =
-      body.model === 'gemini-3.1-flash-lite'
-        ? 'gemini-3.1-flash-lite'
-        : body.model === 'gemini-4-hydrogen'
+      body.model === 'gemini-4-hydrogen'
         ? 'gemini-4-hydrogen'
-        : 'gemini-4-hydrogen';
+        : 'gemini-3.1-flash-lite';
 
     const modelCandidates = Array.from(
-      new Set([requestedModel, 'gemini-4-hydrogen', 'gemini-3.1-flash-lite', 'gemini-2.5-flash'])
+      new Set([requestedModel, 'gemini-3.1-flash-lite', 'gemini-2.5-flash', 'gemini-4-hydrogen'])
     );
 
     try {

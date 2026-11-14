@@ -40,18 +40,18 @@ const MODEL_OPTIONS: Array<{
   description: string;
 }> = [
   {
-    id: 'gemini-4-hydrogen',
-    name: 'Gemini 4 Flash',
-    tag: 'Balanced (Default)',
-    icon: Sparkles,
-    description: 'Fast, balanced & intelligent for admissions, syllabus & art queries',
-  },
-  {
     id: 'gemini-3.1-flash-lite',
     name: 'Gemini 3.1 Flash Lite',
-    tag: 'Fast Responses',
+    tag: 'Fast (Default)',
     icon: Zap,
-    description: 'Lightweight & instant answers for quick questions',
+    description: 'Fast & instant answers for admissions, syllabus & art queries',
+  },
+  {
+    id: 'gemini-4-hydrogen',
+    name: 'Gemini 4 Flash',
+    tag: 'Balanced',
+    icon: Sparkles,
+    description: 'Detailed responses for deeper course or technique questions',
   },
 ];
 
@@ -91,12 +91,12 @@ export const GeminiChatModal: React.FC<GeminiChatModalProps> = ({ isOpen, onClos
       role: 'model',
       text: 'Namaste! Welcome to The Art Horizon. I am your Gemini AI Art Advisor, here to guide you through Vikas Gothi’s fine art academy, our live Zoom online classes for ages 6–15 (Max 4–5 Students per batch with 3 levels), 1-on-1 private classes, and custom portrait commissions in all mediums.\n\nHow can I help you today?',
       timestamp: 'Just now',
-      modelUsed: 'gemini-4-hydrogen',
+      modelUsed: 'gemini-3.1-flash-lite',
     },
   ]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<ModelKey>('gemini-4-hydrogen');
+  const [selectedModel, setSelectedModel] = useState<ModelKey>('gemini-3.1-flash-lite');
   const [selectedRole, setSelectedRole] = useState<RoleKey>('general');
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
 
